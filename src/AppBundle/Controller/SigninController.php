@@ -13,7 +13,7 @@ use AppBundle\Entity\Student;
 use Symfony\Component\Validator\Constraints\Email as EmailConstraint;
 use Symfony\Component\Validator\Constraints\Length as LengthConstraint;
 use Symfony\Component\Validator\Constraints\Url as UrlConstraint;
-
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 class SigninController extends Controller
 {
@@ -119,7 +119,48 @@ class SigninController extends Controller
 
     }
 
-
+    /**
+     * @ApiDoc(
+     *  description="This method sign up a user (College) in the system. ",
+     *  requirements={
+     *      {
+     *          "name"="username",
+     *          "dataType"="String",
+     *          "description"="Username of the user (CIF)"
+     *      },
+     *      {
+     *          "name"="password",
+     *          "dataType"="String",
+     *          "description"="Password of the user"
+     *      },
+     *      {
+     *          "name"="email",
+     *          "dataType"="String",
+     *          "description"="Email of the user (DNI)"
+     *      },
+     *      {
+     *          "name"="companyName",
+     *          "dataType"="String",
+     *          "description"="Company name of the college."
+     *      },
+     *      {
+     *          "name"="address",
+     *          "dataType"="String",
+     *          "description"="Address of the College"
+     *      },
+     *      {
+     *          "name"="telephone",
+     *          "dataType"="String",
+     *          "description"="Telephone of the user (DNI)"
+     *      },
+     *      {
+     *          "name"="url",
+     *          "dataType"="String",
+     *          "description"="Url name of the college."
+     *      },
+     *  },
+     * )
+     */
     public function collegeAction(Request $request)
     {
         $password=$request->request->get('password');
@@ -195,6 +236,33 @@ class SigninController extends Controller
 
     }
 
+    /**
+     * @ApiDoc(
+     *  description="This method sign up a user (Student) in the system. ",
+     *  requirements={
+     *      {
+     *          "name"="username",
+     *          "dataType"="String",
+     *          "description"="Username of the user (DNI)"
+     *      },
+     *      {
+     *          "name"="password",
+     *          "dataType"="String",
+     *          "description"="Password of the user"
+     *      },
+     *      {
+     *          "name"="email",
+     *          "dataType"="String",
+     *          "description"="Email of the user (DNI)"
+     *      },
+     *      {
+     *          "name"="name",
+     *          "dataType"="String",
+     *          "description"="Complete name of the user"
+     *      },
+     *  },
+     * )
+     */
     public function studentAction(Request $request)
     {
         $password=$request->request->get('password');

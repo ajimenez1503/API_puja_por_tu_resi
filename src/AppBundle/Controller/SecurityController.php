@@ -9,11 +9,28 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
-
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 class SecurityController extends Controller
 {
 
+    /**
+     * @ApiDoc(
+     *  description="This method allow to a user to sign in the systme.",
+     *  requirements={
+     *      {
+     *          "name"="_username",
+     *          "dataType"="String",
+     *          "description"="Username of the user (DNI/CIF)"
+     *      },
+     *      {
+     *          "name"="_password",
+     *          "dataType"="String",
+     *          "description"="Password of the user"
+     *      },
+     *  },
+     * )
+     */
     public function loginAction(Request $request)
     {
         $response = new JsonResponse();

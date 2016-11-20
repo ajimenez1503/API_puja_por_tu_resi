@@ -1,6 +1,11 @@
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
+
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc
+
 numberLucky:
     path:     /lucky/number/{min}
     defaults:  { _controller: AppBundle:Lucky:number, min: 1 }
@@ -20,6 +25,7 @@ testLucky:
 login:
     path:     /login
     defaults: { _controller: AppBundle:Security:login }
+    methods:  [GET,POST]
 
 logout:
     path: /logout

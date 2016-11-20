@@ -35,6 +35,7 @@ security:
                 target: /login
 
     access_control:
+    - { path: ^/api/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/Signin/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/lucky/test/ , roles: IS_AUTHENTICATED_ANONYMOUSLY }

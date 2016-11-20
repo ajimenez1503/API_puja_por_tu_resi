@@ -1,0 +1,38 @@
+# src/AppBundle/Resources/config/doctrine/User.orm.yml
+AppBundle\Entity\College:
+    type: entity
+    table: colleges
+    id:
+        username:
+            type: string
+            length: 9
+            unique: true
+    fields:
+        password:
+            type: string
+            length: 64
+            unique: false
+        email:
+            type: string
+            length: 60
+            unique: false
+        isActive:
+            type: boolean
+            column: is_active
+        companyName:
+            type: string
+            length: 60
+            unique: false
+            column: company_name
+        address:
+            type: string
+            length: 200
+            unique: false
+        telephone:
+            type: string
+            length: 12
+            unique: false
+        url:
+            type: string
+            length: 60
+            unique: false

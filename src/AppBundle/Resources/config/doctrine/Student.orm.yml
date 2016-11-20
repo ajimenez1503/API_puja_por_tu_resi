@@ -1,0 +1,29 @@
+# src/AppBundle/Resources/config/doctrine/Student.orm.yml
+AppBundle\Entity\Student:
+    type: entity
+    table: students
+    id:
+        username:
+            type: string
+            length: 9
+            unique: true
+    fields:
+        password:
+            type: string
+            length: 64
+            unique: false
+        email:
+            type: string
+            length: 60
+            unique: false
+        name:
+            type: string
+            length: 100
+            unique: false
+        isActive:
+            type: boolean
+            column: is_active
+        creationDate:
+            type: datetime
+            unique: false
+            column: creation_date

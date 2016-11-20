@@ -1,0 +1,35 @@
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+numberLucky:
+    path:     /lucky/number/{min}
+    defaults:  { _controller: AppBundle:Lucky:number, min: 1 }
+    methods:  [GET]
+    requirements:
+        min: '\d+'
+hellooLucky:
+    path:     /lucky/helloo/{name}
+    defaults:  { _controller: AppBundle:Lucky:helloo}
+    methods:  [POST,GET]
+
+testLucky:
+    path:     /lucky/test/{name}
+    defaults:  { _controller: AppBundle:Lucky:test}
+    methods:  [POST,GET]
+
+login:
+    path:     /login
+    defaults: { _controller: AppBundle:Security:login }
+
+logout:
+    path: /logout
+
+collegeSignin:
+    path:     /Signin/college/
+    defaults:  { _controller: AppBundle:Signin:college }
+    methods:  [POST]
+
+studentSignin:
+    path:     /Signin/student/
+    defaults:  { _controller: AppBundle:Signin:student }
+    methods:  [POST]

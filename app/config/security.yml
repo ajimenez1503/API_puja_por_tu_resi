@@ -1,0 +1,42 @@
+security:
+    encoders:
+        AppBundle\Entity\College:
+            algorithm: bcrypt
+        AppBundle\Entity\Student:
+            algorithm: bcrypt
+
+    # ...
+    providers:
+        our_db_provider:
+            chain:
+                providers: [college_our_db_provider, student_our_db_provider]
+        college_our_db_provider:
+            entity:
+                class: AppBundle:College
+                property: username
+        student_our_db_provider:
+            entity:
+                class: AppBundle:Student
+                property: username
+
+                # if you are using multiple entity managers
+                # manager_name: customer
+    #it is used to specify what request need authentication or not
+    firewalls:
+        main:
+            anonymous: ~
+            form_login:
+                login_path: login
+                check_path: login
+                default_target_path: login
+                always_use_default_target_path: true
+            logout:
+                path:   /logout
+                target: /login
+
+    access_control:
+    - { path: ^/Signin/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/lucky/test/ , roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/lucky/helloo/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/, roles: [ROLE_STUDENT, ROLE_COLLEGE] }

@@ -22,7 +22,7 @@ class SigninController extends Controller
     {
         $response = new JsonResponse();
         if (is_null($data)){
-            $data=json_encode(array());
+            $data=array();
         }
         $response->setData(array(
             'success' => $success,
@@ -198,9 +198,9 @@ class SigninController extends Controller
             } catch (\Exception $pdo_ex) {
                 return $this->returnjson(false,'SQL exception.');
             }
-            $data=json_encode(array(
+            $data=array(
              'username' => $college->getUsername(),
-            ));
+            );
             return $this->returnjson(true,'USER register',$data);
         }else{
             return $this->returnjson(false,'Username is already used');
@@ -297,9 +297,9 @@ class SigninController extends Controller
             } catch (\Exception $pdo_ex) {
                 return $this->returnjson(false,'SQL exception.');
             }
-            $data=json_encode(array(
+            $data=array(
              'username' => $Student->getUsername(),
-            ));
+            );
             return $this->returnjson(true,'Student register',$data);
         }else{
             return $this->returnjson(false,'Username is already used');

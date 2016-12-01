@@ -37,12 +37,12 @@ class SecurityController extends Controller
         $securityContext = $this->container->get('security.authorization_checker');
         if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
              $user=$this->get('security.token_storage')->getToken()->getUser();
-             $data=json_encode(array(
+             $data=array(
                  'username' => $user->getUsername(),
                  'password'=>$user->getPassword(),
                  'isvalid'=>$user->getIsActive(),
                  'ROLE'=>$user->getRoles(),
-             ));
+             );
              $response->setData(array(
                 'success' => true,
                 'message' => 'USER logged.',
@@ -52,12 +52,12 @@ class SecurityController extends Controller
         else{
             $authenticationUtils = $this->get('security.authentication_utils');
             // get the login error if there is one
-            $message = 'User is not authenticate';
+            $message = 'User is not registered.';
             $error = $authenticationUtils->getLastAuthenticationError();
             if (!is_null($error)){
                 $message=$error->getMessageKey();
             }
-            $data=json_encode(array());
+            $data=array();
             $response->setData(array(
                 'success' => false,
                 'message' => $message,

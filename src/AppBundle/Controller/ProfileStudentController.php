@@ -1,0 +1,194 @@
+<?php
+// src/AppBundle/Controller/ProfileStudentController.php
+namespace AppBundle\Controller;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use AppBundle\Entity\User;
+use AppBundle\Entity\Student;
+use Symfony\Component\Validator\Constraints\Length as LengthConstraint;
+use Symfony\Component\Validator\Constraints\Email as EmailConstraint;
+use Symfony\Component\HttpFoundation\Request;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+
+
+class ProfileStudentController extends Controller
+{
+
+    public function returnjson($success,$message,$data=null)
+    {
+        $response = new JsonResponse();
+        if (is_null($data)){
+            $data=array();
+        }
+        $response->setData(array(
+            'success' => $success,
+            'message' => $message,
+            'data'=> $data,
+        ));
+        return $response;
+    }
+
+    public function get_point($creation_date){
+        $now =  date_create('now');
+        $interval = date_diff($creation_date,$now);
+        return $interval->format('%a');
+    }
+
+
+    /**
+     * @ApiDoc(
+     *  description="This method return the data of the user student ",
+     * )
+     */
+    public function profileAction()
+    {
+        $user=$this->get('security.token_storage')->getToken()->getUser();
+        $data=array(
+            'name'=>$user->getName(),
+            'username' => $user->getUsername(),
+            'email'=>$user->getEmail(),
+            'isvalid'=>$user->getIsActive(),
+            'ROLE'=>$user->getRoles(),
+            'date_creation'=>$user->getCreationDate(),
+            'point'=>$this->get_point($user->getCreationDate()),
+        );
+        return $this->returnjson(true,'Data user.',$data);
+    }
+
+
+
+    public function validateLenghtInput($input,$min=1,$max=100)
+    {
+
+        $lengthConstraint = new LengthConstraint(array(
+        'min'        => $min,
+        'max'        => $max,
+        'minMessage' => 'Lengh should be >'.$min.'.',
+        'maxMessage' => 'Lengh should be <'.$max.'.'));
+        $errors = $this->get('validator')->validate(
+            $input,
+            $lengthConstraint
+        );
+        if ($errors==""){//if it is empty
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function validateOldPassword($old_password)
+    {
+        $UserPasswordConstraint = new UserPasswordConstraint();
+        $UserPasswordConstraint->message="Password is not valid.";
+        $errors = $this->get('validator')->validate(
+            $old_password,
+            $UserPasswordConstraint
+        );
+        if ($errors==""){//if it is empty
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+    public function validateEmail($email)
+    {
+        $emailConstraint = new EmailConstraint();
+        $emailConstraint->message = 'Email is not correct.';
+        $errors = $this->get('validator')->validate(
+            $email,
+            $emailConstraint
+        );
+        if ($errors==""){//if it is empty
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * @ApiDoc(
+     *  description="This method update the password of a user. ",
+     *  requirements={
+     *      {
+     *          "name"="old_password",
+     *          "dataType"="String",
+     *          "description"="Old password of the user"
+     *      },
+     *      {
+     *          "name"="new_password",
+     *          "dataType"="String",
+     *          "description"="new Password of the user"
+     *      },
+     *  },
+     * )
+     */
+    public function changePasswordAction(Request $request)
+    {
+        $old_password=$request->request->get('old_password');
+        $new_password=$request->request->get('new_password');
+        if (!$this->validateLenghtInput($old_password,8,8) or !$this->validateLenghtInput($new_password,8,8)){
+            return $this->returnjson(false,'Contraseña invalidad. Longitud 8 caracteres.');
+        }
+        if(!$this->validateOldPassword($old_password)){
+            return $this->returnjson(false,'La contraseña actual no es correcta.');
+        }
+        try {
+            $user=$this->get('security.token_storage')->getToken()->getUser();
+            $encoder = $this->container->get('security.password_encoder');
+            $new_passwor_encoded = $encoder->encodePassword($user, $new_password);
+
+            $user->setPassword($new_passwor_encoded);
+
+            $em = $this->getDoctrine()->getManager();
+            // tells Doctrine you want to (eventually) save the Product (no queries is done)
+            $em->persist($user);
+            // actually executes the queries (i.e. the INSERT query)
+            //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+            $em->flush();
+        } catch (\Exception $pdo_ex) {
+            return $this->returnjson(false,'SQL exception.');
+        }
+        return $this->returnjson(true,'La contraseña se ha cambiado correctamente.');
+    }
+
+
+    /**
+     * @ApiDoc(
+     *  description="This method update the email of a user. ",
+     *  requirements={
+     *      {
+     *          "name"="email",
+     *          "dataType"="String",
+     *          "description"="Old password of the user"
+     *      },
+     *  },
+     * )
+     */
+    public function changeEmailAction(Request $request)
+    {
+        $email=$request->request->get('email');
+        if (!$this->validateEmail($email) ){
+            return $this->returnjson(false,'El email no es valido.');
+        }
+        try {
+            $user=$this->get('security.token_storage')->getToken()->getUser();
+            $user->setEmail($email);
+            $em = $this->getDoctrine()->getManager();
+            // tells Doctrine you want to (eventually) save the Product (no queries is done)
+            $em->persist($user);
+            // actually executes the queries (i.e. the INSERT query)
+            //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+            $em->flush();
+        } catch (\Exception $pdo_ex) {
+            return $this->returnjson(false,'SQL exception.');
+        }
+        return $this->returnjson(true,'El email se ha cambiado correctamente.');
+    }
+
+}

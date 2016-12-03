@@ -39,3 +39,19 @@ studentSignin:
     path:     /Signin/student/
     defaults:  { _controller: AppBundle:Signin:student }
     methods:  [POST]
+
+
+profileProfileStudent:
+    path:     /ProfileStudent/profile/
+    defaults:  { _controller: AppBundle:ProfileStudent:profile}
+    methods:  [GET]
+
+changePasswordProfileStudent:
+    path:     /ProfileStudent/changePassword/
+    defaults:  { _controller: AppBundle:ProfileStudent:changePassword}
+    methods:  [POST]
+
+changeEmailProfileStudent:
+    path:     /ProfileStudent/changeEmail/
+    defaults:  { _controller: AppBundle:ProfileStudent:changeEmail}
+    methods:  [POST]

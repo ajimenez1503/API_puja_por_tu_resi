@@ -136,7 +136,7 @@ class SigninController extends Controller
      *      {
      *          "name"="email",
      *          "dataType"="String",
-     *          "description"="Email of the user (DNI)"
+     *          "description"="Email of the user"
      *      },
      *      {
      *          "name"="companyName",
@@ -151,7 +151,7 @@ class SigninController extends Controller
      *      {
      *          "name"="telephone",
      *          "dataType"="String",
-     *          "description"="Telephone of the user (DNI)"
+     *          "description"="Telephone of the user"
      *      },
      *      {
      *          "name"="url",
@@ -253,7 +253,7 @@ class SigninController extends Controller
      *      {
      *          "name"="email",
      *          "dataType"="String",
-     *          "description"="Email of the user (DNI)"
+     *          "description"="Email of the user "
      *      },
      *      {
      *          "name"="name",

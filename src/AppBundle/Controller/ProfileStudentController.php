@@ -60,57 +60,6 @@ class ProfileStudentController extends Controller
     }
 
 
-
-    public function validateLenghtInput($input,$min=1,$max=100)
-    {
-
-        $lengthConstraint = new LengthConstraint(array(
-        'min'        => $min,
-        'max'        => $max,
-        'minMessage' => 'Lengh should be >'.$min.'.',
-        'maxMessage' => 'Lengh should be <'.$max.'.'));
-        $errors = $this->get('validator')->validate(
-            $input,
-            $lengthConstraint
-        );
-        if ($errors==""){//if it is empty
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    public function validateOldPassword($old_password)
-    {
-        $UserPasswordConstraint = new UserPasswordConstraint();
-        $UserPasswordConstraint->message="Password is not valid.";
-        $errors = $this->get('validator')->validate(
-            $old_password,
-            $UserPasswordConstraint
-        );
-        if ($errors==""){//if it is empty
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-
-    public function validateEmail($email)
-    {
-        $emailConstraint = new EmailConstraint();
-        $emailConstraint->message = 'Email is not correct.';
-        $errors = $this->get('validator')->validate(
-            $email,
-            $emailConstraint
-        );
-        if ($errors==""){//if it is empty
-            return true;
-        }else{
-            return false;
-        }
-    }
-
     /**
      * @ApiDoc(
      *  description="This method update the password of a user. ",
@@ -132,10 +81,10 @@ class ProfileStudentController extends Controller
     {
         $old_password=$request->request->get('old_password');
         $new_password=$request->request->get('new_password');
-        if (!$this->validateLenghtInput($old_password,8,8) or !$this->validateLenghtInput($new_password,8,8)){
+        if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$old_password,8,8) or !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$new_password,8,8)){
             return $this->returnjson(false,'Contraseña invalidad. Longitud 8 caracteres.');
         }
-        if(!$this->validateOldPassword($old_password)){
+        if(!$this->get('app.validate')->validateOldPassword($this->get('validator'),$old_password)){
             return $this->returnjson(false,'La contraseña actual no es correcta.');
         }
         try {

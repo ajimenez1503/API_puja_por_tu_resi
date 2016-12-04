@@ -13,3 +13,5 @@ services:
         class: AppBundle\EventListener\ResponseListener
         tags:
             - { name: kernel.event_listener, event: kernel.response }
+    app.validate:
+        class: AppBundle\Validate

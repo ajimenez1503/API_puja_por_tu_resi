@@ -32,79 +32,32 @@ class SigninController extends Controller
         return $response;
     }
 
-    public function validateEmail($email)
-    {
-        $emailConstraint = new EmailConstraint();
-        $emailConstraint->message = 'Email is not correct.';
-        $errors = $this->get('validator')->validate(
-            $email,
-            $emailConstraint
-        );
-        if ($errors==""){//if it is empty
-            return true;
-        }else{
-            return false;
-        }
-    }
 
 
-    public function validateURL($url)
-    {
-        $UrlConstraint = new UrlConstraint();
-        $UrlConstraint->message = 'URL is not correct.';
-        $errors = $this->get('validator')->validate(
-            $url,
-            $UrlConstraint
-        );
-        if ($errors==""){//if it is empty
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    public function validateLenghtInput($input,$min=1,$max=100)
-    {
-
-        $lengthConstraint = new LengthConstraint(array(
-        'min'        => $min,
-        'max'        => $max,
-        'minMessage' => 'Lengh should be >'.$min.'.',
-        'maxMessage' => 'Lengh should be <'.$max.'.'));
-        $errors = $this->get('validator')->validate(
-            $input,
-            $lengthConstraint
-        );
-        if ($errors==""){//if it is empty
-            return true;
-        }else{
-            return false;
-        }
-    }
 
     public function validateRegiterCollege($password,$username,$email,$companyName,$address,$telephone,$url)
     {
         $message="Errors: ";
 
-        if (is_null($password) || !$this->validateLenghtInput($password,1,8)){
+        if (is_null($password) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$password,1,8)){
                 $message=$message.' Password lenght [1,8].';
         }
-        if (is_null($username) || !$this->validateLenghtInput($username,1,10)){
+        if (is_null($username) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username,1,10)){
                 $message=$message.' Username lenght [1,10].';
         }
-        if (is_null($email) || !$this->validateEmail($email)){
+        if (is_null($email) || !$this->get('app.validate')->validateEmail($this->get('validator'),$email)){
             $message=$message.' Email is not correct.';
         }
-        if (is_null($companyName) || !$this->validateLenghtInput($companyName,1)){
+        if (is_null($companyName) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$companyName,1)){
                 $message=$message.' company_name lenght [1,max].';
         }
-        if (is_null($address) || !$this->validateLenghtInput($address,1)){
+        if (is_null($address) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$address,1)){
                 $message=$message.' address lenght [1,8].';
         }
-        if (is_null($telephone) || !$this->validateLenghtInput($telephone,1)){
+        if (is_null($telephone) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$telephone,1)){
                 $message=$message.' telephone lenght [1,8].';
         }
-        if (is_null($url) || !$this->validateURL($url)){
+        if (is_null($url) || !$this->get('app.validate')->validateURL($this->get('validator'),$url)){
             $message=$message.' url is not correct.';
         }
         if ($message=="Errors: "){
@@ -176,7 +129,6 @@ class SigninController extends Controller
             //get message problem
             return $this->returnjson(false,$validate['message']);
         }
-
         //get password
         $college = new College();
         $encoder = $this->container->get('security.password_encoder');
@@ -212,16 +164,16 @@ class SigninController extends Controller
     {
         $message="Errors: ";
 
-        if (is_null($password) ||!$this->validateLenghtInput($password,1,8)){
+        if (is_null($password) ||!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$password,1,8)){
                 $message=$message.' Password lenght [1,8].';
         }
-        if (is_null($username) ||!$this->validateLenghtInput($username,1,10)){
+        if (is_null($username) ||!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username,1,10)){
                 $message=$message.' Username lenght [1,10].';
         }
-        if (is_null($name) ||!$this->validateLenghtInput($name,1,100)){
+        if (is_null($name) ||!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$name,1,100)){
                 $message=$message.' Name lenght [1,8].';
         }
-        if (is_null($email) ||!$this->validateEmail($email)){
+        if (is_null($email) || !$this->get('app.validate')->validateEmail($this->get('validator'),$email)){
             $message=$message.' Email is not correct.';
         }
         if ($message=="Errors: "){

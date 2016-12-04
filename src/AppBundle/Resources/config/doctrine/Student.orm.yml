@@ -27,3 +27,7 @@ AppBundle\Entity\Student:
             type: datetime
             unique: false
             column: creation_date
+    oneToMany:
+        incidences:
+            targetEntity: Incidence
+            mappedBy: student

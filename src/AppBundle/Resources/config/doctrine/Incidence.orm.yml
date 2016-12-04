@@ -1,0 +1,33 @@
+# src/AppBundle/Resources/config/doctrine/Incidence.orm.yml
+AppBundle\Entity\Incidence:
+    type: entity
+    table: incidence
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+            unique: TRUE
+    fields:
+        status:
+            type: string
+            length: 64
+            unique: FALSE
+        description:
+            type: string
+            length: 60
+            unique: FALSE
+        file_name:
+            type: string
+            length: 60
+            unique: FALSE
+            nullable: TRUE
+        date:
+            type: datetime
+            unique: FALSE
+    manyToOne:
+        student:
+            targetEntity: Student
+            inversedBy: incidences
+            joinColumn:
+                name: student_username
+                referencedColumnName: username

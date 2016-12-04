@@ -1,4 +1,4 @@
-# src/AppBundle/Resources/config/doctrine/User.orm.yml
+# src/AppBundle/Resources/config/doctrine/College.orm.yml
 AppBundle\Entity\College:
     type: entity
     table: colleges

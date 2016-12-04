@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
-
+use Doctrine\Common\Collections\ArrayCollection;
 
 class Student implements AdvancedUserInterface, \Serializable
 {
@@ -15,6 +15,7 @@ class Student implements AdvancedUserInterface, \Serializable
     private $isActive;
     private $name;
     private $creationDate;
+    private $incidences;
 
     public function getUsername()
     {
@@ -24,6 +25,8 @@ class Student implements AdvancedUserInterface, \Serializable
     public function __construct()
     {
         $this->isActive = true;
+        $this->creationDate=date_create('now');
+        $this->$incidences = new ArrayCollection();
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
     }
@@ -236,5 +239,39 @@ class Student implements AdvancedUserInterface, \Serializable
     public function getCreationDate()
     {
         return $this->creationDate;
+    }
+
+    /**
+     * Add incidence
+     *
+     * @param \AppBundle\Entity\Incidence $incidence
+     *
+     * @return Student
+     */
+    public function addIncidence(\AppBundle\Entity\Incidence $incidence)
+    {
+        $this->incidences[] = $incidence;
+
+        return $this;
+    }
+
+    /**
+     * Remove incidence
+     *
+     * @param \AppBundle\Entity\Incidence $incidence
+     */
+    public function removeIncidence(\AppBundle\Entity\Incidence $incidence)
+    {
+        $this->incidences->removeElement($incidence);
+    }
+
+    /**
+     * Get incidences
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIncidences()
+    {
+        return $this->incidences;
     }
 }

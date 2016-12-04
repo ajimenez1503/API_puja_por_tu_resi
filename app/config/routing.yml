@@ -55,3 +55,21 @@ changeEmailProfileStudent:
     path:     /ProfileStudent/changeEmail/
     defaults:  { _controller: AppBundle:ProfileStudent:changeEmail}
     methods:  [POST]
+
+
+createIncidence:
+    path:     /Incidence/create/
+    defaults:  { _controller: AppBundle:Incidence:create}
+    methods:  [POST]
+
+
+getIncidence:
+    path:     /Incidence/get/
+    defaults:  { _controller: AppBundle:Incidence:get}
+    methods:  [GET]
+
+
+updateStateIncidence:
+    path:     /Incidence/updateState/
+    defaults:  { _controller: AppBundle:Incidence:updateState}
+    methods:  [POST]

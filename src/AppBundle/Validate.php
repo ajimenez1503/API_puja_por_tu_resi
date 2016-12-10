@@ -4,6 +4,7 @@ namespace AppBundle;
 use Symfony\Component\Validator\Constraints\Email as EmailConstraint;
 use Symfony\Component\Validator\Constraints\Length as LengthConstraint;
 use Symfony\Component\Validator\Constraints\Url as UrlConstraint;
+use Symfony\Component\Validator\Constraints\File as FileValidatorConstraint;
 
 
 class Validate
@@ -70,6 +71,26 @@ class Validate
         $errors = $validator->validate(
             $old_password,
             $UserPasswordConstraint
+        );
+        if ($errors==""){//if it is empty
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+
+    public function validateImageFile($validator,$file)
+    {
+        $FileValidatorConstraint = new FileValidatorConstraint();
+        $FileValidatorConstraint->maxSize='100M';
+        $FileValidatorConstraint->maxSizeMessage='size no allow.';
+        $FileValidatorConstraint->mimeTypes=array("image/jpeg","image/png");
+
+        $errors = $validator->validate(
+            $file,
+            $FileValidatorConstraint
         );
         if ($errors==""){//if it is empty
             return true;

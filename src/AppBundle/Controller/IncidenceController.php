@@ -7,11 +7,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Student;
 use AppBundle\Entity\Incidence;
 use Symfony\Component\Validator\Constraints\Length as LengthConstraint;
 use Symfony\Component\Validator\Constraints\Email as EmailConstraint;
+use Symfony\Component\Validator\Constraints\File as FileValidatorConstraint;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
@@ -32,6 +34,7 @@ class IncidenceController extends Controller
         ));
         return $response;
     }
+
 
     /**
      * @ApiDoc(
@@ -54,18 +57,23 @@ class IncidenceController extends Controller
     {
 
         $description=$request->request->get('description');
-        $file_name=$request->request->get('file_name');
+        $file=$request->files->get('file_name');
 
-        if (!$this->validateLenghtInput($description)){
+        if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$description)){
             return $this->returnjson(false,'Descripcion no es valida.');
         }
+        if (!$this->get('app.validate')->validateImageFile($this->get('validator'),$file)){
+            return $this->returnjson(false,'Imagen no es valida.');
+        }
+        $filename=md5(uniqid()).'.'.$file->getClientOriginalExtension();
+        $file->move($this->container->getParameter('storageFiles'),$filename);
         try {
             $user=$this->get('security.token_storage')->getToken()->getUser();
             $incidence = new Incidence();
 
             $incidence->setStudent($user);
             $incidence->setDescription($description);
-            $incidence->setFileName($file_name);
+            $incidence->setFileName($filename);
             $user->addIncidence($incidence);
             $em = $this->getDoctrine()->getManager();
             // tells Doctrine you want to (eventually) save the Product (no queries is done)
@@ -125,25 +133,6 @@ class IncidenceController extends Controller
     }
 
 
-
-    public function validateLenghtInput($input,$min=1,$max=100)
-    {
-
-        $lengthConstraint = new LengthConstraint(array(
-        'min'        => $min,
-        'max'        => $max,
-        'minMessage' => 'Lengh should be >'.$min.'.',
-        'maxMessage' => 'Lengh should be <'.$max.'.'));
-        $errors = $this->get('validator')->validate(
-            $input,
-            $lengthConstraint
-        );
-        if ($errors==""){//if it is empty
-            return true;
-        }else{
-            return false;
-        }
-    }
 
     public function validateState($state)
     {

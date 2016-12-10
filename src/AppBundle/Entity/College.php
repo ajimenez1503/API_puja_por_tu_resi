@@ -17,6 +17,7 @@ class College implements AdvancedUserInterface, \Serializable
     private $address;
     private $telephone;
     private $url;
+    private $incidences;
 
     public function __construct()
     {
@@ -287,5 +288,39 @@ class College implements AdvancedUserInterface, \Serializable
     public function geturl()
     {
         return $this->url;
+    }
+
+    /**
+     * Add incidence
+     *
+     * @param \AppBundle\Entity\Incidence $incidence
+     *
+     * @return College
+     */
+    public function addIncidence(\AppBundle\Entity\Incidence $incidence)
+    {
+        $this->incidences[] = $incidence;
+
+        return $this;
+    }
+
+    /**
+     * Remove incidence
+     *
+     * @param \AppBundle\Entity\Incidence $incidence
+     */
+    public function removeIncidence(\AppBundle\Entity\Incidence $incidence)
+    {
+        $this->incidences->removeElement($incidence);
+    }
+
+    /**
+     * Get incidences
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIncidences()
+    {
+        return $this->incidences;
     }
 }

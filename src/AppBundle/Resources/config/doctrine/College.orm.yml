@@ -36,3 +36,7 @@ AppBundle\Entity\College:
             type: string
             length: 60
             unique: false
+    oneToMany:
+        incidences:
+            targetEntity: Incidence
+            mappedBy: college

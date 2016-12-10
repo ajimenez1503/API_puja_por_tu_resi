@@ -12,7 +12,7 @@ class Incidence
     private $description;
     private $file_name;
     private $date;
-    //private $college;
+    private $college;
     private $student;
 
 
@@ -20,9 +20,8 @@ class Incidence
     public function __construct()
     {
         $this->status = "OPEN";
-        $this->file_name = NULL;
         $this->date=date_create('now');
-        //TODO time now
+        $this->college = null; 
     }
     /**
      * Get id
@@ -183,5 +182,29 @@ class Incidence
             'date'=>$this->getDate(),
         );
         return $output;
+    }
+
+    /**
+     * Set college
+     *
+     * @param \AppBundle\Entity\College $college
+     *
+     * @return Incidence
+     */
+    public function setCollege(\AppBundle\Entity\College $college = null)
+    {
+        $this->college = $college;
+
+        return $this;
+    }
+
+    /**
+     * Get college
+     *
+     * @return \AppBundle\Entity\College
+     */
+    public function getCollege()
+    {
+        return $this->college;
     }
 }

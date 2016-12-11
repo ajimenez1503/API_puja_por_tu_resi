@@ -98,4 +98,25 @@ class Validate
             return false;
         }
     }
+
+
+
+
+    public function validatePDFFile($validator,$file)
+    {
+        $FileValidatorConstraint = new FileValidatorConstraint();
+        $FileValidatorConstraint->maxSize='100M';
+        $FileValidatorConstraint->maxSizeMessage='size no allow.';
+        $FileValidatorConstraint->mimeTypes=array("application/pdf");
+
+        $errors = $validator->validate(
+            $file,
+            $FileValidatorConstraint
+        );
+        if ($errors==""){//if it is empty
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

@@ -1,0 +1,38 @@
+# src/AppBundle/Resources/config/doctrine/Message.orm.yml
+AppBundle\Entity\Message:
+    type: entity
+    table: message
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+            unique: TRUE
+    fields:
+        open:
+            type: boolean
+            unique: FALSE
+        message:
+            type: string
+            length: 5000
+            unique: FALSE
+        file_attached:
+            type: string
+            length: 60
+            unique: FALSE
+            nullable: TRUE
+        date:
+            type: datetime
+            unique: FALSE
+    manyToOne:
+        student:
+            targetEntity: Student
+            inversedBy: messages
+            joinColumn:
+                name: student_username
+                referencedColumnName: username
+        college:
+            targetEntity: College
+            inversedBy: messages
+            joinColumn:
+                name: college_username
+                referencedColumnName: username

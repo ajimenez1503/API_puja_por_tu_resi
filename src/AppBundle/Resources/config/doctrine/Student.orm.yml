@@ -31,3 +31,6 @@ AppBundle\Entity\Student:
         incidences:
             targetEntity: Incidence
             mappedBy: student
+        messages:
+            targetEntity: Message
+            mappedBy: student

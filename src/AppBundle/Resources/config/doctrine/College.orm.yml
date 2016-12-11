@@ -40,3 +40,6 @@ AppBundle\Entity\College:
         incidences:
             targetEntity: Incidence
             mappedBy: college
+        messages:
+            targetEntity: Message
+            mappedBy: college

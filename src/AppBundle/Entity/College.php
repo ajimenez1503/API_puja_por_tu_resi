@@ -18,6 +18,8 @@ class College implements AdvancedUserInterface, \Serializable
     private $telephone;
     private $url;
     private $incidences;
+    private $messages;
+
 
     public function __construct()
     {
@@ -322,5 +324,39 @@ class College implements AdvancedUserInterface, \Serializable
     public function getIncidences()
     {
         return $this->incidences;
+    }
+
+    /**
+     * Add message
+     *
+     * @param \AppBundle\Entity\Message $message
+     *
+     * @return College
+     */
+    public function addMessage(\AppBundle\Entity\Message $message)
+    {
+        $this->messages[] = $message;
+
+        return $this;
+    }
+
+    /**
+     * Remove message
+     *
+     * @param \AppBundle\Entity\Message $message
+     */
+    public function removeMessage(\AppBundle\Entity\Message $message)
+    {
+        $this->messages->removeElement($message);
+    }
+
+    /**
+     * Get messages
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMessages()
+    {
+        return $this->messages;
     }
 }

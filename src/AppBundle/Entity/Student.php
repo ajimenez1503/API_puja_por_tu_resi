@@ -16,6 +16,7 @@ class Student implements AdvancedUserInterface, \Serializable
     private $name;
     private $creationDate;
     private $incidences;
+    private $messages;
 
     public function getUsername()
     {
@@ -273,5 +274,39 @@ class Student implements AdvancedUserInterface, \Serializable
     public function getIncidences()
     {
         return $this->incidences;
+    }
+
+    /**
+     * Add message
+     *
+     * @param \AppBundle\Entity\Message $message
+     *
+     * @return Student
+     */
+    public function addMessage(\AppBundle\Entity\Message $message)
+    {
+        $this->messages[] = $message;
+
+        return $this;
+    }
+
+    /**
+     * Remove message
+     *
+     * @param \AppBundle\Entity\Message $message
+     */
+    public function removeMessage(\AppBundle\Entity\Message $message)
+    {
+        $this->messages->removeElement($message);
+    }
+
+    /**
+     * Get messages
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMessages()
+    {
+        return $this->messages;
     }
 }

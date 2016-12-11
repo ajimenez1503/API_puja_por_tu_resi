@@ -62,14 +62,27 @@ createIncidence:
     defaults:  { _controller: AppBundle:Incidence:create}
     methods:  [POST]
 
-
 getIncidence:
     path:     /Incidence/get/
     defaults:  { _controller: AppBundle:Incidence:get}
     methods:  [GET]
 
-
 updateStateIncidence:
     path:     /Incidence/updateState/
     defaults:  { _controller: AppBundle:Incidence:updateState}
+    methods:  [POST]
+
+createMessagee:
+    path:     /Message/create/
+    defaults:  { _controller: AppBundle:Message:create}
+    methods:  [POST]
+
+getMessage:
+    path:     /Message/get/
+    defaults:  { _controller: AppBundle:Message:get}
+    methods:  [GET]
+
+openMessage:
+    path:     /Message/open/
+    defaults:  { _controller: AppBundle:Message:open}
     methods:  [POST]

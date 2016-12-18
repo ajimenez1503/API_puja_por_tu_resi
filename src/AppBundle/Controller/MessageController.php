@@ -52,18 +52,17 @@ class MessageController extends Controller
      */
     public function createAction(Request $request)
     {
-
         $message_text=$request->request->get('message');
         $file=$request->files->get('file_attached');
         if (count($file) == 0){
             $file=null;
         }
         if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$message_text,1,5000)){
-            return $this->returnjson(false,'Texto no es valida.');
+            return $this->returnjson(false,'Texto no es valido.');
         }
         if (!is_null($file)){
-            if (!$this->get('app.validate')->validatePDFFile($this->get('validator'),$file)){
-                return $this->returnjson(false,'Archivo no es valida.');
+            if (!$this->get('app.validate')->validatePDFFile($this->get('validator'),$file) and !$this->get('app.validate')->validateImageFile($this->get('validator'),$file)){
+                return $this->returnjson(false,'Archivo no es valido.');
             }
             $filename=md5(uniqid()).'.'.$file->getClientOriginalExtension();
             $file->move($this->container->getParameter('storageFiles'),$filename);

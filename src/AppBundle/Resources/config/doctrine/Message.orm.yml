@@ -23,6 +23,10 @@ AppBundle\Entity\Message:
         date:
             type: datetime
             unique: FALSE
+        sender_type:
+            type: string
+            unique: FALSE
+            
     manyToOne:
         student:
             targetEntity: Student

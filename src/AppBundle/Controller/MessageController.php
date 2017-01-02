@@ -72,6 +72,7 @@ class MessageController extends Controller
             $user=$this->get('security.token_storage')->getToken()->getUser();
             $message = new Message();
             $message->setStudent($user);
+            $message->setSenderType($user->getRoles()[0]);
             $message->setMessage($message_text);
             if (!is_null($file)){
                 $message->setFileAttached($filename);
@@ -135,10 +136,66 @@ class MessageController extends Controller
 
         $output=array();
         for ($i = 0; $i < count($messages); $i++) {
-            array_push($output,$messages[$i]->getJSON()
+            array_unshift($output,$messages[$i]->getJSON()
             );
         }
         return $this->returnjson(true,'List of messages',$output);
     }
+
+
+    /**
+     * @ApiDoc(
+     *  description="download file",
+     *  requirements={
+     *      {
+     *          "name"="filename",
+     *          "dataType"="String",
+     *          "description"="filename of the file to download"
+     *      },
+     *  },
+     * )
+     */
+    public function downloadAction($filename)
+    {
+        $path = $this->container->getParameter('storageFiles');
+        $content = file_get_contents($path.'/'.$filename);
+
+        $response = new Response();
+
+        //set headers
+        $response->headers->set('Content-Type', 'mime/type');
+        $response->headers->set('Content-Disposition', 'attachment;filename="'.$filename);
+
+        $response->setContent($content);
+        return $response;
+    }
+
+
+
+    /**
+     * @ApiDoc(
+     *  description="This method set open=true of a all the message of user.",
+     * )
+     */
+    public function openAllAction(Request $request)
+    {
+        $user=$this->get('security.token_storage')->getToken()->getUser();
+        $messages=$user->getMessages()->getValues();
+        for ($i = 0; $i < count($messages); $i++) {
+            try {
+                $messages[$i]->setOpen(true);
+                $em = $this->getDoctrine()->getManager();
+                // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                $em->persist($messages[$i]);
+                // actually executes the queries (i.e. the INSERT query)
+                //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                $em->flush();
+            } catch (\Exception $pdo_ex) {
+                return $this->returnjson(false,'SQL exception.');
+            }
+        }
+        return $this->returnjson(true,'TOdos messnage se ha leido correctamente.');
+    }
+
 
 }

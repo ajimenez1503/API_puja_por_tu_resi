@@ -82,7 +82,17 @@ getMessage:
     defaults:  { _controller: AppBundle:Message:get}
     methods:  [GET]
 
+openAllMessage:
+    path:     /Message/openAll/
+    defaults:  { _controller: AppBundle:Message:openAll}
+    methods:  [POST]
+    
 openMessage:
     path:     /Message/open/
     defaults:  { _controller: AppBundle:Message:open}
     methods:  [POST]
+
+downloadMessage:
+    path:  /Message/download/{filename}
+    defaults: { _controller: AppBundle:Message:download }
+    methods:  [GET]

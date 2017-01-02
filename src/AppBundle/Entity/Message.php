@@ -14,6 +14,7 @@ class Message
     private $date;
     private $college;
     private $student;
+    private $sender_type;//STUDENT or COLLEGE
 
 
 
@@ -94,6 +95,7 @@ class Message
             'message' => $this->getMessage(),
             'file_attached'=>$this->getFileAttached(),
             'date'=>$this->getDate(),
+            'senderType'=>$this->getSenderType(),
         );
         return $output;
     }
@@ -194,5 +196,29 @@ class Message
     public function getOpen()
     {
         return $this->open;
+    }
+
+    /**
+     * Set senderType
+     *
+     * @param string $senderType
+     *
+     * @return Message
+     */
+    public function setSenderType($senderType)
+    {
+        $this->sender_type = $senderType;
+
+        return $this;
+    }
+
+    /**
+     * Get senderType
+     *
+     * @return string
+     */
+    public function getSenderType()
+    {
+        return $this->sender_type;
     }
 }

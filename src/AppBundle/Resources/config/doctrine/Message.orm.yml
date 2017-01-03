@@ -8,7 +8,10 @@ AppBundle\Entity\Message:
             generator: { strategy: AUTO }
             unique: TRUE
     fields:
-        open:
+        read_by_student:
+            type: boolean
+            unique: FALSE
+        read_by_college:
             type: boolean
             unique: FALSE
         message:
@@ -26,7 +29,7 @@ AppBundle\Entity\Message:
         sender_type:
             type: string
             unique: FALSE
-            
+
     manyToOne:
         student:
             targetEntity: Student

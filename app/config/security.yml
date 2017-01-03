@@ -35,7 +35,7 @@ security:
                 target: /login
 
     access_control:
-    - { path: ^/Message/download/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/download/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/api/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/Signin/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }

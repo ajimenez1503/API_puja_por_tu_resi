@@ -94,8 +94,6 @@ class Message
         $output=array(
             'id'=>$this->getId(),
             'message' => $this->getMessage(),
-            'read_by_student'=>$this->getReadByStudent(),
-            'read_by_college'=>$this->getReadByCollege(),
             'file_attached'=>$this->getFileAttached(),
             'date'=>$this->getDate(),
             'senderType'=>$this->getSenderType(),
@@ -200,53 +198,5 @@ class Message
     public function getSenderType()
     {
         return $this->sender_type;
-    }
-
-    /**
-     * Set readByStudent
-     *
-     * @param boolean $readByStudent
-     *
-     * @return Message
-     */
-    public function setReadByStudent($readByStudent)
-    {
-        $this->read_by_student = $readByStudent;
-
-        return $this;
-    }
-
-    /**
-     * Get readByStudent
-     *
-     * @return boolean
-     */
-    public function getReadByStudent()
-    {
-        return $this->read_by_student;
-    }
-
-    /**
-     * Set readByCollege
-     *
-     * @param boolean $readByCollege
-     *
-     * @return Message
-     */
-    public function setReadByCollege($readByCollege)
-    {
-        $this->read_by_college = $readByCollege;
-
-        return $this;
-    }
-
-    /**
-     * Get readByCollege
-     *
-     * @return boolean
-     */
-    public function getReadByCollege()
-    {
-        return $this->read_by_college;
     }
 }

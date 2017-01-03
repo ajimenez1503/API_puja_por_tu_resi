@@ -163,4 +163,37 @@ class IncidenceController extends Controller
         return $this->returnjson(true,'List of inicidences',$output);
     }
 
+
+
+    /**
+     * @ApiDoc(
+     *  description="download file",
+     *  requirements={
+     *      {
+     *          "name"="filename",
+     *          "dataType"="String",
+     *          "description"="filename of the file to download"
+     *      },
+     *  },
+     * )
+     */
+    public function downloadAction($filename)
+    {
+        $path = $this->container->getParameter('storageFiles');
+        $content = file_get_contents($path.'/'.$filename);
+
+        $response = new Response();
+
+        //set headers
+
+        //$response->headers->set("Access-Control-Expose-Headers", "Content-Disposition");
+        $response->headers->add(array('Access-Control-Expose-Headers' =>  'Content-Disposition'));
+        $response->headers->set('Content-Type', 'mime/type');
+        $response->headers->set('Content-Disposition', 'attachment;filename="'.$filename);
+
+        $response->setContent($content);
+        return $response;
+    }
+
+
 }

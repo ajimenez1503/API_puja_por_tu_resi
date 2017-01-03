@@ -143,6 +143,33 @@ class MessageController extends Controller
     }
 
 
+
+    /**
+     * @ApiDoc(
+     *  description="get number of not read message of a user(Student || College)",
+     * )
+     */
+    public function countNotReadAction(Request $request)
+    {
+        $user=$this->get('security.token_storage')->getToken()->getUser();
+        $messages=$user->getMessages()->getValues();
+
+        $count=0;
+        for ($i = 0; $i < count($messages); $i++) {
+            if ($user->getRoles()[0]=="ROLE_STUDENT"){
+                if (!$messages[$i]->getReadByStudent()){
+                    $count+=1;
+                }
+            }elseif ($user->getRoles()[0]=="ROLE_COLLEGE"){
+                if (!$messages[$i]->getReadByCollege()){
+                    $count+=1;
+                }
+            }
+        }
+        return $this->returnjson(true,'List of messages not read',$count);
+    }
+
+
     /**
      * @ApiDoc(
      *  description="download file",
@@ -163,6 +190,9 @@ class MessageController extends Controller
         $response = new Response();
 
         //set headers
+
+        //$response->headers->set("Access-Control-Expose-Headers", "Content-Disposition");
+        $response->headers->add(array('Access-Control-Expose-Headers' =>  'Content-Disposition'));
         $response->headers->set('Content-Type', 'mime/type');
         $response->headers->set('Content-Disposition', 'attachment;filename="'.$filename);
 
@@ -174,7 +204,7 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method set open=true of a all the message of user.",
+     *  description="This method set ReadBy=true of a all the message of user (Student/College).",
      * )
      */
     public function openAllAction(Request $request)
@@ -183,7 +213,11 @@ class MessageController extends Controller
         $messages=$user->getMessages()->getValues();
         for ($i = 0; $i < count($messages); $i++) {
             try {
-                $messages[$i]->setOpen(true);
+                if ($user->getRoles()[0]=="ROLE_STUDENT"){
+                    $messages[$i]->setReadByStudent(true);
+                }elseif ($user->getRoles()[0]=="ROLE_COLLEGE"){
+                    $messages[$i]->setReadByCollege(true);
+                }
                 $em = $this->getDoctrine()->getManager();
                 // tells Doctrine you want to (eventually) save the Product (no queries is done)
                 $em->persist($messages[$i]);

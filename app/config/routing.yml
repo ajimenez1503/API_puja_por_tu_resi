@@ -67,6 +67,11 @@ getIncidence:
     defaults:  { _controller: AppBundle:Incidence:get}
     methods:  [GET]
 
+downloadIncidence:
+    path:  /Incidence/download/{filename}
+    defaults: { _controller: AppBundle:Incidence:download }
+    methods:  [GET]
+
 updateStateIncidence:
     path:     /Incidence/updateState/
     defaults:  { _controller: AppBundle:Incidence:updateState}
@@ -82,11 +87,16 @@ getMessage:
     defaults:  { _controller: AppBundle:Message:get}
     methods:  [GET]
 
+countNotReadMessage:
+    path:     /Message/countNotRead/
+    defaults:  { _controller: AppBundle:Message:countNotRead}
+    methods:  [GET]
+
 openAllMessage:
     path:     /Message/openAll/
     defaults:  { _controller: AppBundle:Message:openAll}
     methods:  [POST]
-    
+
 openMessage:
     path:     /Message/open/
     defaults:  { _controller: AppBundle:Message:open}

@@ -35,7 +35,7 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method create a message ",
+     *  description="This method create a message  by the user (Student)",
      *  requirements={
      *      {
      *          "name"="message",
@@ -70,6 +70,8 @@ class MessageController extends Controller
 
         try {
             $user=$this->get('security.token_storage')->getToken()->getUser();
+            //TODO If ROLE_STUDENT get the college by the agreement
+            //TODO elese, get the username_student in the request
             $message = new Message();
             $message->setStudent($user);
             $message->setSenderType($user->getRoles()[0]);
@@ -77,7 +79,7 @@ class MessageController extends Controller
             if (!is_null($file)){
                 $message->setFileAttached($filename);
             }
-            //$user->addMessage($message);
+            $user->addMessage($message);
             $em = $this->getDoctrine()->getManager();
             // tells Doctrine you want to (eventually) save the Product (no queries is done)
             $em->persist($message);
@@ -120,7 +122,7 @@ class MessageController extends Controller
         } catch (\Exception $pdo_ex) {
             return $this->returnjson(false,'SQL exception.');
         }
-        return $this->returnjson(true,'El messnage se ha leido correctamente.');
+        return $this->returnjson(true,'El mensaje se ha leido correctamente.');
     }
 
 

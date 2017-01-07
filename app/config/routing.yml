@@ -77,7 +77,7 @@ updateStateIncidence:
     defaults:  { _controller: AppBundle:Incidence:updateState}
     methods:  [POST]
 
-createMessagee:
+createMessage:
     path:     /Message/create/
     defaults:  { _controller: AppBundle:Message:create}
     methods:  [POST]
@@ -105,4 +105,24 @@ openMessage:
 downloadMessage:
     path:  /Message/download/{filename}
     defaults: { _controller: AppBundle:Message:download }
+    methods:  [GET]
+
+createRent:
+    path:     /Rent/create/
+    defaults:  { _controller: AppBundle:Rent:create}
+    methods:  [POST]
+
+payRent:
+    path:     /Rent/pay/
+    defaults:  { _controller: AppBundle:Rent:pay}
+    methods:  [POST]
+
+getRent:
+    path:     /Rent/get/
+    defaults:  { _controller: AppBundle:Rent:get}
+    methods:  [GET]
+
+getUnpaidRent:
+    path:     /Rent/getUnpaid/
+    defaults:  { _controller: AppBundle:Rent:getUnpaid}
     methods:  [GET]

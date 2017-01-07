@@ -17,6 +17,7 @@ class Student implements AdvancedUserInterface, \Serializable
     private $creationDate;
     private $incidences;
     private $messages;
+    private $rents;
 
     public function getUsername()
     {
@@ -308,5 +309,39 @@ class Student implements AdvancedUserInterface, \Serializable
     public function getMessages()
     {
         return $this->messages;
+    }
+
+    /**
+     * Add rent
+     *
+     * @param \AppBundle\Entity\Rent $rent
+     *
+     * @return Student
+     */
+    public function addRent(\AppBundle\Entity\Rent $rent)
+    {
+        $this->rents[] = $rent;
+
+        return $this;
+    }
+
+    /**
+     * Remove rent
+     *
+     * @param \AppBundle\Entity\Rent $rent
+     */
+    public function removeRent(\AppBundle\Entity\Rent $rent)
+    {
+        $this->rents->removeElement($rent);
+    }
+
+    /**
+     * Get rents
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRents()
+    {
+        return $this->rents;
     }
 }

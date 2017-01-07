@@ -1,0 +1,51 @@
+# src/AppBundle/Resources/config/doctrine/Rent.orm.yml
+AppBundle\Entity\Rent:
+    type: entity
+    table: rent
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+            unique: TRUE
+    fields:
+        status_paid:
+            type: boolean
+            unique: FALSE
+        price:
+            type: float
+            unique: FALSE
+        date:
+            type: datetime
+            unique: FALSE
+        file_receipt:
+            type: string
+            length: 60
+            unique: FALSE
+            nullable: TRUE
+        date_paid:
+            type: datetime
+            unique: FALSE
+            nullable: TRUE
+        card_holder:
+            type: string
+            length: 60
+            unique: FALSE
+            nullable: TRUE
+        card_number:
+            type: string
+            length: 60
+            unique: FALSE
+            nullable: TRUE
+    manyToOne:
+        student:
+            targetEntity: Student
+            inversedBy: rents
+            joinColumn:
+                name: student_username
+                referencedColumnName: username
+        college:
+            targetEntity: College
+            inversedBy: retns
+            joinColumn:
+                name: college_username
+                referencedColumnName: username

@@ -88,6 +88,18 @@ class Student implements AdvancedUserInterface, \Serializable
         ));
     }
 
+
+    public function getJSON()
+    {
+        $output=array(
+            'username'=>$this->getUsername(),
+            'name' => $this->getName(),
+            'email'=>$this->getEmail(),
+            'creationDate'=>$this->getCreationDate(),
+        );
+        return $output;
+    }
+
     /** @see \Serializable::unserialize() */
     public function unserialize($serialized)
     {

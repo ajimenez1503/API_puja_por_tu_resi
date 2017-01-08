@@ -124,17 +124,19 @@ class RentController extends Controller
         return $this->returnjson(true,'List of rents unpaid',$output);
     }
 
-    public function crete_receipt(/*$college_data,$student_data,$rent_data*/)
+    public function crete_receipt(/*$college_data,*/$student_data,$rent_data)
     {
-        $filename="/".md5(uniqid()).'.pdf';
+        $filename=md5(uniqid()).'.pdf';
         $this->get('knp_snappy.pdf')->generateFromHtml(
             $this->renderView(
                 'payment_receipt.html.twig',
                 array(
-                    //'some'  => $vars
+                    'rent'  => $rent_data->getJSON(),
+                    'student' =>$student_data->getJSON(),
+                    //TODO add college information
                 )
             ),
-            $this->container->getParameter('storageFiles').$filename
+            $this->container->getParameter('storageFiles')."/".$filename
         );
         return $filename;
     }
@@ -173,10 +175,6 @@ class RentController extends Controller
         $cardNumber=$request->request->get('cardNumber');
         $cardNumber=preg_replace("/\D/", "", $cardNumber);//Delete everthing that is not a digit
 
-        $file_name=$this->crete_receipt(/*$college_data,$student_data,$rent_data*/);
-        return $this->returnjson(false,'TODOOO');
-
-
         if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$cardHolder,1,20)){
             return $this->returnjson(false,'cardHolder no es valido.');
         }
@@ -190,12 +188,14 @@ class RentController extends Controller
 
         try {
             $rent = $this->getDoctrine()->getRepository('AppBundle:Rent')->find($id);
-
+            $user=$this->get('security.token_storage')->getToken()->getUser();
+            //TODO get college by the agreement
             $rent->setStatusPaid(true);
             $rent->setCardHolder($cardHolder);
             $rent->setCardNumber($cardNumber);
-            $rent->setFileReceipt($filename);
             $rent->setDatePaid(date_create('now'));
+            $file_name=$this->crete_receipt(/*$college_data*/$user,$rent);//TODO add college information
+            $rent->setFileReceipt($file_name);
             $em = $this->getDoctrine()->getManager();
             // tells Doctrine you want to (eventually) save the Product (no queries is done)
             $em->persist($rent);
@@ -203,7 +203,7 @@ class RentController extends Controller
             //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
             $em->flush();
         } catch (\Exception $pdo_ex) {
-            return $this->returnjson(false,'SQL exception.');
+            return $this->returnjson(false,'SQL exception.'.$pdo_ex);
         }
         return $this->returnjson(true,'La mensualidad se ha pagado correctamente.');
     }

@@ -25,6 +25,9 @@ class College implements AdvancedUserInterface, \Serializable
     public function __construct()
     {
         $this->isActive = true;
+        $this->incidences = new ArrayCollection();
+        $this->messages = new ArrayCollection();
+        $this->rents = new ArrayCollection();
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
     }

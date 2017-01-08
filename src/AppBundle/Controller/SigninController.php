@@ -153,7 +153,7 @@ class SigninController extends Controller
             $data=array(
              'username' => $college->getUsername(),
             );
-            return $this->returnjson(true,'USER register',$data);
+            return $this->returnjson(true,'USER college register',$data);
         }else{
             return $this->returnjson(false,'Username is already used');
         }
@@ -217,6 +217,7 @@ class SigninController extends Controller
      */
     public function studentAction(Request $request)
     {
+
         $password=$request->request->get('password');
         $username=$request->request->get('username');
         $email=$request->request->get('email');
@@ -252,7 +253,7 @@ class SigninController extends Controller
             $data=array(
              'username' => $Student->getUsername(),
             );
-            return $this->returnjson(true,'Student register',$data);
+            return $this->returnjson(true,'User Student register',$data);
         }else{
             return $this->returnjson(false,'Username is already used');
         }

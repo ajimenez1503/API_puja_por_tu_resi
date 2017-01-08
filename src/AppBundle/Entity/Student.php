@@ -28,7 +28,9 @@ class Student implements AdvancedUserInterface, \Serializable
     {
         $this->isActive = true;
         $this->creationDate=date_create('now');
-        $this->$incidences = new ArrayCollection();
+        $this->incidences = new ArrayCollection();
+        $this->messages = new ArrayCollection();
+        $this->rents = new ArrayCollection();
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
     }

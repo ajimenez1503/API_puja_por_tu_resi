@@ -124,6 +124,20 @@ class RentController extends Controller
         return $this->returnjson(true,'List of rents unpaid',$output);
     }
 
+    public function crete_receipt(/*$college_data,$student_data,$rent_data*/)
+    {
+        $filename="/".md5(uniqid()).'.pdf';
+        $this->get('knp_snappy.pdf')->generateFromHtml(
+            $this->renderView(
+                'payment_receipt.html.twig',
+                array(
+                    //'some'  => $vars
+                )
+            ),
+            $this->container->getParameter('storageFiles').$filename
+        );
+        return $filename;
+    }
 
     /**
      * @ApiDoc(
@@ -158,6 +172,11 @@ class RentController extends Controller
         $expiry_month=$request->request->get('expiry_month');
         $cardNumber=$request->request->get('cardNumber');
         $cardNumber=preg_replace("/\D/", "", $cardNumber);//Delete everthing that is not a digit
+
+        $file_name=$this->crete_receipt(/*$college_data,$student_data,$rent_data*/);
+        return $this->returnjson(false,'TODOOO');
+
+
         if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$cardHolder,1,20)){
             return $this->returnjson(false,'cardHolder no es valido.');
         }
@@ -175,6 +194,7 @@ class RentController extends Controller
             $rent->setStatusPaid(true);
             $rent->setCardHolder($cardHolder);
             $rent->setCardNumber($cardNumber);
+            $rent->setFileReceipt($filename);
             $rent->setDatePaid(date_create('now'));
             $em = $this->getDoctrine()->getManager();
             // tells Doctrine you want to (eventually) save the Product (no queries is done)

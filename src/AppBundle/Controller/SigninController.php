@@ -42,7 +42,7 @@ class SigninController extends Controller
         if (is_null($password) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$password,1,8)){
                 $message=$message.' Password lenght [1,8].';
         }
-        if (is_null($username) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username,1,10)){
+        if (is_null($username) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username,9,9)){
                 $message=$message.' Username lenght [1,10].';
         }
         if (is_null($email) || !$this->get('app.validate')->validateEmail($this->get('validator'),$email)){
@@ -54,8 +54,8 @@ class SigninController extends Controller
         if (is_null($address) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$address,1)){
                 $message=$message.' address lenght [1,8].';
         }
-        if (is_null($telephone) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$telephone,1)){
-                $message=$message.' telephone lenght [1,8].';
+        if (is_null($telephone) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$telephone,1,15)){
+                $message=$message.' telephone lenght [1,15].';
         }
         if (is_null($url) || !$this->get('app.validate')->validateURL($this->get('validator'),$url)){
             $message=$message.' url is not correct.';
@@ -129,6 +129,7 @@ class SigninController extends Controller
             //get message problem
             return $this->returnjson(false,$validate['message']);
         }
+
         //get password
         $college = new College();
         $encoder = $this->container->get('security.password_encoder');

@@ -96,6 +96,7 @@ class Rent
             'status_paid' => $this->getStatusPaid(),
             'price'=>$this->getPrice(),
             'date'=>$this->getDate(),
+            'month'=>date_format($this->getDate(),"F"),
             'file_receipt'=>$this->getFileReceipt(),
             'date_paid'=>$this->getDatePaid(),
             'card_number'=>$this->getCardNumber(),

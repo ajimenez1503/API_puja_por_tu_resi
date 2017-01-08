@@ -126,3 +126,7 @@ getUnpaidRent:
     path:     /Rent/getUnpaid/
     defaults:  { _controller: AppBundle:Rent:getUnpaid}
     methods:  [GET]
+downloadRent:
+    path:  /Rent/download/{filename}
+    defaults: { _controller: AppBundle:Rent:download }
+    methods:  [GET]

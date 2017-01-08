@@ -121,7 +121,7 @@ class RentController extends Controller
                 array_unshift($output,$messages[$i]->getJSON());
             }
         }
-        return $this->returnjson(true,'List of rents',$output);
+        return $this->returnjson(true,'List of rents unpaid',$output);
     }
 
 
@@ -153,12 +153,20 @@ class RentController extends Controller
     {
         $id=$request->request->get('id');
         $cardHolder=$request->request->get('cardHolder');
+        $cvv=$request->request->get('cvv');
+        $expiry_year=$request->request->get('expiry_year');
+        $expiry_month=$request->request->get('expiry_month');
         $cardNumber=$request->request->get('cardNumber');
+        $cardNumber=preg_replace("/\D/", "", $cardNumber);//Delete everthing that is not a digit
         if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$cardHolder,1,20)){
             return $this->returnjson(false,'cardHolder no es valido.');
         }
-        if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$cardNumber,1,20)){
-            return $this->returnjson(false,'cardNumber no es valido.');
+        if (!$this->get('app.validate')->validateLuhnCardNumber($this->get('validator'),$cardNumber)){
+            return $this->returnjson(false,'cardNumber no es valido. Luhn.');
+        }if (!$this->get('app.validate')->validateCVV($cardNumber,$cvv)){
+            return $this->returnjson(false,'CVV no es valido.');
+        }if (!$this->get('app.validate')->validateExpiryDate($expiry_month,$expiry_year)){
+            return $this->returnjson(false,'Fecha expiracion erronea.');
         }
 
         try {
@@ -178,6 +186,36 @@ class RentController extends Controller
             return $this->returnjson(false,'SQL exception.');
         }
         return $this->returnjson(true,'La mensualidad se ha pagado correctamente.');
+    }
+
+    /**
+     * @ApiDoc(
+     *  description="download file",
+     *  requirements={
+     *      {
+     *          "name"="filename",
+     *          "dataType"="String",
+     *          "description"="filename receipt"
+     *      },
+     *  },
+     * )
+     */
+    public function downloadAction($filename)
+    {
+        $path = $this->container->getParameter('storageFiles');
+        $content = file_get_contents($path.'/'.$filename);
+
+        $response = new Response();
+
+        //set headers
+
+        //$response->headers->set("Access-Control-Expose-Headers", "Content-Disposition");
+        $response->headers->add(array('Access-Control-Expose-Headers' =>  'Content-Disposition'));
+        $response->headers->set('Content-Type', 'mime/type');
+        $response->headers->set('Content-Disposition', 'attachment;filename="'.$filename);
+
+        $response->setContent($content);
+        return $response;
     }
 
 }

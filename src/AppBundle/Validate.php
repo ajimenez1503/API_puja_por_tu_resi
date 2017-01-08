@@ -5,6 +5,8 @@ use Symfony\Component\Validator\Constraints\Email as EmailConstraint;
 use Symfony\Component\Validator\Constraints\Length as LengthConstraint;
 use Symfony\Component\Validator\Constraints\Url as UrlConstraint;
 use Symfony\Component\Validator\Constraints\File as FileValidatorConstraint;
+use Symfony\Component\Validator\Constraints\Luhn as LuhnValidatorConstraint;
+
 
 
 class Validate
@@ -22,6 +24,54 @@ class Validate
             return true;
         }else{
             return false;
+        }
+    }
+
+    public function validateLuhnCardNumber($validator,$CardNumber)
+    {
+        $LuhnValidatorConstraint = new LuhnValidatorConstraint();
+        $LuhnValidatorConstraint->message = 'CardNumber is not correct. Luhn.';
+        $errors = $validator->validate(
+            $CardNumber,
+            $LuhnValidatorConstraint
+        );
+        if ($errors==""){//if it is empty
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+    public function validateCVV($cardNumber,$cvv){
+        // Get the first number of the credit card so we know how many digits to look for
+        $firstnumber = intval(substr($cardNumber,0, 1));
+        if ($firstnumber == 3)
+        {
+            if (!ereg('([0-9]{4})', $cvv)) {
+                return false;
+            }
+        }
+        // else mastercard or visa
+        elseif (!ereg('([0-9]{3})', $cvv))  {
+            return false;
+        }
+        return true;
+    }
+
+
+
+    public function validateExpiryDate($expiry_month,$expiry_year)
+    {
+        $date=date_create('now');
+        $expiry_year=intval($expiry_year);
+        $expiry_month=intval($expiry_month);
+        $month = date_format($date,"m");
+        $year = date_format($date,"Y");
+        if ($year> $expiry_year || ($year == $expiry_year && $month >= $expiry_month)){
+            return false;
+        }else{
+            return true;
         }
     }
 

@@ -21,7 +21,7 @@ class Incidence
     {
         $this->status = "OPEN";
         $this->date=date_create('now');
-        $this->college = null; 
+        $this->college = null;
     }
     /**
      * Get id
@@ -154,24 +154,9 @@ class Incidence
     }
 
 
-
     /**
-     * Set description,file_name,student
-     *
-      * @param string $status
-     * @param \AppBundle\Entity\Student $student
-     *
-     * @return Incidence
-     */
-    public function set($description,$file_name,\AppBundle\Entity\Student $student = null)
-    {
-        $this->description = $description;
-        $this->file_name =  $file_name;
-        $this->student = $student;
-
-        return $this;
-    }
-
+    * @return JSON format of the inicidence
+    */
     public function getJSON()
     {
         $output=array(

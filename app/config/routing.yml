@@ -41,19 +41,19 @@ studentSignin:
     methods:  [POST]
 
 
-profileProfileStudent:
-    path:     /ProfileStudent/profile/
-    defaults:  { _controller: AppBundle:ProfileStudent:profile}
+getProfileStudent:
+    path:     /ProfileStudent/get/
+    defaults:  { _controller: AppBundle:ProfileStudent:get}
     methods:  [GET]
 
-changePasswordProfileStudent:
-    path:     /ProfileStudent/changePassword/
-    defaults:  { _controller: AppBundle:ProfileStudent:changePassword}
+updatePasswordProfileStudent:
+    path:     /ProfileStudent/updatePassword/
+    defaults:  { _controller: AppBundle:ProfileStudent:updatePassword}
     methods:  [POST]
 
-changeEmailProfileStudent:
-    path:     /ProfileStudent/changeEmail/
-    defaults:  { _controller: AppBundle:ProfileStudent:changeEmail}
+updateEmailProfileStudent:
+    path:     /ProfileStudent/updateEmail/
+    defaults:  { _controller: AppBundle:ProfileStudent:updateEmail}
     methods:  [POST]
 
 
@@ -87,9 +87,9 @@ getMessage:
     defaults:  { _controller: AppBundle:Message:get}
     methods:  [GET]
 
-countNotReadMessage:
-    path:     /Message/countNotRead/
-    defaults:  { _controller: AppBundle:Message:countNotRead}
+countUnreadMessage:
+    path:     /Message/countUnread/
+    defaults:  { _controller: AppBundle:Message:countUnread}
     methods:  [GET]
 
 openAllMessage:

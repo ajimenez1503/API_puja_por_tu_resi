@@ -35,17 +35,17 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method create a message  by the user (Student)",
+     *  description="This method create a message by the user (Student)",
      *  requirements={
      *      {
      *          "name"="message",
      *          "dataType"="String",
-     *          "description"="text of the message"
+     *          "description"="Text of the message, max 5000 character."
      *      },
      *      {
      *          "name"="file_attached",
      *          "dataType"="String",
-     *          "description"="file_name of the attachedfile file "
+     *          "description"="File of the attachedfile file. It is optional. It can be image or pdf format. "
      *      },
      *  },
      * )
@@ -96,7 +96,7 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method set open=true of a message.",
+     *  description="This methodo oepn a message by the 'id'.",
      *  requirements={
      *      {
      *          "name"="id",
@@ -111,7 +111,6 @@ class MessageController extends Controller
         $id=$request->request->get('id');
         try {
             $message = $this->getDoctrine()->getRepository('AppBundle:Message')->find($id);
-
             $message->setOpen(true);
             $em = $this->getDoctrine()->getManager();
             // tells Doctrine you want to (eventually) save the Product (no queries is done)
@@ -128,30 +127,28 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="get list of message of a user(Student || College)",
+     *  description="Get list of messages of a user (Student || College). In JSON format.",
      * )
      */
     public function getAction(Request $request)
     {
         $user=$this->get('security.token_storage')->getToken()->getUser();
         $messages=$user->getMessages()->getValues();
-
         $output=array();
         for ($i = 0; $i < count($messages); $i++) {
-            array_unshift($output,$messages[$i]->getJSON()
-            );
+            array_unshift($output,$messages[$i]->getJSON());
         }
-        return $this->returnjson(true,'List of messages',$output);
+        return $this->returnjson(true,'Lista de mensajes.',$output);
     }
 
 
 
     /**
      * @ApiDoc(
-     *  description="get number of not read message of a user(Student || College)",
+     *  description="Get number of unread message of a user (Student || College).",
      * )
      */
-    public function countNotReadAction(Request $request)
+    public function countUnreadAction(Request $request)
     {
         $user=$this->get('security.token_storage')->getToken()->getUser();
         $messages=$user->getMessages()->getValues();
@@ -168,18 +165,18 @@ class MessageController extends Controller
                 }
             }
         }
-        return $this->returnjson(true,'List of messages not read',$count);
+        return $this->returnjson(true,'Numero de mensajes sin leer.',$count);
     }
 
 
     /**
      * @ApiDoc(
-     *  description="download file",
+     *  description="Download attached file of the message.",
      *  requirements={
      *      {
      *          "name"="filename",
      *          "dataType"="String",
-     *          "description"="filename of the file to download"
+     *          "description"="Filename of the file to download"
      *      },
      *  },
      * )
@@ -188,11 +185,8 @@ class MessageController extends Controller
     {
         $path = $this->container->getParameter('storageFiles');
         $content = file_get_contents($path.'/'.$filename);
-
         $response = new Response();
-
         //set headers
-
         //$response->headers->set("Access-Control-Expose-Headers", "Content-Disposition");
         $response->headers->add(array('Access-Control-Expose-Headers' =>  'Content-Disposition'));
         $response->headers->set('Content-Type', 'mime/type');
@@ -206,7 +200,7 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method set ReadBy=true of a all the message of user (Student/College).",
+     *  description="This method set ReadBy=true of a all the messages of user (Student/College).",
      * )
      */
     public function openAllAction(Request $request)
@@ -230,7 +224,7 @@ class MessageController extends Controller
                 return $this->returnjson(false,'SQL exception.');
             }
         }
-        return $this->returnjson(true,'TOdos messnage se ha leido correctamente.');
+        return $this->returnjson(true,'Todos mensajes se ha leido correctamente.');
     }
 
 

@@ -34,7 +34,18 @@ class SigninController extends Controller
 
 
 
-
+    /**
+    * Validate input of the register of the student
+    *
+    * @param string  $password
+    * @param string $username
+    * @param string  $email
+    * @param string $companyName
+    * @param string  $telephone
+    * @param string $url
+    *
+    * @return {'success': bool, 'message': String}
+    */
     public function validateRegiterCollege($password,$username,$email,$companyName,$address,$telephone,$url)
     {
         $message="Errors: ";
@@ -160,7 +171,16 @@ class SigninController extends Controller
         }
     }
 
-
+    /**
+    * Validate input of the register of the student
+    *
+    * @param string  $password
+    * @param string $username
+    * @param string  $email
+    * @param string $name
+    *
+    * @return {'success': bool, 'message': String}
+    */
     public function validateRegiterStudent($password,$username,$email,$name)
     {
         $message="Errors: ";

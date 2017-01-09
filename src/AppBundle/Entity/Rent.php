@@ -87,8 +87,9 @@ class Rent
     }
 
 
-
-
+    /**
+    * @return JSON format of the rent
+    */
     public function getJSON()
     {
         $output=array(

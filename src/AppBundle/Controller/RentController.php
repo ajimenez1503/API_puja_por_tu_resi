@@ -35,17 +35,17 @@ class RentController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method create a rent of a moth without pay, yet ",
+     *  description="This method create a rent of a moth without pay yet. This order is automatically.",
      *  requirements={
      *      {
-     *          "name"="message",
+     *          "name"="student",
      *          "dataType"="String",
-     *          "description"="text of the message"
+     *          "description"="Username of the user Student"
      *      },
      *      {
-     *          "name"="file_attached",
+     *          "name"="college",
      *          "dataType"="String",
-     *          "description"="file_name of the attachedfile file "
+     *          "description"="Username of the user College"
      *      },
      *  },
      * )
@@ -55,10 +55,10 @@ class RentController extends Controller
         $username_student=$request->request->get('student');
         $username_college=$request->request->get('college');
         if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username_student,1,10)){
-            return $this->returnjson(false,'Username student no es valido.');
+            return $this->returnjson(false,'DNI usurio no es valido.');
         }
         if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username_college,1,10)){
-            return $this->returnjson(false,'Username student  no es valido.');
+            return $this->returnjson(false,'CIF usuario  no es valido.');
         }
         try {
             $user_student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username_student);
@@ -89,7 +89,7 @@ class RentController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="get list of rents of a user(Student || College)",
+     *  description="Get list of rents of a user (Student || College). Format JSON.",
      * )
      */
     public function getAction(Request $request)
@@ -99,15 +99,14 @@ class RentController extends Controller
 
         $output=array();
         for ($i = 0; $i < count($messages); $i++) {
-            array_unshift($output,$messages[$i]->getJSON()
-            );
+            array_unshift($output,$messages[$i]->getJSON());
         }
-        return $this->returnjson(true,'List of rents',$output);
+        return $this->returnjson(true,'Lista de pagos.',$output);
     }
 
     /**
      * @ApiDoc(
-     *  description="get list of rents without pay of a user(Student )",
+     *  description="Get list of rents without pay of a user (Student)",
      * )
      */
     public function getUnpaidAction(Request $request)
@@ -121,9 +120,14 @@ class RentController extends Controller
                 array_unshift($output,$messages[$i]->getJSON());
             }
         }
-        return $this->returnjson(true,'List of rents unpaid',$output);
+        return $this->returnjson(true,'Lista de mensualidades sin pagar.',$output);
     }
 
+    /**
+     * Create the receipt file by the date of the college, student, and the current rent.
+     * Using knp_snappy and twig to generate a pdf file.
+     * The name of the user is random.
+     */
     public function crete_receipt(/*$college_data,*/$student_data,$rent_data)
     {
         $filename=md5(uniqid()).'.pdf';
@@ -155,12 +159,27 @@ class RentController extends Controller
      *      {
      *          "name"="cardNumber",
      *          "dataType"="string",
-     *          "description"="number of the card of the paid"
+     *          "description"="Number of the card of the paid"
      *      },
      *      {
      *          "name"="cardHolder",
      *          "dataType"="string",
-     *          "description"="name of the holder of the card of the paid"
+     *          "description"="Name of the holder of the card of the paid"
+     *      },
+     *      {
+     *          "name"="cvv",
+     *          "dataType"="string",
+     *          "description"="Security number of the card of the paid"
+     *      },
+     *      {
+     *          "name"="expiry_year",
+     *          "dataType"="string",
+     *          "description"="4 digit of the year"
+     *      },
+     *      {
+     *          "name"="cvv",
+     *          "dataType"="expiry_month",
+     *          "description"="2 digit of the month."
      *      },
      *  },
      * )
@@ -176,10 +195,9 @@ class RentController extends Controller
         $cardNumber=preg_replace("/\D/", "", $cardNumber);//Delete everthing that is not a digit
 
         if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$cardHolder,1,20)){
-            return $this->returnjson(false,'cardHolder no es valido.');
-        }
-        if (!$this->get('app.validate')->validateLuhnCardNumber($this->get('validator'),$cardNumber)){
-            return $this->returnjson(false,'cardNumber no es valido. Luhn.');
+            return $this->returnjson(false,'Propietario de la tarjeta no es valido.');
+        }if (!$this->get('app.validate')->validateLuhnCardNumber($this->get('validator'),$cardNumber)){
+            return $this->returnjson(false,'Numero de tarjeta no es valido. Luhn.');
         }if (!$this->get('app.validate')->validateCVV($cardNumber,$cvv)){
             return $this->returnjson(false,'CVV no es valido.');
         }if (!$this->get('app.validate')->validateExpiryDate($expiry_month,$expiry_year)){
@@ -210,12 +228,12 @@ class RentController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="download file",
+     *  description="Download receipt file.",
      *  requirements={
      *      {
      *          "name"="filename",
      *          "dataType"="String",
-     *          "description"="filename receipt"
+     *          "description"="Filename receipt"
      *      },
      *  },
      * )
@@ -224,11 +242,8 @@ class RentController extends Controller
     {
         $path = $this->container->getParameter('storageFiles');
         $content = file_get_contents($path.'/'.$filename);
-
         $response = new Response();
-
         //set headers
-
         //$response->headers->set("Access-Control-Expose-Headers", "Content-Disposition");
         $response->headers->add(array('Access-Control-Expose-Headers' =>  'Content-Disposition'));
         $response->headers->set('Content-Type', 'mime/type');

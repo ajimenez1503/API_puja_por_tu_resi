@@ -43,19 +43,18 @@ class IncidenceController extends Controller
      *      {
      *          "name"="description",
      *          "dataType"="String",
-     *          "description"="description of the inicidence"
+     *          "description"="Description of the inicidence"
      *      },
      *      {
      *          "name"="file_name",
      *          "dataType"="String",
-     *          "description"="file_name with the picture"
+     *          "description"="File with the picture. Image format."
      *      },
      *  },
      * )
      */
     public function createAction(Request $request)
     {
-
         $description=$request->request->get('description');
         $file=$request->files->get('file_name');
 
@@ -70,10 +69,10 @@ class IncidenceController extends Controller
         try {
             $user=$this->get('security.token_storage')->getToken()->getUser();
             $incidence = new Incidence();
-
             $incidence->setStudent($user);
             $incidence->setDescription($description);
             $incidence->setFileName($filename);
+
             $user->addIncidence($incidence);
             $em = $this->getDoctrine()->getManager();
             // tells Doctrine you want to (eventually) save the Product (no queries is done)
@@ -101,7 +100,7 @@ class IncidenceController extends Controller
      *      {
      *          "name"="state",
      *          "dataType"="String",
-     *          "description"="new state of the incidence."
+     *          "description"="New state of the incidence. state=['OPEN' or 'IN PROGRESS' or 'DONE']"
      *      },
      *  },
      * )
@@ -118,7 +117,6 @@ class IncidenceController extends Controller
         }
         try {
             $incidence = $this->getDoctrine()->getRepository('AppBundle:Incidence')->find($id);
-
             $incidence->setStatus($state);
             $em = $this->getDoctrine()->getManager();
             // tells Doctrine you want to (eventually) save the Product (no queries is done)
@@ -129,7 +127,7 @@ class IncidenceController extends Controller
         } catch (\Exception $pdo_ex) {
             return $this->returnjson(false,'SQL exception.');
         }
-        return $this->returnjson(true,'La incidencia se ha actualizado correctamente.');
+        return $this->returnjson(true,'La incidencia se ha actualizado correctamente con el nuevo estado '.$state.'.');
     }
 
 
@@ -145,7 +143,7 @@ class IncidenceController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="get list of incident of a user(Student)",
+     *  description="Get list of incident of a user(Student) in a JSON format.",
      * )
      */
     public function getAction(Request $request)
@@ -160,14 +158,14 @@ class IncidenceController extends Controller
         }
 
 
-        return $this->returnjson(true,'List of inicidences',$output);
+        return $this->returnjson(true,'Lista de inicidencias.',$output);
     }
 
 
 
     /**
      * @ApiDoc(
-     *  description="download file",
+     *  description="Download file of the incidence.",
      *  requirements={
      *      {
      *          "name"="filename",
@@ -181,11 +179,8 @@ class IncidenceController extends Controller
     {
         $path = $this->container->getParameter('storageFiles');
         $content = file_get_contents($path.'/'.$filename);
-
         $response = new Response();
-
         //set headers
-
         //$response->headers->set("Access-Control-Expose-Headers", "Content-Disposition");
         $response->headers->add(array('Access-Control-Expose-Headers' =>  'Content-Disposition'));
         $response->headers->set('Content-Type', 'mime/type');

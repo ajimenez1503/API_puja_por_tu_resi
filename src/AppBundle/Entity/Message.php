@@ -36,8 +36,6 @@ class Message
         return $this->id;
     }
 
-
-
     /**
      * Set date
      *
@@ -87,8 +85,9 @@ class Message
     }
 
 
-
-
+    /**
+    * @return JSON format of the message
+    */
     public function getJSON()
     {
         $output=array(

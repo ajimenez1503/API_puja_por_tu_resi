@@ -32,6 +32,9 @@ class ProfileStudentController extends Controller
         return $response;
     }
 
+    /**
+     * Calculate the number of point of the user. It is the number of days from the register.
+     */
     public function get_point($creation_date){
         $now =  date_create('now');
         $interval = date_diff($creation_date,$now);
@@ -41,10 +44,10 @@ class ProfileStudentController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method return the data of the user student ",
+     *  description="Get data of the user (student) : name, username, email, ROLE, date_creation, point.",
      * )
      */
-    public function profileAction()
+    public function getAction()
     {
         $user=$this->get('security.token_storage')->getToken()->getUser();
         $data=array(
@@ -62,7 +65,7 @@ class ProfileStudentController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method update the password of a user. ",
+     *  description="This method update the password of a user (student).",
      *  requirements={
      *      {
      *          "name"="old_password",
@@ -72,12 +75,12 @@ class ProfileStudentController extends Controller
      *      {
      *          "name"="new_password",
      *          "dataType"="String",
-     *          "description"="new Password of the user"
+     *          "description"="New Password of the user"
      *      },
      *  },
      * )
      */
-    public function changePasswordAction(Request $request)
+    public function updatePasswordAction(Request $request)
     {
         $old_password=$request->request->get('old_password');
         $new_password=$request->request->get('new_password');
@@ -109,17 +112,17 @@ class ProfileStudentController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method update the email of a user. ",
+     *  description="This method update the email of a user (student). ",
      *  requirements={
      *      {
      *          "name"="email",
      *          "dataType"="String",
-     *          "description"="Old password of the user"
+     *          "description"="New email of the user"
      *      },
      *  },
      * )
      */
-    public function changeEmailAction(Request $request)
+    public function updateEmailAction(Request $request)
     {
         $email=$request->request->get('email');
         if (!$this->validateEmail($email) ){

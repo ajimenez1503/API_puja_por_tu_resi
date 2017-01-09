@@ -16,7 +16,7 @@ class SecurityController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method allow to a user to sign in the systme.",
+     *  description="This method allow to a user to login the systme.",
      *  requirements={
      *      {
      *          "name"="_username",

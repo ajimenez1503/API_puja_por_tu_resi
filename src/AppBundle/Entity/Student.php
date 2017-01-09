@@ -90,7 +90,9 @@ class Student implements AdvancedUserInterface, \Serializable
         ));
     }
 
-
+    /**
+    * @return JSON format of the user student
+    */
     public function getJSON()
     {
         $output=array(

@@ -12,6 +12,14 @@ use Symfony\Component\Validator\Constraints\Luhn as LuhnValidatorConstraint;
 class Validate
 {
 
+    /**
+    * Validate URL.
+    *
+    * @param validator_module  $validator
+    * @param string $url    url
+    *
+    * @return bool
+    */
     public function validateURL($validator,$url)
     {
         $UrlConstraint = new UrlConstraint();
@@ -27,10 +35,18 @@ class Validate
         }
     }
 
+    /**
+    * Validate cardNumber by the LUHN algorithm
+    *
+    * @param validator_module  $validator
+    * @param string $CardNumber    CardNumber
+    *
+    * @return bool
+    */
     public function validateLuhnCardNumber($validator,$CardNumber)
     {
         $LuhnValidatorConstraint = new LuhnValidatorConstraint();
-        $LuhnValidatorConstraint->message = 'CardNumber is not correct. Luhn.';
+        $LuhnValidatorConstraint->message = 'CardNumber is not correct.';
         $errors = $validator->validate(
             $CardNumber,
             $LuhnValidatorConstraint
@@ -42,7 +58,14 @@ class Validate
         }
     }
 
-
+    /**
+    * Validate security code
+    *
+    * @param string $CardNumber    CardNumber
+    * @param string $cvv    cvv
+    *
+    * @return bool
+    */
     public function validateCVV($cardNumber,$cvv){
         // Get the first number of the credit card so we know how many digits to look for
         $firstnumber = intval(substr($cardNumber,0, 1));
@@ -60,7 +83,14 @@ class Validate
     }
 
 
-
+    /**
+    * Validate if the expiry date is older or equal than now.
+    *
+    * @param string  $expiry_month
+    * @param string $expiry_year
+    *
+    * @return bool
+    */
     public function validateExpiryDate($expiry_month,$expiry_year)
     {
         $date=date_create('now');
@@ -75,9 +105,17 @@ class Validate
         }
     }
 
+
+    /**
+    * Validate email
+    *
+    * @param validator_module  $validator
+    * @param string $email    email
+    *
+    * @return bool
+    */
     public function validateEmail($validator,$email)
     {
-
         $emailConstraint = new EmailConstraint();
         $emailConstraint->message = 'Email is not correct.';
         $errors = $validator->validate(
@@ -93,7 +131,16 @@ class Validate
     }
 
 
-
+    /**
+    * Validate length of the input.
+    *
+    * @param validator_module  $validator
+    * @param string $input    CardNumber
+    * @param int $min    min length
+    * @param int $max    max length
+    *
+    * @return bool
+    */
     public function validateLenghtInput($validator,$input,$min=1,$max=100)
     {
 
@@ -113,7 +160,14 @@ class Validate
         }
     }
 
-
+    /**
+    * Validate that the old password belong to the user.
+    *
+    * @param validator_module  $validator
+    * @param string $old_password    input old_password
+    *
+    * @return bool
+    */
     public function validateOldPassword($validator,$old_password)
     {
         $UserPasswordConstraint = new UserPasswordConstraint();
@@ -130,7 +184,14 @@ class Validate
     }
 
 
-
+    /**
+    * Validate format image file
+    *
+    * @param validator_module  $validator
+    * @param string $file    file structure
+    *
+    * @return bool
+    */
     public function validateImageFile($validator,$file)
     {
         $FileValidatorConstraint = new FileValidatorConstraint();
@@ -150,8 +211,14 @@ class Validate
     }
 
 
-
-
+    /**
+    * Validate format pdf file
+    *
+    * @param validator_module  $validator
+    * @param string $file    file structure
+    *
+    * @return bool
+    */
     public function validatePDFFile($validator,$file)
     {
         $FileValidatorConstraint = new FileValidatorConstraint();

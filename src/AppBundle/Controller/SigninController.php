@@ -49,12 +49,12 @@ class SigninController extends Controller
     public function validateRegiterCollege($password,$username,$email,$companyName,$address,$telephone,$url)
     {
         $message="Errors: ";
-
-        if (is_null($password) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$password,1,8)){
-                $message=$message.' Password lenght [1,8].';
+        $sizePassword=$this->container->getParameter('sizePassword');
+        if (is_null($password) || !$this->get('app.validate')->validatePassword($this->get('validator'),$password,$sizePassword)){
+                $message=$message.' Password lenght ['.strval($sizePassword).','.strval($sizePassword).'].';
         }
         if (is_null($username) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username,9,9)){
-                $message=$message.' Username lenght [1,10].';
+                $message=$message.' Username lenght CIF [9,9].';
         }
         if (is_null($email) || !$this->get('app.validate')->validateEmail($this->get('validator'),$email)){
             $message=$message.' Email is not correct.';
@@ -184,9 +184,9 @@ class SigninController extends Controller
     public function validateRegiterStudent($password,$username,$email,$name)
     {
         $message="Errors: ";
-
-        if (is_null($password) ||!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$password,1,8)){
-                $message=$message.' Password lenght [1,8].';
+        $sizePassword=$this->container->getParameter('sizePassword');
+        if (is_null($password) || !$this->get('app.validate')->validatePassword($this->get('validator'),$password,$sizePassword)){
+                $message=$message.' Password lenght ['.strval($sizePassword).','.strval($sizePassword).'].';
         }
         if (is_null($username) ||!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username,1,10)){
                 $message=$message.' Username lenght [1,10].';

@@ -135,7 +135,7 @@ class Validate
     * Validate length of the input.
     *
     * @param validator_module  $validator
-    * @param string $input    CardNumber
+    * @param string $input    input
     * @param int $min    min length
     * @param int $max    max length
     *
@@ -151,6 +151,33 @@ class Validate
         'maxMessage' => 'Lengh should be <'.$max.'.'));
         $errors = $validator->validate(
             $input,
+            $lengthConstraint
+        );
+        if ($errors==""){//if it is empty
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+    * Validate length of the input.
+    *
+    * @param validator_module  $validator
+    * @param string $password    password
+    * @param string $size       size
+    *
+    * @return bool
+    */
+    public function validatePassword($validator,$password,$size)
+    {
+        $lengthConstraint = new LengthConstraint(array(
+        'min'        => $size,
+        'max'        => $size,
+        'minMessage' => 'Lengh should be >'.$size.'.',
+        'maxMessage' => 'Lengh should be <'.$size.'.'));
+        $errors = $validator->validate(
+            $password,
             $lengthConstraint
         );
         if ($errors==""){//if it is empty

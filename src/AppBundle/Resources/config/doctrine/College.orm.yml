@@ -28,6 +28,12 @@ AppBundle\Entity\College:
             type: string
             length: 200
             unique: false
+        latitude:
+            type: float
+            unique: false
+        longitude:
+            type: float
+            unique: false
         telephone:
             type: string
             length: 12

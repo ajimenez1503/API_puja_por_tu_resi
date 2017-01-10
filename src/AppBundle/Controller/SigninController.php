@@ -132,6 +132,8 @@ class SigninController extends Controller
         $email=$request->request->get('email');
         $companyName=$request->request->get('companyName');
         $address=$request->request->get('address');
+        $lat=$request->request->get('lat');
+        $lng=$request->request->get('lng');
         $telephone=$request->request->get('telephone');
         $url=$request->request->get('url');
 
@@ -152,6 +154,8 @@ class SigninController extends Controller
         if (!$college_exist){//if not exists, create it
             try {
                 $college->set( $username,$encoded,$email,$companyName,$address,$telephone,$url);
+                $college->setLatitude($lat);
+                $college->setLongitude($lng);
                 //This method is a shortcut to get the doctrine service
                 $em = $this->getDoctrine()->getManager();
                 // tells Doctrine you want to (eventually) save the Product (no queries is done)

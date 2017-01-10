@@ -16,6 +16,8 @@ class College implements AdvancedUserInterface, \Serializable
     private $isActive;
     private $companyName;
     private $address;
+    private $latitude;
+    private $longitude;
     private $telephone;
     private $url;
     private $incidences;
@@ -397,5 +399,53 @@ class College implements AdvancedUserInterface, \Serializable
     public function getRents()
     {
         return $this->rents;
+    }
+
+    /**
+     * Set latitude
+     *
+     * @param float $latitude
+     *
+     * @return College
+     */
+    public function setLatitude($latitude)
+    {
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    /**
+     * Get latitude
+     *
+     * @return float
+     */
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }
+
+    /**
+     * Set longitude
+     *
+     * @param float $longitude
+     *
+     * @return College
+     */
+    public function setLongitude($longitude)
+    {
+        $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    /**
+     * Get longitude
+     *
+     * @return float
+     */
+    public function getLongitude()
+    {
+        return $this->longitude;
     }
 }

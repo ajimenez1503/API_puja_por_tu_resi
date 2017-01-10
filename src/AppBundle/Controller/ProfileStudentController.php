@@ -125,7 +125,8 @@ class ProfileStudentController extends Controller
     public function updateEmailAction(Request $request)
     {
         $email=$request->request->get('email');
-        if (!$this->validateEmail($email) ){
+
+        if (!$this->get('app.validate')->validateEmail($this->get('validator'),$email) ){
             return $this->returnjson(false,'El email no es valido.');
         }
         try {

@@ -149,16 +149,20 @@ class IncidenceController extends Controller
     public function getAction(Request $request)
     {
         $user=$this->get('security.token_storage')->getToken()->getUser();
-        $incidences=$user->getIncidences()->getValues();
+        if ($user->getRoles()[0]=="ROLE_STUDENT"){
+            $incidences=$user->getIncidences()->getValues();
 
-        $output=array();
-        for ($i = 0; $i < count($incidences); $i++) {
-            array_push($output,$incidences[$i]->getJSON()
-            );
+            $output=array();
+            for ($i = 0; $i < count($incidences); $i++) {
+                array_push($output,$incidences[$i]->getJSON()
+                );
+            }
+            return $this->returnjson(true,'Lista de inicidencias.',$output);
+        }else{//TODO get all the user by all the agreement in date
+            //return all the incidences of all the user
+            return $this->returnjson(False,'College_incidences is not done yet.',$output);
+
         }
-
-
-        return $this->returnjson(true,'Lista de inicidencias.',$output);
     }
 
 

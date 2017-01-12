@@ -43,9 +43,6 @@ AppBundle\Entity\College:
             length: 60
             unique: false
     oneToMany:
-        incidences:
-            targetEntity: Incidence
-            mappedBy: college
         messages:
             targetEntity: Message
             mappedBy: college

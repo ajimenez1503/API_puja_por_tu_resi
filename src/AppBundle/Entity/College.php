@@ -20,16 +20,13 @@ class College implements AdvancedUserInterface, \Serializable
     private $longitude;
     private $telephone;
     private $url;
-    private $incidences;
     private $messages;
 
 
     public function __construct()
     {
         $this->isActive = true;
-        $this->incidences = new ArrayCollection();
         $this->messages = new ArrayCollection();
-        $this->rents = new ArrayCollection();
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
     }
@@ -298,39 +295,6 @@ class College implements AdvancedUserInterface, \Serializable
         return $this->url;
     }
 
-    /**
-     * Add incidence
-     *
-     * @param \AppBundle\Entity\Incidence $incidence
-     *
-     * @return College
-     */
-    public function addIncidence(\AppBundle\Entity\Incidence $incidence)
-    {
-        $this->incidences[] = $incidence;
-
-        return $this;
-    }
-
-    /**
-     * Remove incidence
-     *
-     * @param \AppBundle\Entity\Incidence $incidence
-     */
-    public function removeIncidence(\AppBundle\Entity\Incidence $incidence)
-    {
-        $this->incidences->removeElement($incidence);
-    }
-
-    /**
-     * Get incidences
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getIncidences()
-    {
-        return $this->incidences;
-    }
 
     /**
      * Add message
@@ -366,15 +330,6 @@ class College implements AdvancedUserInterface, \Serializable
         return $this->messages;
     }
 
-    /**
-     * Get rents
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRents()
-    {
-        return $this->rents;
-    }
 
     /**
      * Set latitude

@@ -31,9 +31,3 @@ AppBundle\Entity\Incidence:
             joinColumn:
                 name: student_username
                 referencedColumnName: username
-        college:
-            targetEntity: College
-            inversedBy: incidences
-            joinColumn:
-                name: college_username
-                referencedColumnName: username

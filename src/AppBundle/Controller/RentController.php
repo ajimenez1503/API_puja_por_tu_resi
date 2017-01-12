@@ -77,19 +77,26 @@ class RentController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get list of rents of a user (Student || College). Format JSON.",
+     *  description="Get list of rents of a user (Student). Format JSON.",
      * )
      */
     public function getAction(Request $request)
     {
         $user=$this->get('security.token_storage')->getToken()->getUser();
-        $messages=$user->getRents()->getValues();
+        if ($user->getRoles()[0]=="ROLE_STUDENT"){
+            $rents=$user->getRents()->getValues();
 
-        $output=array();
-        for ($i = 0; $i < count($messages); $i++) {
-            array_unshift($output,$messages[$i]->getJSON());
+            $output=array();
+            for ($i = 0; $i < count($rents); $i++) {
+                array_unshift($output,$rents[$i]->getJSON());
+            }
+            return $this->returnjson(true,'Lista de pagos.',$output);
+        }else{
+            //TODO get all the user by all the agreement in date
+            //return all the rents of all the user or a specify user  $user=$request->request->get('user');
+            return $this->returnjson(False,'College_retns is not done yet.',$output);
+
         }
-        return $this->returnjson(true,'Lista de pagos.',$output);
     }
 
     /**
@@ -100,15 +107,22 @@ class RentController extends Controller
     public function getUnpaidAction(Request $request)
     {
         $user=$this->get('security.token_storage')->getToken()->getUser();
-        $messages=$user->getRents()->getValues();
+        if ($user->getRoles()[0]=="ROLE_STUDENT"){
+            $messages=$user->getRents()->getValues();
 
-        $output=array();
-        for ($i = 0; $i < count($messages); $i++) {
-            if (!$messages[$i]->getStatusPaid()){
-                array_unshift($output,$messages[$i]->getJSON());
+            $output=array();
+            for ($i = 0; $i < count($messages); $i++) {
+                if (!$messages[$i]->getStatusPaid()){
+                    array_unshift($output,$messages[$i]->getJSON());
+                }
             }
+            return $this->returnjson(true,'Lista de mensualidades sin pagar.',$output);
+        }else{
+            //TODO get all the user by all the agreement in date
+            //return all the rents of all the user or a specify user  $user=$request->request->get('user');
+            return $this->returnjson(False,'College_unpaidretns is not done yet.',$output);
+
         }
-        return $this->returnjson(true,'Lista de mensualidades sin pagar.',$output);
     }
 
     /**

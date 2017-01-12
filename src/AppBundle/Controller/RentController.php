@@ -42,41 +42,29 @@ class RentController extends Controller
      *          "dataType"="String",
      *          "description"="Username of the user Student"
      *      },
-     *      {
-     *          "name"="college",
-     *          "dataType"="String",
-     *          "description"="Username of the user College"
-     *      },
      *  },
      * )
      */
     public function createAction(Request $request)
     {
         $username_student=$request->request->get('student');
-        $username_college=$request->request->get('college');
         if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username_student,1,10)){
             return $this->returnjson(false,'DNI usurio no es valido.');
         }
-        if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username_college,1,10)){
-            return $this->returnjson(false,'CIF usuario  no es valido.');
-        }
         try {
             $user_student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username_student);
-            $user_college = $this->getDoctrine()->getRepository('AppBundle:College')->find($username_college);
+
             //TODO get price of agrement between college and user
             $rent = new Rent();
             $rent->setStudent($user_student);
-            $rent->setCollege($user_college);
             $rent->setPrice(100);//TODO $agreement->getPrice();
 
-            $user_college->addRent($rent);
             $user_student->addRent($rent);
 
             $em = $this->getDoctrine()->getManager();
             // tells Doctrine you want to (eventually) save the Product (no queries is done)
             $em->persist($rent);
             $em->persist($user_student);
-            $em->persist($user_college);
             // actually executes the queries (i.e. the INSERT query)
             //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
             $em->flush();
@@ -137,7 +125,7 @@ class RentController extends Controller
                 array(
                     'rent'  => $rent_data->getJSON(),
                     'student' =>$student_data->getJSON(),
-                    //TODO add college information
+                    //TODO add college information from the agreement
                 )
             ),
             $this->container->getParameter('storageFiles')."/".$filename

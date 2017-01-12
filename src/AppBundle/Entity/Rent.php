@@ -13,7 +13,6 @@ class Rent
     private $date;
     private $file_receipt;
     private $date_paid;
-    private $college;
     private $student;
     private $card_holder;
     private $card_number;
@@ -102,36 +101,12 @@ class Rent
             'date_paid'=>$this->getDatePaid(),
             'card_number'=>$this->getCardNumber(),
             'card_holder'=>$this->getCardHolder(),
-            'college'=>$this->getCollege()->getUsername(),
             'Student'=>$this->getStudent()->getUsername(),
 
         );
         return $output;
     }
 
-    /**
-     * Set college
-     *
-     * @param \AppBundle\Entity\College $college
-     *
-     * @return Incidence
-     */
-    public function setCollege(\AppBundle\Entity\College $college = null)
-    {
-        $this->college = $college;
-
-        return $this;
-    }
-
-    /**
-     * Get college
-     *
-     * @return \AppBundle\Entity\College
-     */
-    public function getCollege()
-    {
-        return $this->college;
-    }
 
     /**
      * Set statusPaid

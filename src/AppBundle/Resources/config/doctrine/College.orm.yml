@@ -49,6 +49,3 @@ AppBundle\Entity\College:
         messages:
             targetEntity: Message
             mappedBy: college
-        rents:
-            targetEntity: Rent
-            mappedBy: college

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 10-01-2017 a las 19:29:05
+-- Tiempo de generación: 17-01-2017 a las 16:32:20
 -- Versión del servidor: 5.5.44-0ubuntu0.14.04.1
 -- Versión de PHP: 5.5.9-1ubuntu4.11
 
@@ -56,23 +56,21 @@ INSERT INTO `colleges` (`username`, `password`, `email`, `is_active`, `company_n
 CREATE TABLE IF NOT EXISTS `incidence` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `student_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `college_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
   `file_name` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
   `date` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `IDX_170604174BD54AEC` (`student_username`),
-  KEY `IDX_1706041716A289D1` (`college_username`)
+  KEY `IDX_170604174BD54AEC` (`student_username`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Volcado de datos para la tabla `incidence`
 --
 
-INSERT INTO `incidence` (`id`, `student_username`, `college_username`, `status`, `description`, `file_name`, `date`) VALUES
-(1, '12345678A', NULL, 'IN PROGRESS', 'la mesa esta rota ', '1aa2c0c121556de82865a9898058937a.jpg', '2017-01-10 18:34:45'),
-(2, '12345678A', NULL, 'OPEN', 'la puerta no se cierra. Ayuda ', 'c4d35eccf17df135b22c07d183a47e21.jpg', '2017-01-10 18:40:13');
+INSERT INTO `incidence` (`id`, `student_username`, `status`, `description`, `file_name`, `date`) VALUES
+(1, '12345678A', 'IN PROGRESS', 'la mesa esta rota ', '1aa2c0c121556de82865a9898058937a.jpg', '2017-01-10 18:34:45'),
+(2, '12345678A', 'OPEN', 'la puerta no se cierra. Ayuda ', 'c4d35eccf17df135b22c07d183a47e21.jpg', '2017-01-10 18:40:13');
 
 -- --------------------------------------------------------
 
@@ -114,7 +112,6 @@ INSERT INTO `message` (`id`, `student_username`, `college_username`, `read_by_st
 CREATE TABLE IF NOT EXISTS `rent` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `student_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `college_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status_paid` tinyint(1) NOT NULL,
   `price` double NOT NULL,
   `date` datetime NOT NULL,
@@ -123,18 +120,17 @@ CREATE TABLE IF NOT EXISTS `rent` (
   `card_holder` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
   `card_number` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `IDX_2784DCC4BD54AEC` (`student_username`),
-  KEY `IDX_2784DCC16A289D1` (`college_username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+  KEY `IDX_2784DCC4BD54AEC` (`student_username`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
 
 --
 -- Volcado de datos para la tabla `rent`
 --
 
-INSERT INTO `rent` (`id`, `student_username`, `college_username`, `status_paid`, `price`, `date`, `file_receipt`, `date_paid`, `card_holder`, `card_number`) VALUES
-(1, '12345678A', 'B18756676', 0, 100, '2017-01-10 18:38:05', NULL, NULL, NULL, NULL),
-(2, '12345678A', 'B18756676', 1, 100, '2017-01-10 18:38:07', '81acf277523dcde69abaa61e60cfa993.pdf', '2017-01-10 19:26:33', 'juan', '4886171554372581'),
-(3, '12345678A', 'B18756676', 1, 100, '2017-01-10 18:38:08', '16461ec3bd01a0d1db5d6dbf63d1f19c.pdf', '2017-01-10 18:59:47', 'antonio', '4009487096031929');
+INSERT INTO `rent` (`id`, `student_username`, `status_paid`, `price`, `date`, `file_receipt`, `date_paid`, `card_holder`, `card_number`) VALUES
+(2, '12345678A', 1, 100, '2017-01-10 18:38:07', '81acf277523dcde69abaa61e60cfa993.pdf', '2017-01-10 19:26:33', 'juan', '4886171554372581'),
+(3, '12345678A', 1, 100, '2017-01-10 18:38:08', '16461ec3bd01a0d1db5d6dbf63d1f19c.pdf', '2017-01-10 18:59:47', 'antonio', '4009487096031929'),
+(4, '12345678A', 0, 100, '2017-01-12 20:49:33', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -167,7 +163,6 @@ INSERT INTO `students` (`username`, `password`, `email`, `name`, `is_active`, `c
 -- Filtros para la tabla `incidence`
 --
 ALTER TABLE `incidence`
-  ADD CONSTRAINT `FK_1706041716A289D1` FOREIGN KEY (`college_username`) REFERENCES `colleges` (`username`),
   ADD CONSTRAINT `FK_170604174BD54AEC` FOREIGN KEY (`student_username`) REFERENCES `students` (`username`);
 
 --
@@ -181,7 +176,6 @@ ALTER TABLE `message`
 -- Filtros para la tabla `rent`
 --
 ALTER TABLE `rent`
-  ADD CONSTRAINT `FK_2784DCC16A289D1` FOREIGN KEY (`college_username`) REFERENCES `colleges` (`username`),
   ADD CONSTRAINT `FK_2784DCC4BD54AEC` FOREIGN KEY (`student_username`) REFERENCES `students` (`username`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

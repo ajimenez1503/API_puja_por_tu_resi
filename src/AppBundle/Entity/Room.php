@@ -30,7 +30,7 @@ class Room
 
     public function __construct()
     {
-
+        $this->state="FREE";
     }
     /**
      * Get id

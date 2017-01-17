@@ -130,3 +130,8 @@ downloadRent:
     path:  /Rent/download/{filename}
     defaults: { _controller: AppBundle:Rent:download }
     methods:  [GET]
+
+createRoom:
+    path:     /Room/create/
+    defaults:  { _controller: AppBundle:Room:create}
+    methods:  [POST]

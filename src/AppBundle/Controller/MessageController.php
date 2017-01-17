@@ -44,7 +44,7 @@ class MessageController extends Controller
      *      },
      *      {
      *          "name"="file_attached",
-     *          "dataType"="String",
+     *          "dataType"="File",
      *          "description"="File of the attachedfile file. It is optional. It can be image or pdf format. "
      *      },
      *  },

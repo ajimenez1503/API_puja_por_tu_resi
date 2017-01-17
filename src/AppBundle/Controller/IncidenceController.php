@@ -47,7 +47,7 @@ class IncidenceController extends Controller
      *      },
      *      {
      *          "name"="file_name",
-     *          "dataType"="String",
+     *          "dataType"="File",
      *          "description"="File with the picture. Image format."
      *      },
      *  },

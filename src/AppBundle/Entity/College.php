@@ -21,12 +21,14 @@ class College implements AdvancedUserInterface, \Serializable
     private $telephone;
     private $url;
     private $messages;
+    private $rooms;
 
 
     public function __construct()
     {
         $this->isActive = true;
         $this->messages = new ArrayCollection();
+        $this->rooms = new ArrayCollection();
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
     }
@@ -377,5 +379,39 @@ class College implements AdvancedUserInterface, \Serializable
     public function getLongitude()
     {
         return $this->longitude;
+    }
+
+    /**
+     * Add room
+     *
+     * @param \AppBundle\Entity\Room $room
+     *
+     * @return College
+     */
+    public function addRoom(\AppBundle\Entity\Room $room)
+    {
+        $this->rooms[] = $room;
+
+        return $this;
+    }
+
+    /**
+     * Remove room
+     *
+     * @param \AppBundle\Entity\Room $room
+     */
+    public function removeRoom(\AppBundle\Entity\Room $room)
+    {
+        $this->rooms->removeElement($room);
+    }
+
+    /**
+     * Get rooms
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRooms()
+    {
+        return $this->rooms;
     }
 }

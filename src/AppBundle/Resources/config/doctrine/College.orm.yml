@@ -46,3 +46,6 @@ AppBundle\Entity\College:
         messages:
             targetEntity: Message
             mappedBy: college
+        rooms:
+            targetEntity: Room
+            mappedBy: college

@@ -1,0 +1,71 @@
+# src/AppBundle/Resources/config/doctrine/Room.orm.yml
+AppBundle\Entity\Room:
+    type: entity
+    table: room
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+            unique: TRUE
+    fields:
+        name:
+            type: string
+            unique: FALSE
+        price:
+            type: float
+            unique: FALSE
+        date_start_school:
+            type: datetime
+            unique: FALSE
+        date_end_school:
+            type: datetime
+            unique: FALSE
+        date_start_bid:
+            type: datetime
+            unique: FALSE
+        date_end_bid:
+            type: datetime
+            unique: FALSE
+        floor:
+            type: integer
+            unique: FALSE
+        size:
+            type: integer
+            unique: FALSE
+        state:
+            type: string
+            unique: FALSE
+        picture1:
+            type: string
+            length: 60
+            unique: FALSE
+            nullable: TRUE
+        picture2:
+            type: string
+            length: 60
+            unique: FALSE
+            nullable: TRUE
+        picture3:
+            type: string
+            length: 60
+            unique: FALSE
+            nullable: TRUE
+        tv:
+            type: boolean
+            unique: FALSE
+        bath:
+            type: boolean
+            unique: FALSE
+        desk:
+            type: boolean
+            unique: FALSE
+        wardrove:
+            type: boolean
+            unique: FALSE
+    manyToOne:
+        college:
+            targetEntity: College
+            inversedBy: rooms
+            joinColumn:
+                name: college_username
+                referencedColumnName: username

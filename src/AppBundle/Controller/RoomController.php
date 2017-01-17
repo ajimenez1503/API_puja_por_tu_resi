@@ -134,8 +134,44 @@ class RoomController extends Controller
         $wardrove=$request->request->get('wardrove');
 
         //TODO validate everything
+        if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$name)){
+                return $this->returnjson(false,'Nombre no es valido (size).');
+        }
+        if (!$this->get('app.validate')->validateInt($price,$mix=1,$max=2000)){
+            return $this->returnjson(false,'Precio no es valido (size).');
+        }
+        if (!$this->get('app.validate')->validateDate($date_start_school,$date_end_school)){
+            return $this->returnjson(false,'Fecha de estacia academica no es correcta.');
+        }
+        if (!$this->get('app.validate')->validateDate($date_start_bid,$date_end_bid)){
+            return $this->returnjson(false,'Fecha de las puja no es correcta.');
+        }
         if (!$this->get('app.validate')->validateImageFile($this->get('validator'),$picture1)){
-            return $this->returnjson(false,'Archivo no es valido.');
+            return $this->returnjson(false,'Archivo no es valido (Image format).');
+        }
+        if (!$this->get('app.validate')->validateImageFile($this->get('validator'),$picture2)){
+            return $this->returnjson(false,'Archivo no es valido (Image format).');
+        }
+        if (!$this->get('app.validate')->validateImageFile($this->get('validator'),$picture3)){
+            return $this->returnjson(false,'Archivo no es valido (Image format).');
+        }
+        if (!$this->get('app.validate')->validateInt($floor,$mix=1,$max=20)){
+            return $this->returnjson(false,'Planta no es valido (size).');
+        }
+        if (!$this->get('app.validate')->validateInt($size,$mix=1,$max=100)){
+            return $this->returnjson(false,'Tamaño no es valido (size).');
+        }
+        if (!$this->get('app.validate')->validateBool($tv)){
+            return $this->returnjson(false,'Tv debe ser true or false.');
+        }
+        if (!$this->get('app.validate')->validateBool($bath)){
+            return $this->returnjson(false,'Baño debe ser true or false.');
+        }
+        if (!$this->get('app.validate')->validateBool($desk)){
+            return $this->returnjson(false,'Escritorio debe ser true or false.');
+        }
+        if (!$this->get('app.validate')->validateBool($wardrove)){
+            return $this->returnjson(false,'Armario debe ser true or false.');
         }
         $filename1=md5(uniqid()).'.'.$picture1->getClientOriginalExtension();
         $picture1->move($this->container->getParameter('storageFiles'),$filename1);

@@ -161,6 +161,62 @@ class Validate
     }
 
     /**
+    * Validate int in a range
+    *
+    * @param int $input   input
+    * @param int $min    min price
+    * @param int $max    max price
+    *
+    * @return bool
+    */
+    public function validateInt($input,$min=1,$max=2000)
+    {
+        $price=intval($input);
+        if ($input>=$min && $input<=$max){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+    /**
+    * Validate boolean, it should be 0 or 1
+    *
+    * @param int $input   input
+    *
+    * @return bool
+    */
+    public function validateBool($input)
+    {
+        if ($input=="0" || $input=="1"){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+    /**
+    * Validate Date,
+    * The both dates must be old than now.
+    * The second date must be old than the first
+    *
+    * @param int $date1   input
+    * @param int $date2   input
+    *
+    * @return bool
+    */
+    public function validateDate($date1,$date2)
+    {
+        if ($date1>=date_create('now') and $date2>=$date1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
     * Validate length of the input.
     *
     * @param validator_module  $validator

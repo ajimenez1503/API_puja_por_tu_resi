@@ -209,7 +209,8 @@ class Validate
     */
     public function validateDate($date1,$date2)
     {
-        if ($date1>=date_create('now') and $date2>=$date1){
+        $yesterday=date_create('yesterday');
+        if ($date1>=$yesterday and $date2>=$date1){
             return true;
         }else{
             return false;

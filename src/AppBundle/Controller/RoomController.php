@@ -146,6 +146,9 @@ class RoomController extends Controller
         if (!$this->get('app.validate')->validateDate($date_start_bid,$date_end_bid)){
             return $this->returnjson(false,'Fecha de las puja no es correcta.');
         }
+        if (!$this->get('app.validate')->validateDate($date_end_bid,$date_start_school)){
+            return $this->returnjson(false,'Fecha de las puja debe ser menor que la academica.');
+        }
         if (!$this->get('app.validate')->validateImageFile($this->get('validator'),$picture1)){
             return $this->returnjson(false,'Archivo no es valido (Image format).');
         }
@@ -252,10 +255,14 @@ class RoomController extends Controller
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRoles()[0]=="ROLE_COLLEGE"){
             $rooms=$user->getRooms()->getValues();
-
+            $today=date_create('now');
             $output=array();
             for ($i = 0; $i < count($rooms); $i++) {
-                if($rooms[$i]->getState()=="FREE"){
+                if(
+                    ($rooms[$i]->getDateStartSchool()>$today && $rooms[$i]->getDateEndBid()<$today) ||//between bid and school
+                    ($rooms[$i]->getDateStartSchool()>$today && $rooms[$i]->getDateStartBid()>$today)||//before bid and before school
+                    ($rooms[$i]->getDateEndBid()<$today && $rooms[$i]->getDateEndSchool()<$today)  //after bid and after school
+                ){
                     array_unshift($output,$rooms[$i]->getJSON());
                 }
             }
@@ -275,10 +282,12 @@ class RoomController extends Controller
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRoles()[0]=="ROLE_COLLEGE"){
             $rooms=$user->getRooms()->getValues();
-
+            $today=date_create('now');
             $output=array();
             for ($i = 0; $i < count($rooms); $i++) {
-                if($rooms[$i]->getState()=="OFFERED"){
+                if($rooms[$i]->getState()=="OFFERED"||
+                    ($rooms[$i]->getDateStartBid()<=$today && $rooms[$i]->getDateEndBid()>=$today)
+                ){
                     array_unshift($output,$rooms[$i]->getJSON());
                 }
             }

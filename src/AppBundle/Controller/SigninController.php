@@ -46,7 +46,7 @@ class SigninController extends Controller
     *
     * @return {'success': bool, 'message': String}
     */
-    public function validateRegiterCollege($password,$username,$email,$companyName,$address,$telephone,$url)
+    public function validateRegiterCollege($password,$username,$email,$companyName,$address,$telephone,$url,$lat,$lng,$wifi,$elevator,$canteen,$hours24,$laundry,$gym,$study_room,$heating)
     {
         $message="Errors: ";
         $sizePassword=$this->container->getParameter('sizePassword');
@@ -71,6 +71,36 @@ class SigninController extends Controller
         if (is_null($url) || !$this->get('app.validate')->validateURL($this->get('validator'),$url)){
             $message=$message.' url is not correct.';
         }
+        if (is_null($lat)){
+            $message=$message.' Latitude cannot be null.';
+        }
+        if (is_null($lat)){
+            $message=$message.' Longitude cannot be null.';
+        }
+        if (is_null($wifi) || !$this->get('app.validate')->validateBool($wifi)){
+            $message=$message.'wifi debe ser true or false.';
+        }
+        if (is_null($canteen) || !$this->get('app.validate')->validateBool($canteen)){
+            $message=$message.'canteen debe ser true or false.';
+        }
+        if (is_null($elevator) || !$this->get('app.validate')->validateBool($elevator)){
+            $message=$message.'elevator debe ser true or false.';
+        }
+        if (is_null($hours24) || !$this->get('app.validate')->validateBool($hours24)){
+            $message=$message.'hours24 debe ser true or false.';
+        }
+        if (is_null($laundry) || !$this->get('app.validate')->validateBool($laundry)){
+            $message=$message.'laundry debe ser true or false.';
+        }
+        if (is_null($gym) || !$this->get('app.validate')->validateBool($gym)){
+            $message=$message.'gym debe ser true or false.';
+        }
+        if (is_null($study_room) || !$this->get('app.validate')->validateBool($study_room)){
+            $message=$message.'study_room debe ser true or false.';
+        }
+        if (is_null($heating) || !$this->get('app.validate')->validateBool($heating)){
+            $message=$message.'$heating debe ser true or false.';
+        }
         if ($message=="Errors: "){
             return array(
                 'success' => True,
@@ -80,7 +110,6 @@ class SigninController extends Controller
                 'success' => false,
                 'message' => $message);
         }
-
     }
 
     /**
@@ -122,6 +151,46 @@ class SigninController extends Controller
      *          "dataType"="String",
      *          "description"="Url name of the college."
      *      },
+     *      {
+     *          "name"="wifi",
+     *          "dataType"="boolean",
+     *          "description"="True if the college has wifi."
+     *      },
+     *      {
+     *          "name"="elevator",
+     *          "dataType"="boolean",
+     *          "description"="True if the college has wifi."
+     *      },
+     *      {
+     *          "name"="canteen",
+     *          "dataType"="boolean",
+     *          "description"="True if the college has wifi."
+     *      },
+     *      {
+     *          "name"="hours24",
+     *          "dataType"="boolean",
+     *          "description"="True if the college has wifi."
+     *      },
+     *      {
+     *          "name"="laundry",
+     *          "dataType"="boolean",
+     *          "description"="True if the college has wifi."
+     *      },
+     *      {
+     *          "name"="gym",
+     *          "dataType"="boolean",
+     *          "description"="True if the college has wifi."
+     *      },
+     *      {
+     *          "name"="study_room",
+     *          "dataType"="boolean",
+     *          "description"="True if the college has wifi."
+     *      },
+     *      {
+     *          "name"="heating",
+     *          "dataType"="boolean",
+     *          "description"="True if the college has wifi."
+     *      },
      *  },
      * )
      */
@@ -136,8 +205,16 @@ class SigninController extends Controller
         $lng=$request->request->get('lng');
         $telephone=$request->request->get('telephone');
         $url=$request->request->get('url');
+        $wifi =$request->request->get('wifi');
+        $elevator =$request->request->get('elevator');
+        $canteen=$request->request->get('canteen');
+        $hours24=$request->request->get('hours24');
+        $laundry =$request->request->get('laundry');
+        $gym =$request->request->get('gym');
+        $study_room =$request->request->get('study_room');
+        $heating =$request->request->get('heating');
 
-        $validate=$this->validateRegiterCollege($password,$username,$email,$companyName,$address,$telephone,$url);
+        $validate=$this->validateRegiterCollege($password,$username,$email,$companyName,$address,$telephone,$url,$lat,$lng,$wifi,$elevator,$canteen,$hours24,$laundry,$gym,$study_room,$heating);
         if (!$validate['success']){
             //get message problem
             return $this->returnjson(false,$validate['message']);
@@ -156,6 +233,7 @@ class SigninController extends Controller
                 $college->set( $username,$encoded,$email,$companyName,$address,$telephone,$url);
                 $college->setLatitude($lat);
                 $college->setLongitude($lng);
+                $college->setEquipment($wifi,$elevator,$canteen,$hours24,$laundry,$gym,$study_room,$heating);
                 //This method is a shortcut to get the doctrine service
                 $em = $this->getDoctrine()->getManager();
                 // tells Doctrine you want to (eventually) save the Product (no queries is done)
@@ -164,7 +242,7 @@ class SigninController extends Controller
                 //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                 $em->flush();
             } catch (\Exception $pdo_ex) {
-                return $this->returnjson(false,'SQL exception.');
+                return $this->returnjson(false,'SQL exception.'.$pdo_ex);
             }
             $data=array(
              'username' => $college->getUsername(),

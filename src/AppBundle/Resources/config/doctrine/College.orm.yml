@@ -42,6 +42,30 @@ AppBundle\Entity\College:
             type: string
             length: 60
             unique: false
+        wifi:
+            type: boolean
+            unique: false
+        elevator:
+            type: boolean
+            unique: false
+        canteen:
+            type: boolean
+            unique: false
+        hours24:
+            type: boolean
+            unique: false
+        laundry:
+            type: boolean
+            unique: false
+        gym:
+            type: boolean
+            unique: false
+        study_room:
+            type: boolean
+            unique: false
+        heating:
+            type: boolean
+            unique: false
     oneToMany:
         messages:
             targetEntity: Message

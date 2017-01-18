@@ -22,6 +22,14 @@ class College implements AdvancedUserInterface, \Serializable
     private $url;
     private $messages;
     private $rooms;
+    private $wifi;
+    private $elevator;
+    private $canteen;
+    private $hours24;
+    private $laundry;
+    private $gym;
+    private $study_room;
+    private $heating;
 
 
     public function __construct()
@@ -29,6 +37,14 @@ class College implements AdvancedUserInterface, \Serializable
         $this->isActive = true;
         $this->messages = new ArrayCollection();
         $this->rooms = new ArrayCollection();
+        $this->wifi = false;
+        $this->elevator = false;
+        $this->canteen = false;
+        $this->hours24 = false;
+        $this->laundry = false;
+        $this->gym = false;
+        $this->study_room = false;
+        $this->heating = false;
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
     }
@@ -199,6 +215,24 @@ class College implements AdvancedUserInterface, \Serializable
        $this->url=$url;
        return $this;
    }
+
+   /**
+   * @param string  $wifi,$elevator,$canteen,$hours24,$laundry,$gym,$study_room,$heating
+   *
+   * @return User
+   */
+  public function setEquipment( $wifi,$elevator,$canteen,$hours24,$laundry,$gym,$study_room,$heating)
+  {
+      $this->wifi = $wifi;
+      $this->elevator = $elevator;
+      $this->canteen = $canteen;
+      $this->hours24 = $hours24;
+      $this->gym=$gym;
+      $this->study_room=$study_room;
+      $this->heating=$heating;
+  }
+
+
 
 
     /**
@@ -413,5 +447,197 @@ class College implements AdvancedUserInterface, \Serializable
     public function getRooms()
     {
         return $this->rooms;
+    }
+
+    /**
+     * Set wifi
+     *
+     * @param boolean $wifi
+     *
+     * @return College
+     */
+    public function setWifi($wifi)
+    {
+        $this->wifi = $wifi;
+
+        return $this;
+    }
+
+    /**
+     * Get wifi
+     *
+     * @return boolean
+     */
+    public function getWifi()
+    {
+        return $this->wifi;
+    }
+
+    /**
+     * Set elevator
+     *
+     * @param boolean $elevator
+     *
+     * @return College
+     */
+    public function setElevator($elevator)
+    {
+        $this->elevator = $elevator;
+
+        return $this;
+    }
+
+    /**
+     * Get elevator
+     *
+     * @return boolean
+     */
+    public function getElevator()
+    {
+        return $this->elevator;
+    }
+
+    /**
+     * Set canteen
+     *
+     * @param boolean $canteen
+     *
+     * @return College
+     */
+    public function setCanteen($canteen)
+    {
+        $this->canteen = $canteen;
+
+        return $this;
+    }
+
+    /**
+     * Get canteen
+     *
+     * @return boolean
+     */
+    public function getCanteen()
+    {
+        return $this->canteen;
+    }
+
+    /**
+     * Set hours24
+     *
+     * @param boolean $hours24
+     *
+     * @return College
+     */
+    public function setHours24($hours24)
+    {
+        $this->hours24 = $hours24;
+
+        return $this;
+    }
+
+    /**
+     * Get hours24
+     *
+     * @return boolean
+     */
+    public function getHours24()
+    {
+        return $this->hours24;
+    }
+
+    /**
+     * Set laundry
+     *
+     * @param boolean $laundry
+     *
+     * @return College
+     */
+    public function setLaundry($laundry)
+    {
+        $this->laundry = $laundry;
+
+        return $this;
+    }
+
+    /**
+     * Get laundry
+     *
+     * @return boolean
+     */
+    public function getLaundry()
+    {
+        return $this->laundry;
+    }
+
+    /**
+     * Set gym
+     *
+     * @param boolean $gym
+     *
+     * @return College
+     */
+    public function setGym($gym)
+    {
+        $this->gym = $gym;
+
+        return $this;
+    }
+
+    /**
+     * Get gym
+     *
+     * @return boolean
+     */
+    public function getGym()
+    {
+        return $this->gym;
+    }
+
+    /**
+     * Set studyRoom
+     *
+     * @param boolean $studyRoom
+     *
+     * @return College
+     */
+    public function setStudyRoom($studyRoom)
+    {
+        $this->study_room = $studyRoom;
+
+        return $this;
+    }
+
+    /**
+     * Get studyRoom
+     *
+     * @return boolean
+     */
+    public function getStudyRoom()
+    {
+        return $this->study_room;
+    }
+
+    /**
+     * Set heating
+     *
+     * @param boolean $heating
+     *
+     * @return College
+     */
+    public function setHeating($heating)
+    {
+        $this->heating = $heating;
+
+        return $this;
+    }
+
+    /**
+     * Get heating
+     *
+     * @return boolean
+     */
+    public function getHeating()
+    {
+        return $this->heating;
     }
 }

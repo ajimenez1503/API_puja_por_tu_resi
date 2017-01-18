@@ -312,6 +312,26 @@ class RoomController extends Controller
     }
 
 
+
+    /**
+     * @ApiDoc(
+     *  description="Remove room of the id of a user (College).",
+     * )
+     */
+    public function removeAction($id)
+    {
+        $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($id);
+        if (!$room) {
+            return $this->returnjson(False,'Habitacion with id '.$id.' doesnt exists.');
+        }else {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($room);
+            $em->flush();
+            return $this->returnjson(False,'Habitacion with id '.$id.' se ha eleminado.');
+        }
+    }
+
+
     /**
      * @ApiDoc(
      *  description="Download pictures rooms.",

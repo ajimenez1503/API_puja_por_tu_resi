@@ -165,3 +165,8 @@ getRoom:
     path:  /Room/get/{id}
     defaults: { _controller: AppBundle:Room:get }
     methods:  [GET]
+
+removeRoom:
+    path:  /Room/remove/{id}
+    defaults: { _controller: AppBundle:Room:remove }
+    methods:  [POST]

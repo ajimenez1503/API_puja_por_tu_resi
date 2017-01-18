@@ -16,7 +16,6 @@ class Room
     private $date_end_bid;
     private $floor;
     private $size;
-    private $state;
     private $picture1;
     private $picture2;
     private $picture3;
@@ -30,7 +29,6 @@ class Room
 
     public function __construct()
     {
-        $this->state="FREE";
     }
     /**
      * Get id
@@ -60,7 +58,6 @@ class Room
             '$date_end_bid'=>$this->getDateEndBid(),
             '$floor'=>$this->getFloor(),
             '$size' => $this->getSize(),
-            '$state'=>$this->getState(),
             '$picture1'=>$this->getPicture1(),
             '$picture2'=>$this->getPicture2(),
             '$picture3'=>$this->getPicture3(),
@@ -289,29 +286,6 @@ class Room
         return $this->size;
     }
 
-    /**
-     * Set state
-     *
-     * @param string $state
-     *
-     * @return Room
-     */
-    public function setState($state)
-    {
-        $this->state = $state;
-
-        return $this;
-    }
-
-    /**
-     * Get state
-     *
-     * @return string
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
 
     /**
      * Set picture1

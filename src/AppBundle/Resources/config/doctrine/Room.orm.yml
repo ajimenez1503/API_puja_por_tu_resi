@@ -32,9 +32,6 @@ AppBundle\Entity\Room:
         size:
             type: integer
             unique: FALSE
-        state:
-            type: string
-            unique: FALSE
         picture1:
             type: string
             length: 60

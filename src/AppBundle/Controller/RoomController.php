@@ -285,9 +285,7 @@ class RoomController extends Controller
             $today=date_create('now');
             $output=array();
             for ($i = 0; $i < count($rooms); $i++) {
-                if($rooms[$i]->getState()=="OFFERED"||
-                    ($rooms[$i]->getDateStartBid()<=$today && $rooms[$i]->getDateEndBid()>=$today)
-                ){
+                if($rooms[$i]->getDateStartBid()<=$today && $rooms[$i]->getDateEndBid()>=$today){
                     array_unshift($output,$rooms[$i]->getJSON());
                 }
             }

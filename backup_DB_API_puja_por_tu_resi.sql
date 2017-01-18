@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 17-01-2017 a las 16:32:20
+-- Tiempo de generación: 18-01-2017 a las 17:34:35
 -- Versión del servidor: 5.5.44-0ubuntu0.14.04.1
 -- Versión de PHP: 5.5.9-1ubuntu4.11
 
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `message` (
   PRIMARY KEY (`id`),
   KEY `IDX_B6BD307F4BD54AEC` (`student_username`),
   KEY `IDX_B6BD307F16A289D1` (`college_username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
 
 --
 -- Volcado de datos para la tabla `message`
@@ -101,7 +101,9 @@ INSERT INTO `message` (`id`, `student_username`, `college_username`, `read_by_st
 (1, '12345678A', NULL, 1, 0, 'hola que tal estas antonio?', NULL, '2017-01-10 18:35:06', 'ROLE_STUDENT'),
 (2, '12345678A', NULL, 1, 0, 'te escribo de nuevo para preguntar por la familia? ', 'ce074d239ca6644c8b78bc42728b3e98.jpg', '2017-01-10 18:35:38', 'ROLE_STUDENT'),
 (3, '12345678A', NULL, 1, 0, 'holaaaaaaa, yo muy bien y tu?', NULL, '2017-01-10 18:58:12', 'ROLE_COLLEGE'),
-(4, '12345678A', NULL, 1, 0, 'muy bien también. Gracias. ', NULL, '2017-01-10 19:25:57', 'ROLE_STUDENT');
+(4, '12345678A', NULL, 1, 0, 'muy bien también. Gracias. ', NULL, '2017-01-10 19:25:57', 'ROLE_STUDENT'),
+(5, '12345678A', NULL, 0, 0, 'test', NULL, '2017-01-17 17:11:01', 'ROLE_STUDENT'),
+(6, '12345678A', NULL, 0, 0, 'test', '56447a1a43304b796f0c1d9c4b63c272.jpg', '2017-01-17 17:11:43', 'ROLE_STUDENT');
 
 -- --------------------------------------------------------
 
@@ -131,6 +133,43 @@ INSERT INTO `rent` (`id`, `student_username`, `status_paid`, `price`, `date`, `f
 (2, '12345678A', 1, 100, '2017-01-10 18:38:07', '81acf277523dcde69abaa61e60cfa993.pdf', '2017-01-10 19:26:33', 'juan', '4886171554372581'),
 (3, '12345678A', 1, 100, '2017-01-10 18:38:08', '16461ec3bd01a0d1db5d6dbf63d1f19c.pdf', '2017-01-10 18:59:47', 'antonio', '4009487096031929'),
 (4, '12345678A', 0, 100, '2017-01-12 20:49:33', NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `room`
+--
+
+CREATE TABLE IF NOT EXISTS `room` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `college_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `price` double NOT NULL,
+  `date_start_school` datetime NOT NULL,
+  `date_end_school` datetime NOT NULL,
+  `date_start_bid` datetime NOT NULL,
+  `date_end_bid` datetime NOT NULL,
+  `floor` int(11) NOT NULL,
+  `size` int(11) NOT NULL,
+  `picture1` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `picture2` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `picture3` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `tv` tinyint(1) NOT NULL,
+  `bath` tinyint(1) NOT NULL,
+  `desk` tinyint(1) NOT NULL,
+  `wardrove` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_729F519B16A289D1` (`college_username`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=15 ;
+
+--
+-- Volcado de datos para la tabla `room`
+--
+
+INSERT INTO `room` (`id`, `college_username`, `name`, `price`, `date_start_school`, `date_end_school`, `date_start_bid`, `date_end_bid`, `floor`, `size`, `picture1`, `picture2`, `picture3`, `tv`, `bath`, `desk`, `wardrove`) VALUES
+(12, 'B18756676', 'room1', 500, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-26 00:00:00', '2017-02-15 00:00:00', 1, 20, '6d1866951e88d63d8c51c2cbc48ae76e.jpg', '0fc817542bcf3e3a65e5fb453d5d62d8.jpg', 'afc9cef7a4e8c5e0dbc333b1a8a2fd84.jpg', 1, 1, 0, 0),
+(13, 'B18756676', 'room1', 500, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-18 00:00:00', '2017-02-15 00:00:00', 1, 20, 'acd27bdd307e5691e011a75fd98fe0c7.jpg', 'c9a00998b9ad3062ab70c7573c428631.jpg', 'a85799d39659ee30c7a50d71aec49ae2.jpg', 1, 1, 0, 0),
+(14, 'B18756676', 'room1', 500, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-17 00:00:00', '2017-02-15 00:00:00', 1, 20, '6df6b486c6ffdb7f27f888d749cdd8ec.jpg', '2de6153ac8621c67785e64e2a55b4773.jpg', 'c3c2fcfd1b9f1977c4b4667c484e9f9a.jpg', 1, 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -177,6 +216,12 @@ ALTER TABLE `message`
 --
 ALTER TABLE `rent`
   ADD CONSTRAINT `FK_2784DCC4BD54AEC` FOREIGN KEY (`student_username`) REFERENCES `students` (`username`);
+
+--
+-- Filtros para la tabla `room`
+--
+ALTER TABLE `room`
+  ADD CONSTRAINT `FK_729F519B16A289D1` FOREIGN KEY (`college_username`) REFERENCES `colleges` (`username`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

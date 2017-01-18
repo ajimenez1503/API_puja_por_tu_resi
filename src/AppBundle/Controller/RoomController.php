@@ -218,4 +218,117 @@ class RoomController extends Controller
         }
         return $this->returnjson(true,'La habitacion se ha creado correctamente.');
     }
+
+
+
+    /**
+     * @ApiDoc(
+     *  description="Get list of rooms of a user (College). Format JSON.",
+     * )
+     */
+    public function getAllAction(Request $request)
+    {
+        $user=$this->get('security.token_storage')->getToken()->getUser();
+        if ($user->getRoles()[0]=="ROLE_COLLEGE"){
+            $rooms=$user->getRooms()->getValues();
+
+            $output=array();
+            for ($i = 0; $i < count($rooms); $i++) {
+                array_unshift($output,$rooms[$i]->getJSON());
+            }
+            return $this->returnjson(true,'Lista de habitaciones.',$output);
+        }else{
+            return $this->returnjson(False,'The user Student cannot get rooms');
+        }
+    }
+
+    /**
+     * @ApiDoc(
+     *  description="Get list of FREE rooms of a user (College). Format JSON.",
+     * )
+     */
+    public function getFREEAction(Request $request)
+    {
+        $user=$this->get('security.token_storage')->getToken()->getUser();
+        if ($user->getRoles()[0]=="ROLE_COLLEGE"){
+            $rooms=$user->getRooms()->getValues();
+
+            $output=array();
+            for ($i = 0; $i < count($rooms); $i++) {
+                if($rooms[$i]->getState()=="FREE"){
+                    array_unshift($output,$rooms[$i]->getJSON());
+                }
+            }
+            return $this->returnjson(true,'Lista de habitaciones sin usar (libres).',$output);
+        }else{
+            return $this->returnjson(False,'The user Student cannot get rooms');
+        }
+    }
+
+    /**
+     * @ApiDoc(
+     *  description="Get list of OFFERED rooms of a user (College). Format JSON.",
+     * )
+     */
+    public function getOFFEREDAction(Request $request)
+    {
+        $user=$this->get('security.token_storage')->getToken()->getUser();
+        if ($user->getRoles()[0]=="ROLE_COLLEGE"){
+            $rooms=$user->getRooms()->getValues();
+
+            $output=array();
+            for ($i = 0; $i < count($rooms); $i++) {
+                if($rooms[$i]->getState()=="OFFERED"){
+                    array_unshift($output,$rooms[$i]->getJSON());
+                }
+            }
+            return $this->returnjson(true,'Lista de habitaciones para pujar.',$output);
+        }else{
+            return $this->returnjson(False,'The user Student cannot get rooms');
+        }
+    }
+
+
+    /**
+     * @ApiDoc(
+     *  description="Get room of the id of a user (College). Format JSON.",
+     * )
+     */
+    public function getAction($id)
+    {
+        $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($id);
+        if (!$room) {
+            return $this->returnjson(False,'Habitacion with id '.$id.' doesnt exists.');
+        }else {
+            return $this->returnjson(False,'Habitacion',$room->getJSON());
+        }
+    }
+
+
+    /**
+     * @ApiDoc(
+     *  description="Download pictures rooms.",
+     *  requirements={
+     *      {
+     *          "name"="filename",
+     *          "dataType"="String",
+     *          "description"="Filename receipt"
+     *      },
+     *  },
+     * )
+     */
+    public function downloadAction($filename)
+    {
+        $path = $this->container->getParameter('storageFiles');
+        $content = file_get_contents($path.'/'.$filename);
+        $response = new Response();
+        //set headers
+        //$response->headers->set("Access-Control-Expose-Headers", "Content-Disposition");
+        $response->headers->add(array('Access-Control-Expose-Headers' =>  'Content-Disposition'));
+        $response->headers->set('Content-Type', 'mime/type');
+        $response->headers->set('Content-Disposition', 'attachment;filename="'.$filename);
+
+        $response->setContent($content);
+        return $response;
+    }
 }

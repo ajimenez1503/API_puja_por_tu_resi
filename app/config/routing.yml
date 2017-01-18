@@ -135,3 +135,28 @@ createRoom:
     path:     /Room/create/
     defaults:  { _controller: AppBundle:Room:create}
     methods:  [POST]
+
+getAllRoom:
+    path:     /Room/getAll/
+    defaults:  { _controller: AppBundle:Room:getAll}
+    methods:  [GET]
+
+getOFFEREDRoom:
+    path:     /Room/getOFFERED/
+    defaults:  { _controller: AppBundle:Room:getOFFERED}
+    methods:  [GET]
+
+getFREERoom:
+    path:     /Room/getFREE/
+    defaults:  { _controller: AppBundle:Room:getFREE}
+    methods:  [GET]
+
+downloadRoom:
+    path:  /Room/download/{filename}
+    defaults: { _controller: AppBundle:Room:download }
+    methods:  [GET]
+
+getRoom:
+    path:  /Room/get/{id}
+    defaults: { _controller: AppBundle:Room:get }
+    methods:  [GET]

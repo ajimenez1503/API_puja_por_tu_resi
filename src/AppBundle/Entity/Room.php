@@ -52,12 +52,23 @@ class Room
     {
         $output=array(
             'id'=>$this->getId(),
-            'message' => $this->getMessage(),
-            'read_by_student'=>$this->getReadByStudent(),
-            'read_by_college'=>$this->getReadByCollege(),
-            'file_attached'=>$this->getFileAttached(),
-            'date'=>$this->getDate(),
-            'senderType'=>$this->getSenderType(),
+            '$name' => $this->getName(),
+            '$price'=>$this->getPrice(),
+            '$date_start_school'=>$this->getDateStartSchool(),
+            '$date_end_school'=>$this->getDateEndSchool(),
+            '$date_start_bid'=>$this->getDateStartBid(),
+            '$date_end_bid'=>$this->getDateEndBid(),
+            '$floor'=>$this->getFloor(),
+            '$size' => $this->getSize(),
+            '$state'=>$this->getState(),
+            '$picture1'=>$this->getPicture1(),
+            '$picture2'=>$this->getPicture2(),
+            '$picture3'=>$this->getPicture3(),
+            '$tv'=>$this->getTv(),
+            '$bath'=>$this->getBath(),
+            '$desk'=>$this->getDesk(),
+            '$wardrove'=>$this->getWardrove(),
+            '$college'=>$this->getCollege()->getUsername(),
         );
         return $output;
     }

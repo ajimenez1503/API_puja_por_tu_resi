@@ -338,4 +338,102 @@ class RoomController extends Controller
         $response->setContent($content);
         return $response;
     }
+
+
+
+    /**
+     * @ApiDoc(
+     *  description="This method update the date bid/school of a room.",
+     *  requirements={
+     *      {
+     *          "name"="id",
+     *          "dataType"="integer",
+     *          "description"="ID of the room"
+     *      },
+     *      {
+     *          "name"="date_start_school",
+     *          "dataType"="datetime",
+     *          "description"="Date when the user (Student) starts to live and pay. (OPTIONAL)"
+     *      },
+     *      {
+     *          "name"="date_end_school",
+     *          "dataType"="datetime",
+     *          "description"="Date when the user (Student) stops to live and pay. (OPTIONAL)"
+     *      },
+     *      {
+     *          "name"="date_start_bid",
+     *          "dataType"="datetime",
+     *          "description"="Date when the user (Student) can start to bid. (OPTIONAL)"
+     *      },
+     *      {
+     *          "name"="date_end_bid",
+     *          "dataType"="datetime",
+     *          "description"="Date when the user (Student) can not bid anymore. (OPTIONAL)"
+     *      },
+     *  },
+     * )
+     */
+    public function updateDateAction(Request $request)
+    {
+        $id=$request->request->get('id');
+
+        if (!is_null($request->request->get('date_start_school'))) {
+            $date_start_school=date_create($request->request->get('date_start_school'));
+        }else{
+            $date_start_school=NULL;
+        }
+        if (!is_null($request->request->get('date_end_school')))  {
+            $date_end_school=date_create($request->request->get('date_end_school'));
+        }else{
+            $date_end_school=NULL;
+        }
+
+        if (!is_null($request->request->get('date_start_bid')))  {
+            $date_start_bid=date_create($request->request->get('date_start_bid'));
+        }else{
+            $date_start_bid=NULL;
+        }
+
+        if (!is_null($request->request->get('date_end_bid')))  {
+            $date_end_bid=date_create($request->request->get('date_end_bid'));
+        }else{
+            $date_end_bid=NULL;
+        }
+
+        if (!is_null($date_start_school) && !is_null($date_end_school)){
+            if (!$this->get('app.validate')->validateDate($date_start_school,$date_end_school)){
+                return $this->returnjson(false,'Fecha de estacia academica no es correcta.');
+            }
+        }
+        if (!is_null($date_start_bid) && !is_null($date_end_bid)){
+            if (!$this->get('app.validate')->validateDate($date_start_bid,$date_end_bid)){
+                return $this->returnjson(false,'Fecha de las puja no es correcta.');
+            }
+        }
+        if (!is_null($date_start_school) && !is_null($date_end_school) && !is_null($date_start_bid) && !is_null($date_end_bid)){
+            if (!$this->get('app.validate')->validateDate($date_end_bid,$date_start_school)){
+                return $this->returnjson(false,'Fecha de las puja debe ser menor que la academica.');
+            }
+        }
+        try {
+            $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($id);
+            if (!is_null($date_start_school) && !is_null($date_end_school)){
+                $room->setDateStartSchool($date_start_school);
+                $room->setDateEndSchool($date_end_school);
+            }
+            if (!is_null($date_start_bid) && !is_null($date_end_bid)){
+                $room->setDateStartBid($date_start_bid);
+                $room->setDateEndBid($date_end_bid);
+            }
+            $em = $this->getDoctrine()->getManager();
+            // tells Doctrine you want to (eventually) save the Product (no queries is done)
+            $em->persist($room);
+            // actually executes the queries (i.e. the INSERT query)
+            //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+            $em->flush();
+        } catch (\Exception $pdo_ex) {
+            return $this->returnjson(false,'SQL exception.');
+        }
+        return $this->returnjson(true,'La habitacion se ha actualizado correctamente con las nuevas fechas.');
+    }
 }

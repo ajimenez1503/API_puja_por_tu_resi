@@ -136,6 +136,11 @@ createRoom:
     defaults:  { _controller: AppBundle:Room:create}
     methods:  [POST]
 
+updateDate:
+    path:     /Room/updateDate/
+    defaults:  { _controller: AppBundle:Room:updateDate}
+    methods:  [POST]
+
 getAllRoom:
     path:     /Room/getAll/
     defaults:  { _controller: AppBundle:Room:getAll}

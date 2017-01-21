@@ -320,14 +320,23 @@ class RoomController extends Controller
      */
     public function removeAction($id)
     {
-        $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($id);
+        $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find(intval($id));
         if (!$room) {
             return $this->returnjson(False,'Habitacion with id '.$id.' doesnt exists.');
         }else {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($room);
-            $em->flush();
-            return $this->returnjson(False,'Habitacion with id '.$id.' se ha eleminado.');
+            $today=date_create('now');
+            if(
+                ($room->getDateStartSchool()>$today && $room->getDateEndBid()<$today) ||//between bid and school
+                ($room->getDateStartSchool()>$today && $room->getDateStartBid()>$today)||//before bid and before school
+                ($room->getDateEndBid()<$today && $room->getDateEndSchool()<$today)  //after bid and after school
+            ){
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($room);
+                $em->flush();
+                return $this->returnjson(True,'Habitacion with id '.$id.' se ha eleminado.');
+            }else{
+                return $this->returnjson(False,'Habitacion with id '.$id.' esta en uso (pujas - academico ).');
+            }
         }
     }
 

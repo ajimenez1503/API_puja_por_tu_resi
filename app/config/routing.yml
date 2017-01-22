@@ -27,6 +27,11 @@ login:
     defaults: { _controller: AppBundle:Security:login }
     methods:  [GET,POST]
 
+SecuritycheckSesion:
+    path:     /Security/checkSesion/
+    defaults: { _controller: AppBundle:Security:checkSesion }
+    methods:  [GET]
+
 logout:
     path: /logout
 

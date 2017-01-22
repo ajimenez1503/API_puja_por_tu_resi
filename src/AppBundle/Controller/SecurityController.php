@@ -39,7 +39,6 @@ class SecurityController extends Controller
              $user=$this->get('security.token_storage')->getToken()->getUser();
              $data=array(
                  'username' => $user->getUsername(),
-                 'password'=>$user->getPassword(),
                  'isvalid'=>$user->getIsActive(),
                  'ROLE'=>$user->getRoles(),
              );
@@ -57,6 +56,44 @@ class SecurityController extends Controller
             if (!is_null($error)){
                 $message=$error->getMessageKey();
             }
+            $data=array();
+            $response->setData(array(
+                'success' => false,
+                'message' => $message,
+                'data'=>$data,
+            ));
+        }
+        return $response;
+    }
+
+
+
+
+    /**
+     * @ApiDoc(
+     *  description="This method verify if a user (which role) is connected in the system. ",
+     * )
+     */
+    public function checkSesionAction(Request $request)
+    {
+        $response = new JsonResponse();
+        $securityContext = $this->container->get('security.authorization_checker');
+        if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
+             $user=$this->get('security.token_storage')->getToken()->getUser();
+             $data=array(
+                 'username' => $user->getUsername(),
+                 'isvalid'=>$user->getIsActive(),
+                 'ROLE'=>$user->getRoles(),
+             );
+             $response->setData(array(
+                'success' => true,
+                'message' => 'USER  is logged.',
+                'data'=> $data,
+             ));
+        }
+        else{
+            $message = 'User is not registered.';
+            $data=array();
             $data=array();
             $response->setData(array(
                 'success' => false,

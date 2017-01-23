@@ -480,7 +480,7 @@ class RoomController extends Controller
         }else {
             $output=array();
             for ($i = 0; $i < count($colleges); $i++) {
-                //TODO check if the college has OFFERED rooms
+                //check if the college has OFFERED rooms
                 $rooms=$colleges[$i]->getOFFEREDroom();
                 if ($rooms){
                     array_unshift($output,array_merge(
@@ -489,6 +489,28 @@ class RoomController extends Controller
                 }
             }
             return $this->returnjson(true,'Lista de residencias y habitaciones para pujar.',$output);
+
+        }
+    }
+
+
+
+    /**
+     * @ApiDoc(
+     *  description="Get the companyName of all the colleges. This function can be called by User (College/Student). Format JSON.",
+     * )
+     */
+    public function getAllCompanyNameAction(Request $request)
+    {
+        $colleges = $this->getDoctrine()->getRepository('AppBundle:College')->findAll();
+        if (!$colleges) {
+            return $this->returnjson(true,'No hay ninguna residencia.',$output);
+        }else {
+            $output=array();
+            for ($i = 0; $i < count($colleges); $i++) {
+                array_unshift($output,$colleges[$i]->getCompanyName());
+            }
+            return $this->returnjson(true,'Lista de residencias (company name).',$output);
 
         }
     }

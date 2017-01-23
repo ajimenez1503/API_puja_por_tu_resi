@@ -176,6 +176,12 @@ getSearchRoom:
     defaults: { _controller: AppBundle:Room:getSearch }
     methods:  [GET]
 
+getAllCompanyNameRoom:
+    path:  /Room/getAllCompanyName/
+    defaults: { _controller: AppBundle:Room:getAllCompanyName }
+    methods:  [GET]
+
+
 
 removeRoom:
     path:  /Room/remove/{id}

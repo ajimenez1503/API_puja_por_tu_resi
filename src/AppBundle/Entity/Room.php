@@ -44,7 +44,7 @@ class Room
 
 
     /**
-    * @return JSON format of the message
+    * @return JSON format of the room
     */
     public function getJSON()
     {

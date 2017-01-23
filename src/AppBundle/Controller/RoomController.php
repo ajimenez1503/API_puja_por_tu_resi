@@ -465,4 +465,33 @@ class RoomController extends Controller
         }
         return $this->returnjson(true,'La habitacion se ha actualizado correctamente con las nuevas fechas.');
     }
+
+
+    /**
+     * @ApiDoc(
+     *  description="Get all the colleges with the data of colelge and all the OFFERED room. This function can be called by User (College/Student). Format JSON.",
+     * )
+     */
+    public function getSearchAction(Request $request)
+    {
+        $colleges = $this->getDoctrine()->getRepository('AppBundle:College')->findAll();
+        if (!$colleges) {
+            return $this->returnjson(true,'No hay ninguna residencia.',$output);
+        }else {
+            $output=array();
+            for ($i = 0; $i < count($colleges); $i++) {
+                //TODO check if the college has OFFERED rooms
+                $rooms=$colleges[$i]->getOFFEREDroom();
+                if ($rooms){
+                    array_unshift($output,array_merge(
+                        $colleges[$i]->getJSON(),array('rooms'=>$rooms))
+                    );
+                }
+            }
+            return $this->returnjson(true,'Lista de residencias y habitaciones para pujar.',$output);
+
+        }
+    }
+
+
 }

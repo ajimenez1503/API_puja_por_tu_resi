@@ -49,6 +49,34 @@ class College implements AdvancedUserInterface, \Serializable
         // $this->salt = md5(uniqid(null, true));
     }
 
+    /**
+    * @return JSON format of the college
+    */
+    public function getJSON()
+    {
+        $output=array(
+            'username'=>$this->getUsername(),
+            'email' => $this->getEmail(),
+            'companyName'=>$this->getCompanyName(),
+            'address'=>$this->getAddress(),
+            'latitude'=>$this->getLatitude(),
+            'longitude'=>$this->getLongitude(),
+            'telephone'=>$this->getTelephone(),
+            'url'=>$this->geturl(),
+            'equipment_college'=> array(
+                'wifi' => $this->getWifi(),
+                'elevator'=>$this->getElevator(),
+                'canteen'=>$this->getCanteen(),
+                'hours24'=>$this->getHours24(),
+                'laundry'=>$this->getLaundry(),
+                'gym'=>$this->getGym(),
+                'study_room'=>$this->getStudyRoom(),
+                'heating'=>$this->getHeating(),
+            )
+        );
+        return $output;
+    }
+
     public function isAccountNonExpired()
    {
        return true;
@@ -640,4 +668,23 @@ class College implements AdvancedUserInterface, \Serializable
     {
         return $this->heating;
     }
+
+    /**
+     * Get OFFERED rooms
+     * OFFERED room according to the dates of bid.
+     * @return list of room (JSON format)
+     */
+    public function getOFFEREDroom()
+    {
+        $rooms=$this->getRooms()->getValues();
+        $today=date_create('now');
+        $output=array();
+        for ($i = 0; $i < count($rooms); $i++) {
+            if($rooms[$i]->getDateStartBid()<=$today && $rooms[$i]->getDateEndBid()>=$today){
+                array_unshift($output,$rooms[$i]->getJSON());
+            }
+        }
+        return $output;
+    }
+
 }

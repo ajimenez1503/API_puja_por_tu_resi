@@ -171,6 +171,12 @@ getRoom:
     defaults: { _controller: AppBundle:Room:get }
     methods:  [GET]
 
+getSearchRoom:
+    path:  /Room/getSearch/
+    defaults: { _controller: AppBundle:Room:getSearch }
+    methods:  [GET]
+
+
 removeRoom:
     path:  /Room/remove/{id}
     defaults: { _controller: AppBundle:Room:remove }

@@ -90,4 +90,25 @@ class BidController extends Controller
     }
 
 
+    /**
+     * @ApiDoc(
+     *  description="Get all the bid of a room by its id. Can be called by user (College/Student). Format JSON.",
+     * )
+     */
+    public function getAction($id)
+    {
+        $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($id);
+        if (!$room) {
+            return $this->returnjson(False,'Habitacion con id '.$id.' no existe.');
+        }else {
+            $list_bids=$room->getBids();
+            $output=array();
+            for ($i = 0; $i < count($list_bids); $i++) {
+                array_unshift($output,$list_bids[$i]->getJSON());
+            }
+            return $this->returnjson(true,'Lista de pujas.',$output);
+        }
+    }
+
+
 }

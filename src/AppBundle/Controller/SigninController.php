@@ -159,37 +159,37 @@ class SigninController extends Controller
      *      {
      *          "name"="elevator",
      *          "dataType"="boolean",
-     *          "description"="True if the college has wifi."
+     *          "description"="True if the college has elevator."
      *      },
      *      {
      *          "name"="canteen",
      *          "dataType"="boolean",
-     *          "description"="True if the college has wifi."
+     *          "description"="True if the college has canteen."
      *      },
      *      {
      *          "name"="hours24",
      *          "dataType"="boolean",
-     *          "description"="True if the college has wifi."
+     *          "description"="True if the college has hours24 receptions."
      *      },
      *      {
      *          "name"="laundry",
      *          "dataType"="boolean",
-     *          "description"="True if the college has wifi."
+     *          "description"="True if the college has laundry."
      *      },
      *      {
      *          "name"="gym",
      *          "dataType"="boolean",
-     *          "description"="True if the college has wifi."
+     *          "description"="True if the college has gym."
      *      },
      *      {
      *          "name"="study_room",
      *          "dataType"="boolean",
-     *          "description"="True if the college has wifi."
+     *          "description"="True if the college has study_room."
      *      },
      *      {
      *          "name"="heating",
      *          "dataType"="boolean",
-     *          "description"="True if the college has wifi."
+     *          "description"="True if the college has heating."
      *      },
      *  },
      * )

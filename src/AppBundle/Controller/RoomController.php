@@ -497,9 +497,7 @@ class RoomController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get all the colleges with the data of college and all the OFFERED room.
-     * The college and the room should pass the restrictions: price, equipment, specific_college
-     * This function can be called by User (College/Student). Format JSON.",
+     *  description="Get all the colleges with the data of college and all the OFFERED room. The college and the room should pass the restrictions: price, equipment, specific_college. This function can be called by User (College/Student). Format JSON.",
      *  requirements={
      *      {
      *          "name"="college_company_name",
@@ -516,6 +514,66 @@ class RoomController extends Controller
      *          "dataType"="float",
      *          "description"="Price min of the room per month."
      *      },
+     *      {
+     *          "name"="tv",
+     *          "dataType"="boolean",
+     *          "description"="True if the room has a tv."
+     *      },
+     *      {
+     *          "name"="bath",
+     *          "dataType"="boolean",
+     *          "description"="True if the room has bath."
+     *      },
+     *      {
+     *          "name"="desk",
+     *          "dataType"="boolean",
+     *          "description"="True if the room has a desk."
+     *      },
+     *      {
+     *          "name"="wardrove",
+     *          "dataType"="boolean",
+     *          "description"="True if the room has a wardrove."
+     *      },
+     *      {
+     *          "name"="wifi",
+     *          "dataType"="boolean",
+     *          "description"="True if the college has wifi."
+     *      },
+     *      {
+     *          "name"="elevator",
+     *          "dataType"="boolean",
+     *          "description"="True if the college has elevator."
+     *      },
+     *      {
+     *          "name"="canteen",
+     *          "dataType"="boolean",
+     *          "description"="True if the college has canteen."
+     *      },
+     *      {
+     *          "name"="hours24",
+     *          "dataType"="boolean",
+     *          "description"="True if the college has hours24 receptions."
+     *      },
+     *      {
+     *          "name"="laundry",
+     *          "dataType"="boolean",
+     *          "description"="True if the college has laundry."
+     *      },
+     *      {
+     *          "name"="gym",
+     *          "dataType"="boolean",
+     *          "description"="True if the college has gym."
+     *      },
+     *      {
+     *          "name"="study_room",
+     *          "dataType"="boolean",
+     *          "description"="True if the college has study_room."
+     *      },
+     *      {
+     *          "name"="heating",
+     *          "dataType"="boolean",
+     *          "description"="True if the college has heating."
+     *      },
      *  },
      * )
      */
@@ -524,10 +582,7 @@ class RoomController extends Controller
         $restrictions_companyName=$request->query->get('college_company_name');
         $restrictions_price_max=intval($request->query->get('price_max'));
         $restrictions_price_min=intval($request->query->get('price_min'));
-
-
         $restrictions_wifi=$request->query->get('wifi',$default ='0');
-
         $restrictions_elevator=$request->query->get('elevator',$default ='0');
         $restrictions_canteen=$request->query->get('canteen',$default ='0');
         $restrictions_hours24=$request->query->get('hours24',$default ='0');

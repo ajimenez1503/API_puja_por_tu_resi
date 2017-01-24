@@ -33,16 +33,6 @@ class ProfileStudentController extends Controller
     }
 
     /**
-     * Calculate the number of point of the user. It is the number of days from the register.
-     */
-    public function get_point($creation_date){
-        $now =  date_create('now');
-        $interval = date_diff($creation_date,$now);
-        return $interval->format('%a');
-    }
-
-
-    /**
      * @ApiDoc(
      *  description="Get data of the user (student) : name, username, email, ROLE, date_creation, point.",
      * )
@@ -57,7 +47,7 @@ class ProfileStudentController extends Controller
             'isvalid'=>$user->getIsActive(),
             'ROLE'=>$user->getRoles(),
             'date_creation'=>$user->getCreationDate(),
-            'point'=>$this->get_point($user->getCreationDate()),
+            'point'=>$user->get_point(),
         );
         return $this->returnjson(true,'Data user.',$data);
     }

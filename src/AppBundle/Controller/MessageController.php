@@ -96,7 +96,7 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This methodo oepn a message by the 'id'.",
+     *  description="This methodo open a message by the 'id'.",
      *  requirements={
      *      {
      *          "name"="id",

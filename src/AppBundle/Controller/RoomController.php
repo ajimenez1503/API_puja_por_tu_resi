@@ -305,7 +305,7 @@ class RoomController extends Controller
     {
         $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($id);
         if (!$room) {
-            return $this->returnjson(False,'Habitacion with id '.$id.' doesnt exists.');
+            return $this->returnjson(False,'Habitacion con id '.$id.' no existe.');
         }else {
             return $this->returnjson(False,'Habitacion',$room->getJSON());
         }

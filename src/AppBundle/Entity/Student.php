@@ -396,4 +396,14 @@ class Student implements AdvancedUserInterface, \Serializable
     {
         return $this->bids;
     }
+
+
+    /**
+     * Calculate the number of point of the user. It is the number of days from the register.
+     */
+    public function get_point(){
+        $now =  date_create('now');
+        $interval = date_diff($this->getCreationDate(),$now);
+        return $interval->format('%a');
+    }
 }

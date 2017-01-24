@@ -196,6 +196,12 @@ createBid:
     defaults:  { _controller: AppBundle:Bid:create}
     methods:  [POST]
 
+getBidsRoomBid:
+    path:  /Bid/getBidsRoom/{id}
+    defaults: { _controller: AppBundle:Bid:getBidsRoom }
+    methods:  [GET]
+
+
 getBid:
     path:  /Bid/get/{id}
     defaults: { _controller: AppBundle:Bid:get }

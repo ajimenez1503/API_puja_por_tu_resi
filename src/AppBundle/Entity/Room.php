@@ -24,11 +24,12 @@ class Room
     private $desk;
     private $wardrove;
     private $college;
-
+    private $bids;
 
 
     public function __construct()
     {
+        $this->bids = new ArrayCollection();
     }
     /**
      * Get id
@@ -453,5 +454,39 @@ class Room
     public function getWardrove()
     {
         return $this->wardrove;
+    }
+
+    /**
+     * Add bid
+     *
+     * @param \AppBundle\Entity\Bid $bid
+     *
+     * @return Room
+     */
+    public function addBid(\AppBundle\Entity\Bid $bid)
+    {
+        $this->bids[] = $bid;
+
+        return $this;
+    }
+
+    /**
+     * Remove bid
+     *
+     * @param \AppBundle\Entity\Bid $bid
+     */
+    public function removeBid(\AppBundle\Entity\Bid $bid)
+    {
+        $this->bids->removeElement($bid);
+    }
+
+    /**
+     * Get bids
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBids()
+    {
+        return $this->bids;
     }
 }

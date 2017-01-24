@@ -66,3 +66,7 @@ AppBundle\Entity\Room:
             joinColumn:
                 name: college_username
                 referencedColumnName: username
+    oneToMany:
+        bids:
+            targetEntity: Bid
+            mappedBy: room

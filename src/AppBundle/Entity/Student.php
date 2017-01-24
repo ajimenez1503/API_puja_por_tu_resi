@@ -17,6 +17,7 @@ class Student implements AdvancedUserInterface, \Serializable
     private $creationDate;
     private $incidences;
     private $messages;
+    private $bids;
     private $rents;
 
     public function getUsername()
@@ -30,6 +31,7 @@ class Student implements AdvancedUserInterface, \Serializable
         $this->creationDate=date_create('now');
         $this->incidences = new ArrayCollection();
         $this->messages = new ArrayCollection();
+        $this->bids = new ArrayCollection();
         $this->rents = new ArrayCollection();
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
@@ -359,5 +361,39 @@ class Student implements AdvancedUserInterface, \Serializable
     public function getRents()
     {
         return $this->rents;
+    }
+
+    /**
+     * Add bid
+     *
+     * @param \AppBundle\Entity\Bid $bid
+     *
+     * @return Student
+     */
+    public function addBid(\AppBundle\Entity\Bid $bid)
+    {
+        $this->bids[] = $bid;
+
+        return $this;
+    }
+
+    /**
+     * Remove bid
+     *
+     * @param \AppBundle\Entity\Bid $bid
+     */
+    public function removeBid(\AppBundle\Entity\Bid $bid)
+    {
+        $this->bids->removeElement($bid);
+    }
+
+    /**
+     * Get bids
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBids()
+    {
+        return $this->bids;
     }
 }

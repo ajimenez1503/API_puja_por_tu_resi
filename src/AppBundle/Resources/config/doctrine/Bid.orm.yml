@@ -1,0 +1,27 @@
+# src/AppBundle/Resources/config/doctrine/Bid.orm.yml
+AppBundle\Entity\Bid:
+    type: entity
+    table: bid
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+            unique: TRUE
+    fields:
+        point:
+            type: integer
+            unique: FALSE
+
+    manyToOne:
+        student:
+            targetEntity: Student
+            inversedBy: bids
+            joinColumn:
+                name: student_username
+                referencedColumnName: username
+        room:
+            targetEntity: Room
+            inversedBy: bids
+            joinColumn:
+                name: room_id
+                referencedColumnName: id

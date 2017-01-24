@@ -34,6 +34,9 @@ AppBundle\Entity\Student:
         messages:
             targetEntity: Message
             mappedBy: student
+        bids:
+            targetEntity: Bid
+            mappedBy: student
         rents:
             targetEntity: Rent
             mappedBy: student

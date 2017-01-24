@@ -171,6 +171,11 @@ getRoom:
     defaults: { _controller: AppBundle:Room:get }
     methods:  [GET]
 
+getSearchAllRoom:
+    path:  /Room/getSearchAll/
+    defaults: { _controller: AppBundle:Room:getSearchAll }
+    methods:  [GET]
+
 getSearchRoom:
     path:  /Room/getSearch/
     defaults: { _controller: AppBundle:Room:getSearch }

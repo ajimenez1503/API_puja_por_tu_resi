@@ -469,14 +469,14 @@ class RoomController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get all the colleges with the data of colelge and all the OFFERED room. This function can be called by User (College/Student). Format JSON.",
+     *  description="Get all the colleges with the data of college and all the OFFERED room. This function can be called by User (College/Student). Format JSON.",
      * )
      */
-    public function getSearchAction(Request $request)
+    public function getSearchAllAction(Request $request)
     {
         $colleges = $this->getDoctrine()->getRepository('AppBundle:College')->findAll();
         if (!$colleges) {
-            return $this->returnjson(true,'No hay ninguna residencia.',$output);
+            return $this->returnjson(true,'No hay ninguna residencia.');
         }else {
             $output=array();
             for ($i = 0; $i < count($colleges); $i++) {
@@ -493,6 +493,109 @@ class RoomController extends Controller
         }
     }
 
+
+
+    /**
+     * @ApiDoc(
+     *  description="Get all the colleges with the data of college and all the OFFERED room.
+     * The college and the room should pass the restrictions: price, equipment, specific_college
+     * This function can be called by User (College/Student). Format JSON.",
+     *  requirements={
+     *      {
+     *          "name"="college_company_name",
+     *          "dataType"="String",
+     *          "description"="Name of the college (companyName)."
+     *      },
+     *      {
+     *          "name"="price_max",
+     *          "dataType"="float",
+     *          "description"="Price max of the room per month."
+     *      },
+     *      {
+     *          "name"="price_min",
+     *          "dataType"="float",
+     *          "description"="Price min of the room per month."
+     *      },
+     *  },
+     * )
+     */
+    public function getSearchAction(Request $request)
+    {
+        $restrictions_companyName=$request->query->get('college_company_name');
+        $restrictions_price_max=intval($request->query->get('price_max'));
+        $restrictions_price_min=intval($request->query->get('price_min'));
+
+
+        $restrictions_wifi=$request->query->get('wifi',$default ='0');
+
+        $restrictions_elevator=$request->query->get('elevator',$default ='0');
+        $restrictions_canteen=$request->query->get('canteen',$default ='0');
+        $restrictions_hours24=$request->query->get('hours24',$default ='0');
+        $restrictions_laundry=$request->query->get('laundry',$default ='0');
+        $restrictions_gym=$request->query->get('gym',$default ='0');
+        $restrictions_study_room=$request->query->get('study_room',$default ='0');
+        $restrictions_heating=$request->query->get('heating',$default ='0');
+        $restrictions_tv=$request->query->get('tv',$default ='0');
+        $restrictions_bath=$request->query->get('bath',$default ='0');
+        $restrictions_desk=$request->query->get('desk',$default ='0');
+        $restrictions_wardrove=$request->query->get('wardrove',$default ='0');
+
+
+        if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$restrictions_companyName)){
+                return $this->returnjson(false,'Nombre residencia no es valido (size).');
+        }
+        if (!$this->get('app.validate')->validateInt($restrictions_price_max,$mix=1,$max=2000)){
+            return $this->returnjson(false,'Precio max '.$restrictions_price_max.'no es valido.');
+        }
+        if (!$this->get('app.validate')->validateInt($restrictions_price_min,$mix=0,$max=1999)){
+            return $this->returnjson(false,'Precio min no es valido.');
+        }
+        $colleges = $this->getDoctrine()->getRepository('AppBundle:College')->findAll();
+        if (!$colleges) {
+            return $this->returnjson(true,'No hay ninguna residencia.');
+        }else {
+            $output=array();
+            for ($i = 0; $i < count($colleges); $i++) {
+                //check if the college has OFFERED rooms
+                if ($restrictions_companyName=="TODAS" || $restrictions_companyName==$colleges[$i]->getCompanyName()){
+                    if(
+                        ($restrictions_wifi=="0" || $colleges[$i]->getWifi()) &&
+                        ($restrictions_elevator=="0" || $colleges[$i]->getElevator()) &&
+                        ($restrictions_canteen=="0" || $colleges[$i]->getCanteen()) &&
+                        ($restrictions_hours24=="0" || $colleges[$i]->getHours24()) &&
+                        ($restrictions_laundry=="0" || $colleges[$i]->getLaundry()) &&
+                        ($restrictions_gym=="0" || $colleges[$i]->getGym()) &&
+                        ($restrictions_study_room=="0" || $colleges[$i]->getStudyRoom()) &&
+                        ($restrictions_heating=="0" || $colleges[$i]->getHeating())
+                    ){
+                        $rooms=$colleges[$i]->getOFFEREDroom();
+                        //analyze all the rooms and get the rooms, which pass the restrictions, in a new array
+                        $new_rooms=array();
+                        for ($j = 0; $j < count($rooms); $j++) {
+                            if ($rooms[$j]['price']>=$restrictions_price_min && $rooms[$j]['price']<=$restrictions_price_max){
+                                if(
+                                    ($restrictions_tv=="0" || $rooms[$j]['tv']) &&
+                                    ($restrictions_bath=="0" || $rooms[$j]['bath']) &&
+                                    ($restrictions_desk=="0" || $rooms[$j]['desk']) &&
+                                    ($restrictions_wardrove=="0" || $rooms[$j]['wardrove'])
+                                ){
+                                    array_unshift($new_rooms,$rooms[$j]);
+                                }
+                            }
+                        }
+                        if ($new_rooms){
+                            array_unshift($output,array_merge(
+                                $colleges[$i]->getJSON(),array('rooms'=>$new_rooms))
+                            );
+                        }
+                    }
+                }
+
+            }
+            return $this->returnjson(true,'Lista de residencias y habitaciones para pujar.',$output);
+
+        }
+    }
 
 
     /**

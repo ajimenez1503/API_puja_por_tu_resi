@@ -186,9 +186,12 @@ getAllCompanyNameRoom:
     defaults: { _controller: AppBundle:Room:getAllCompanyName }
     methods:  [GET]
 
-
-
 removeRoom:
     path:  /Room/remove/{id}
     defaults: { _controller: AppBundle:Room:remove }
+    methods:  [POST]
+
+createBid:
+    path:     /Bid/create/
+    defaults:  { _controller: AppBundle:Bid:create}
     methods:  [POST]

@@ -206,3 +206,13 @@ getBid:
     path:  /Bid/get/{id}
     defaults: { _controller: AppBundle:Bid:get }
     methods:  [GET]
+
+removeBid:
+    path:  /Bid/remove/{id}
+    defaults: { _controller: AppBundle:Bid:remove }
+    methods:  [POST]
+
+removeBidsRoomBid:
+    path:  /Bid/removeBidsRoom/{id}
+    defaults: { _controller: AppBundle:Bid:removeBidsRoom }
+    methods:  [POST]

@@ -113,7 +113,7 @@ class BidController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get data of a bid.. Can be called by user (College/Student). Format JSON.",
+     *  description="Get data of a bid. Can be called by user (College/Student). Format JSON.",
      * )
      */
     public function getAction($id)
@@ -127,7 +127,50 @@ class BidController extends Controller
     }
 
 
-    
+    /**
+     * @ApiDoc(
+     *  description="Remove a bid. Can be called by user (College/Student). Format JSON.",
+     * )
+     */
+    public function removeAction($id)
+    {
+        $bid = $this->getDoctrine()->getRepository('AppBundle:Bid')->find($id);
+        if (!$bid) {
+            return $this->returnjson(False,'Puja con id '.$id.' no existe.');
+        }else {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($bid);
+            $em->flush();
+            return $this->returnjson(True,'Puja con id '.$id.' se ha eleminado.');
+        }
+    }
+
+
+
+    /**
+     * @ApiDoc(
+     *  description="Remove all the bid of a room by its id. Can be called by user (College). Format JSON.",
+     * )
+     */
+    public function removeBidsRoomAction($id)
+    {
+        $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($id);
+        if (!$room) {
+            return $this->returnjson(False,'Habitacion con id '.$id.' no existe.');
+        }else {
+            $list_bids=$room->getBids()->getValues();
+            $number_of_bid=count($list_bids);
+            for ($i = 0; $i < count($list_bids); $i++) {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($list_bids[$i]);
+                $em->flush();
+            }
+            return $this->returnjson(true,'Se han eliminado '.$number_of_bid.' pujas.');
+        }
+    }
+
+
+
 
 
 }

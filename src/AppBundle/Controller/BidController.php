@@ -129,7 +129,7 @@ class BidController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Remove a bid. Can be called by user (College/Student). Format JSON.",
+     *  description="Remove a bid. Can be called by user (College/Student).",
      * )
      */
     public function removeAction($id)
@@ -149,7 +149,7 @@ class BidController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Remove all the bid of a room by its id. Can be called by user (College). Format JSON.",
+     *  description="Remove all the bid of a room by its id. Can be called by user (College).",
      * )
      */
     public function removeBidsRoomAction($id)
@@ -166,6 +166,36 @@ class BidController extends Controller
                 $em->flush();
             }
             return $this->returnjson(true,'Se han eliminado '.$number_of_bid.' pujas.');
+        }
+    }
+
+
+    /**
+     * @ApiDoc(
+     *  description="Remove the bid of a user (student) above a room by its id. Can be called by user (Student).",
+     * )
+     */
+    public function removeBidRoomStudentAction($id)
+    {
+        $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($id);
+        if (!$room) {
+            return $this->returnjson(False,'Habitacion con id '.$id.' no existe.');
+        }else {
+            $user=$this->get('security.token_storage')->getToken()->getUser();
+            if ($user->getRoles()[0]=="ROLE_STUDENT"){
+                $list_bids=$room->getBids()->getValues();
+                for ($i = 0; $i < count($list_bids); $i++) {
+                    if ($list_bids[$i]->getStudent()==$user){
+                        $em = $this->getDoctrine()->getManager();
+                        $em->remove($list_bids[$i]);
+                        $em->flush();
+                        return $this->returnjson(true,'Se han eliminado la puja.');
+                    }
+                }
+                return $this->returnjson(true,'El usuario no tiene pujas en esta habitacion.');
+            }else{
+                return $this->returnjson(False,'The user College cannot remove that bid for a room.');
+            }
         }
     }
 

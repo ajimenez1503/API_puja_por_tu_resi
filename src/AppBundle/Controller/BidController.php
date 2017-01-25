@@ -107,8 +107,23 @@ class BidController extends Controller
                 //TODO sort the list of bigger to smaller
                 array_unshift($output,$list_bids[$i]->getJSON());
             }
+            $this->sort_array_of_array($output, 'point');//sort the array by point
             return $this->returnjson(true,'Lista de pujas.',$output);
         }
+    }
+
+    /**
+     * Sort a array which is composed by dict
+     */
+    function sort_array_of_array(&$array, $subfield)
+    {
+        $sortarray = array();
+        foreach ($array as $key => $row)
+        {
+            $sortarray[$key] = $row[$subfield];
+        }
+
+        array_multisort($sortarray, SORT_DESC, $array);
     }
 
 

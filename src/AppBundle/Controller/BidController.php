@@ -104,6 +104,7 @@ class BidController extends Controller
             $list_bids=$room->getBids();
             $output=array();
             for ($i = 0; $i < count($list_bids); $i++) {
+                //TODO sort the list of bigger to smaller
                 array_unshift($output,$list_bids[$i]->getJSON());
             }
             return $this->returnjson(true,'Lista de pujas.',$output);
@@ -169,15 +170,22 @@ class BidController extends Controller
         }
     }
 
-
     /**
      * @ApiDoc(
      *  description="Remove the bid of a user (student) above a room by its id. Can be called by user (Student).",
+     *  requirements={
+     *      {
+     *          "name"="room_id",
+     *          "dataType"="String",
+     *          "description"="Id of the room ."
+     *      },
+     *  }
      * )
      */
-    public function removeBidRoomStudentAction($id)
+    public function removeBidRoomStudentAction(Request $request)
     {
-        $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($id);
+        $room_id=$request->request->get('room');
+        $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($room_id);
         if (!$room) {
             return $this->returnjson(False,'Habitacion con id '.$id.' no existe.');
         }else {

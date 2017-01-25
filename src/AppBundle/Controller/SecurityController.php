@@ -16,7 +16,7 @@ class SecurityController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method allow to a user to login the systme.",
+     *  description="This method allow to a user to login the systme. Can be called by user (College/Student).",
      *  requirements={
      *      {
      *          "name"="_username",
@@ -71,7 +71,7 @@ class SecurityController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method verify if a user (which role) is connected in the system. ",
+     *  description="This method verify if a user (which role) is connected in the system. Can be called by user (College/Student). ",
      * )
      */
     public function checkSesionAction(Request $request)

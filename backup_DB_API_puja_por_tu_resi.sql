@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 24-01-2017 a las 18:47:58
+-- Tiempo de generación: 25-01-2017 a las 21:21:39
 -- Versión del servidor: 5.5.44-0ubuntu0.14.04.1
 -- Versión de PHP: 5.5.9-1ubuntu4.11
 
@@ -19,6 +19,36 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `API_puja_por_tu_resi`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `bid`
+--
+
+CREATE TABLE IF NOT EXISTS `bid` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `student_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `room_id` int(11) DEFAULT NULL,
+  `point` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_4AF2B3F34BD54AEC` (`student_username`),
+  KEY `IDX_4AF2B3F354177093` (`room_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=31 ;
+
+--
+-- Volcado de datos para la tabla `bid`
+--
+
+INSERT INTO `bid` (`id`, `student_username`, `room_id`, `point`) VALUES
+(6, '12345678A', 19, 14),
+(21, '12345678A', 16, 14),
+(24, '12345678A', 21, 14),
+(25, '12345678A', 30, 15),
+(27, '12345678A', 16, 15),
+(28, '12345678A', 16, 1),
+(29, '12345678A', 16, 2),
+(30, '12345678A', 16, 20);
 
 -- --------------------------------------------------------
 
@@ -221,6 +251,13 @@ INSERT INTO `students` (`username`, `password`, `email`, `name`, `is_active`, `c
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `bid`
+--
+ALTER TABLE `bid`
+  ADD CONSTRAINT `FK_4AF2B3F34BD54AEC` FOREIGN KEY (`student_username`) REFERENCES `students` (`username`),
+  ADD CONSTRAINT `FK_4AF2B3F354177093` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`);
 
 --
 -- Filtros para la tabla `incidence`

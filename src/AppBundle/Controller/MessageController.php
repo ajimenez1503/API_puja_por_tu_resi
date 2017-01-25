@@ -58,11 +58,11 @@ class MessageController extends Controller
             $file=null;
         }
         if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$message_text,1,5000)){
-            return $this->returnjson(false,'Texto no es valido.');
+            return $this->returnjson(false,'Texto no es valido (tamaño).');
         }
         if (!is_null($file)){
             if (!$this->get('app.validate')->validatePDFFile($this->get('validator'),$file) and !$this->get('app.validate')->validateImageFile($this->get('validator'),$file)){
-                return $this->returnjson(false,'Archivo no es valido.');
+                return $this->returnjson(false,'Archivo no es valido (PFD- IMG).');
             }
             $filename=md5(uniqid()).'.'.$file->getClientOriginalExtension();
             $file->move($this->container->getParameter('storageFiles'),$filename);
@@ -127,7 +127,7 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get list of messages of a user (Student || College). In JSON format.",
+     *  description="Get list of messages of a user (Student || College). In JSON format. This function can be called by User (College/Student).",
      * )
      */
     public function getAction(Request $request)
@@ -145,7 +145,7 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get number of unread message of a user (Student || College).",
+     *  description="Get number of unread message of a user. This function can be called by User (College/Student).",
      * )
      */
     public function countUnreadAction(Request $request)
@@ -171,7 +171,7 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Download attached file of the message.",
+     *  description="Download attached file of the message. This function can be called by User (College/Student).",
      *  requirements={
      *      {
      *          "name"="filename",
@@ -200,7 +200,7 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method set ReadBy=true of a all the messages of user (Student/College).",
+     *  description="This method set ReadBy=true of a all the messages of user. This function can be called by User (College/Student).",
      * )
      */
     public function openAllAction(Request $request)

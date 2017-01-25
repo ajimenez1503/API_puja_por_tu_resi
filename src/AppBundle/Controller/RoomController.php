@@ -35,7 +35,7 @@ class RoomController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method create a room by the user (College)",
+     *  description="This method create a room for a College. Can be called by user (College).",
      *  requirements={
      *      {
      *          "name"="name",
@@ -150,13 +150,13 @@ class RoomController extends Controller
             return $this->returnjson(false,'Fecha de las puja debe ser menor que la academica.');
         }
         if (!$this->get('app.validate')->validateImageFile($this->get('validator'),$picture1)){
-            return $this->returnjson(false,'Archivo no es valido (Image format).');
+            return $this->returnjson(false,'Archivo1 no es valido (Image format).');
         }
         if (!$this->get('app.validate')->validateImageFile($this->get('validator'),$picture2)){
-            return $this->returnjson(false,'Archivo no es valido (Image format).');
+            return $this->returnjson(false,'Archivo2 no es valido (Image format).');
         }
         if (!$this->get('app.validate')->validateImageFile($this->get('validator'),$picture3)){
-            return $this->returnjson(false,'Archivo no es valido (Image format).');
+            return $this->returnjson(false,'Archivo3 no es valido (Image format).');
         }
         if (!$this->get('app.validate')->validateInt($floor,$mix=1,$max=20)){
             return $this->returnjson(false,'Planta no es valido (size).');
@@ -214,7 +214,7 @@ class RoomController extends Controller
                 //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                 $em->flush();
             }else{
-                return $this->returnjson(False,'The user Student cannot create a room.');
+                return $this->returnjson(False,'El usuario (estudiante) no puede crear una habitacion.');
             }
         } catch (\Exception $pdo_ex) {
             return $this->returnjson(false,'SQL exception.'.$pdo_ex);
@@ -226,7 +226,7 @@ class RoomController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get list of rooms of a user (College). Format JSON.",
+     *  description="Get list of rooms of a College. Format JSON. Can be called by user (College).",
      * )
      */
     public function getAllAction(Request $request)
@@ -247,7 +247,7 @@ class RoomController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get list of FREE rooms of a user (College). Format JSON.",
+     *  description="Get list of FREE rooms of a user (College). Format JSON. Can be called by user (College).",
      * )
      */
     public function getFREEAction(Request $request)
@@ -274,7 +274,7 @@ class RoomController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get list of OFFERED rooms of a user (College). Format JSON.",
+     *  description="Get list of OFFERED rooms of a user (College). Format JSON. Can be called by user (College/Student).",
      * )
      */
     public function getOFFEREDAction(Request $request)
@@ -372,7 +372,7 @@ class RoomController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method update the date bid/school of a room.",
+     *  description="This method update the date bid/school of a room.. Can be called by user (College).",
      *  requirements={
      *      {
      *          "name"="id",
@@ -600,10 +600,10 @@ class RoomController extends Controller
                 return $this->returnjson(false,'Nombre residencia no es valido (size).');
         }
         if (!$this->get('app.validate')->validateInt($restrictions_price_max,$mix=1,$max=2000)){
-            return $this->returnjson(false,'Precio max '.$restrictions_price_max.'no es valido.');
+            return $this->returnjson(false,'Precio max '.$restrictions_price_max.' no es valido.');
         }
         if (!$this->get('app.validate')->validateInt($restrictions_price_min,$mix=0,$max=1999)){
-            return $this->returnjson(false,'Precio min no es valido.');
+            return $this->returnjson(false,'Precio min '.$restrictions_price_min.' no es valido.');
         }
         $colleges = $this->getDoctrine()->getRepository('AppBundle:College')->findAll();
         if (!$colleges) {
@@ -645,7 +645,6 @@ class RoomController extends Controller
                         }
                     }
                 }
-
             }
             return $this->returnjson(true,'Lista de residencias y habitaciones para pujar.',$output);
 

@@ -51,31 +51,31 @@ class SigninController extends Controller
         $message="Errors: ";
         $sizePassword=$this->container->getParameter('sizePassword');
         if (is_null($password) || !$this->get('app.validate')->validatePassword($this->get('validator'),$password,$sizePassword)){
-                $message=$message.' Password lenght ['.strval($sizePassword).','.strval($sizePassword).'].';
+                $message=$message.' Tamaño contraseña['.strval($sizePassword).','.strval($sizePassword).'].';
         }
         if (is_null($username) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username,9,9)){
-                $message=$message.' Username lenght CIF [9,9].';
+                $message=$message.' CIF erroneo [9,9].';
         }
         if (is_null($email) || !$this->get('app.validate')->validateEmail($this->get('validator'),$email)){
-            $message=$message.' Email is not correct.';
+            $message=$message.' Email no es correcto.';
         }
         if (is_null($companyName) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$companyName,1)){
-                $message=$message.' company_name lenght [1,max].';
+                $message=$message.' Nombre comapañia no es correcto [1,max].';
         }
-        if (is_null($address) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$address,1)){
-                $message=$message.' address lenght [1,8].';
+        if (is_null($address) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$address,1,30)){
+                $message=$message.' Direecion no es correcta  [1,30].';
         }
         if (is_null($telephone) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$telephone,1,15)){
-                $message=$message.' telephone lenght [1,15].';
+                $message=$message.' Telefono no es correcto [1,15].';
         }
         if (is_null($url) || !$this->get('app.validate')->validateURL($this->get('validator'),$url)){
-            $message=$message.' url is not correct.';
+            $message=$message.' url no es correcta .';
         }
         if (is_null($lat)){
-            $message=$message.' Latitude cannot be null.';
+            $message=$message.' Latitude no es correcta .';
         }
         if (is_null($lat)){
-            $message=$message.' Longitude cannot be null.';
+            $message=$message.' Longitude no es correcta .';
         }
         if (is_null($wifi) || !$this->get('app.validate')->validateBool($wifi)){
             $message=$message.'wifi debe ser true or false.';
@@ -114,7 +114,7 @@ class SigninController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method sign up a user (College) in the system. ",
+     *  description="This method sign up a user (College) in the system. It is not necessary to be authenticate.",
      *  requirements={
      *      {
      *          "name"="username",
@@ -247,9 +247,9 @@ class SigninController extends Controller
             $data=array(
              'username' => $college->getUsername(),
             );
-            return $this->returnjson(true,'USER college register',$data);
+            return $this->returnjson(true,'Usuario registrado',$data);
         }else{
-            return $this->returnjson(false,'Username is already used');
+            return $this->returnjson(false,'Username ya existe.');
         }
     }
 
@@ -268,16 +268,16 @@ class SigninController extends Controller
         $message="Errors: ";
         $sizePassword=$this->container->getParameter('sizePassword');
         if (is_null($password) || !$this->get('app.validate')->validatePassword($this->get('validator'),$password,$sizePassword)){
-                $message=$message.' Password lenght ['.strval($sizePassword).','.strval($sizePassword).'].';
+                $message=$message.' Tamaño contraseña ['.strval($sizePassword).','.strval($sizePassword).'].';
         }
         if (is_null($username) ||!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username,1,10)){
-                $message=$message.' Username lenght [1,10].';
+                $message=$message.' DNI no es correcto  [1,10].';
         }
-        if (is_null($name) ||!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$name,1,100)){
-                $message=$message.' Name lenght [1,8].';
+        if (is_null($name) ||!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$name,1,30)){
+                $message=$message.' Nombre no es correcto [1,30].';
         }
         if (is_null($email) || !$this->get('app.validate')->validateEmail($this->get('validator'),$email)){
-            $message=$message.' Email is not correct.';
+            $message=$message.' Email no es correcto .';
         }
         if ($message=="Errors: "){
             return array(
@@ -293,7 +293,7 @@ class SigninController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method sign up a user (Student) in the system. ",
+     *  description="This method sign up a user (Student) in the system. It is not necessary to be authenticate.",
      *  requirements={
      *      {
      *          "name"="username",
@@ -356,9 +356,9 @@ class SigninController extends Controller
             $data=array(
              'username' => $Student->getUsername(),
             );
-            return $this->returnjson(true,'User Student register',$data);
+            return $this->returnjson(true,'Usuario registrado',$data);
         }else{
-            return $this->returnjson(false,'Username is already used');
+            return $this->returnjson(false,'Username ya existe.');
         }
     }
 

@@ -34,7 +34,7 @@ class ProfileStudentController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get data of the user (student) : name, username, email, ROLE, date_creation, point.",
+     *  description="Get data of the user (student) : name, username, email, ROLE, date_creation, point. Can be called by user (Student).",
      * )
      */
     public function getAction()
@@ -55,7 +55,7 @@ class ProfileStudentController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method update the password of a user (student).",
+     *  description="This method update the password of a user (student). Can be called by user (Student).",
      *  requirements={
      *      {
      *          "name"="old_password",
@@ -72,10 +72,11 @@ class ProfileStudentController extends Controller
      */
     public function updatePasswordAction(Request $request)
     {
+        $sizePassword=$this->container->getParameter('sizePassword');
         $old_password=$request->request->get('old_password');
         $new_password=$request->request->get('new_password');
-        if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$old_password,8,8) or !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$new_password,8,8)){
-            return $this->returnjson(false,'Contraseña invalidad. Longitud 8 caracteres.');
+        if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$old_password,$sizePassword,$sizePassword) or !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$new_password,$sizePassword,$sizePassword)){
+            return $this->returnjson(false,'Contraseña invalidad. Longitud '.$sizePassword.' caracteres.');
         }
         if(!$this->get('app.validate')->validateOldPassword($this->get('validator'),$old_password)){
             return $this->returnjson(false,'La contraseña actual no es correcta.');
@@ -102,7 +103,7 @@ class ProfileStudentController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method update the email of a user (student). ",
+     *  description="This method update the email of a user (student). Can be called by user (Student).",
      *  requirements={
      *      {
      *          "name"="email",

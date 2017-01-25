@@ -35,7 +35,7 @@ class RentController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method create a rent of a moth without pay yet. This order is automatically.",
+     *  description="This method create a rent of a moth without pay yet. This order is automatically. It is called without authentication ",
      *  requirements={
      *      {
      *          "name"="student",
@@ -51,33 +51,36 @@ class RentController extends Controller
         if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username_student,1,10)){
             return $this->returnjson(false,'DNI usurio no es valido.');
         }
-        try {
-            $user_student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username_student);
+        $user_student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username_student);
+        if(!$user_student){
+            return $this->returnjson(true,'No existe un estudiante con DNI '.$username_student.'.');
+        }else{
+            try {
+                //TODO get price of agrement between college and user
+                $rent = new Rent();
+                $rent->setStudent($user_student);
+                $rent->setPrice(100);//TODO $agreement->getPrice();
+                $user_student->addRent($rent);
 
-            //TODO get price of agrement between college and user
-            $rent = new Rent();
-            $rent->setStudent($user_student);
-            $rent->setPrice(100);//TODO $agreement->getPrice();
-
-            $user_student->addRent($rent);
-
-            $em = $this->getDoctrine()->getManager();
-            // tells Doctrine you want to (eventually) save the Product (no queries is done)
-            $em->persist($rent);
-            $em->persist($user_student);
-            // actually executes the queries (i.e. the INSERT query)
-            //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
-            $em->flush();
-        } catch (\Exception $pdo_ex) {
-            return $this->returnjson(false,'SQL exception. '.$pdo_ex);
+                $em = $this->getDoctrine()->getManager();
+                // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                $em->persist($rent);
+                $em->persist($user_student);
+                // actually executes the queries (i.e. the INSERT query)
+                //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                $em->flush();
+            } catch (\Exception $pdo_ex) {
+                return $this->returnjson(false,'SQL exception. '.$pdo_ex);
+            }
+            return $this->returnjson(true,'La mensualidad se ha creado correctamente.');
         }
-        return $this->returnjson(true,'La mensualidad se ha creado correctamente.');
+
     }
 
 
     /**
      * @ApiDoc(
-     *  description="Get list of rents of a user (Student). Format JSON.",
+     *  description="Get list of rents of a user (Student). Format JSON. Can be called by user (Student/College).",
      * )
      */
     public function getAction(Request $request)
@@ -101,7 +104,7 @@ class RentController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get list of rents without pay of a user (Student)",
+     *  description="Get list of rents without pay of a user (Student). Can be called by user (Student/College).",
      * )
      */
     public function getUnpaidAction(Request $request)
@@ -151,7 +154,7 @@ class RentController extends Controller
      * @ApiDoc(
      *  description="Pay the rent.
      *  This method generate file_receipt.
-     *  update the date_paid and set the cardNumber and cardHolder",
+     *  update the date_paid and set the cardNumber and cardHolder. Can be called by user (Student).",
      *  requirements={
      *      {
      *          "name"="id",
@@ -199,38 +202,45 @@ class RentController extends Controller
         if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$cardHolder,1,20)){
             return $this->returnjson(false,'Propietario de la tarjeta no es valido.');
         }if (!$this->get('app.validate')->validateLuhnCardNumber($this->get('validator'),$cardNumber)){
-            return $this->returnjson(false,'Numero de tarjeta no es valido. Luhn.');
+            return $this->returnjson(false,'Numero de tarjeta no es valido.');
         }if (!$this->get('app.validate')->validateCVV($cardNumber,$cvv)){
             return $this->returnjson(false,'CVV no es valido.');
         }if (!$this->get('app.validate')->validateExpiryDate($expiry_month,$expiry_year)){
             return $this->returnjson(false,'Fecha expiracion erronea.');
         }
-
-        try {
-            $rent = $this->getDoctrine()->getRepository('AppBundle:Rent')->find($id);
+        $rent = $this->getDoctrine()->getRepository('AppBundle:Rent')->find($id);
+        if(!$rent){
+            return $this->returnjson(false,'La mensualidad con id '.$id.' no existe.');
+        }else{
             $user=$this->get('security.token_storage')->getToken()->getUser();
-            //TODO get college by the agreement
-            $rent->setStatusPaid(true);
-            $rent->setCardHolder($cardHolder);
-            $rent->setCardNumber($cardNumber);
-            $rent->setDatePaid(date_create('now'));
-            $file_name=$this->crete_receipt(/*$college_data*/$user,$rent);//TODO add college information
-            $rent->setFileReceipt($file_name);
-            $em = $this->getDoctrine()->getManager();
-            // tells Doctrine you want to (eventually) save the Product (no queries is done)
-            $em->persist($rent);
-            // actually executes the queries (i.e. the INSERT query)
-            //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
-            $em->flush();
-        } catch (\Exception $pdo_ex) {
-            return $this->returnjson(false,'SQL exception.'.$pdo_ex);
+            if ($user->getRoles()[0]=="ROLE_STUDENT"){
+                try {
+                    //TODO get college by the agreement
+                    $rent->setStatusPaid(true);
+                    $rent->setCardHolder($cardHolder);
+                    $rent->setCardNumber($cardNumber);
+                    $rent->setDatePaid(date_create('now'));
+                    $file_name=$this->crete_receipt(/*$college_data*/$user,$rent);//TODO add college information
+                    $rent->setFileReceipt($file_name);
+                    $em = $this->getDoctrine()->getManager();
+                    // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                    $em->persist($rent);
+                    // actually executes the queries (i.e. the INSERT query)
+                    //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                    $em->flush();
+                } catch (\Exception $pdo_ex) {
+                    return $this->returnjson(false,'SQL exception.'.$pdo_ex);
+                }
+                return $this->returnjson(true,'La mensualidad se ha pagado correctamente.');
+            }else{
+                return $this->returnjson(false,'La mensualidad no puede ser pagada por una residencia.');
+            }
         }
-        return $this->returnjson(true,'La mensualidad se ha pagado correctamente.');
     }
 
     /**
      * @ApiDoc(
-     *  description="Download receipt file.",
+     *  description="Download receipt file. Can be called by user (Student/College).",
      *  requirements={
      *      {
      *          "name"="filename",

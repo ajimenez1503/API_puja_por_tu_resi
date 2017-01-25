@@ -38,7 +38,7 @@ class IncidenceController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method create a incidence from the user(Student)",
+     *  description="This method create a incidence. Can be called by user (Student).",
      *  requirements={
      *      {
      *          "name"="description",
@@ -90,11 +90,11 @@ class IncidenceController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method update the state of a incidence.",
+     *  description="This method update the state of a incidence. Can be called by user (College/Student).",
      *  requirements={
      *      {
      *          "name"="id",
-     *          "dataType"="integer",
+     *          "dataType"="Integer",
      *          "description"="ID of the inicidence"
      *      },
      *      {
@@ -107,27 +107,31 @@ class IncidenceController extends Controller
      */
     public function updateStateAction(Request $request)
     {
-
         $id=$request->request->get('id');
         $state=$request->request->get('state');
-
         //validate state.
         if (!$this->validateState($state)){
-            return $this->returnjson(false,'El nuevo estado no es valido.');
+            return $this->returnjson(false,'El estado '.$state.' no es valido.');
         }
-        try {
-            $incidence = $this->getDoctrine()->getRepository('AppBundle:Incidence')->find($id);
-            $incidence->setStatus($state);
-            $em = $this->getDoctrine()->getManager();
-            // tells Doctrine you want to (eventually) save the Product (no queries is done)
-            $em->persist($incidence);
-            // actually executes the queries (i.e. the INSERT query)
-            //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
-            $em->flush();
-        } catch (\Exception $pdo_ex) {
-            return $this->returnjson(false,'SQL exception.');
+        $incidence = $this->getDoctrine()->getRepository('AppBundle:Incidence')->find($id);
+        if (!$incidence){
+            return $this->returnjson(False,'La inicidencia con id '.$id.' no existe.');
+        }else{
+            try {
+
+                $incidence->setStatus($state);
+                $em = $this->getDoctrine()->getManager();
+                // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                $em->persist($incidence);
+                // actually executes the queries (i.e. the INSERT query)
+                //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                $em->flush();
+            } catch (\Exception $pdo_ex) {
+                return $this->returnjson(false,'SQL exception.');
+            }
+            return $this->returnjson(true,'La incidencia se ha actualizado correctamente con el nuevo estado '.$state.'.');
         }
-        return $this->returnjson(true,'La incidencia se ha actualizado correctamente con el nuevo estado '.$state.'.');
+
     }
 
 
@@ -143,7 +147,7 @@ class IncidenceController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get list of incident of a user(Student) in a JSON format.",
+     *  description="Get list of incident of a user in a JSON format. Can be called by user (Student).",
      * )
      */
     public function getAction(Request $request)
@@ -169,7 +173,7 @@ class IncidenceController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Download file of the incidence.",
+     *  description="Download file of the incidence. Can be called by user (College/Student).",
      *  requirements={
      *      {
      *          "name"="filename",

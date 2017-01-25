@@ -39,7 +39,7 @@ class BidController extends Controller
      *  requirements={
      *      {
      *          "name"="room_id",
-     *          "dataType"="String",
+     *          "dataType"="Integer",
      *          "description"="Id of the room ."
      *      },
      *  }
@@ -79,12 +79,12 @@ class BidController extends Controller
                     } catch (\Exception $pdo_ex) {
                         return $this->returnjson(false,'SQL exception.');
                     }
-                    return $this->returnjson(true,'El apuesta se ha creado correctamente.');
+                    return $this->returnjson(true,'La apuesta se ha creado correctamente.');
                 }else{
                     return $this->returnjson(False,'El usuario ya ha pujada por 5 habitaciones.');
                 }
             }else{
-                return $this->returnjson(False,'The user College cannot bid for a room.');
+                return $this->returnjson(False,'El usuario (residencia) no puede pujar por una habitacion.');
             }
         }
     }
@@ -122,7 +122,6 @@ class BidController extends Controller
         {
             $sortarray[$key] = $row[$subfield];
         }
-
         array_multisort($sortarray, SORT_DESC, $array);
     }
 
@@ -138,7 +137,7 @@ class BidController extends Controller
         if (!$bid) {
             return $this->returnjson(False,'Puja con id '.$id.' no existe.');
         }else {
-            return $this->returnjson(true,'Puja.',$bid->getJSON());
+            return $this->returnjson(true,'Informacion sobre la puja.',$bid->getJSON());
         }
     }
 
@@ -165,7 +164,7 @@ class BidController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Remove all the bid of a room by its id. Can be called by user (College).",
+     *  description="Remove all the bids of a room by its id. Can be called by user (College).",
      * )
      */
     public function removeBidsRoomAction($id)
@@ -217,13 +216,10 @@ class BidController extends Controller
                 }
                 return $this->returnjson(true,'El usuario no tiene pujas en esta habitacion.');
             }else{
-                return $this->returnjson(False,'The user College cannot remove that bid for a room.');
+                return $this->returnjson(False,'El usuario (residencia) no puede eliminar la puja.');
             }
         }
     }
-
-
-
 
 
 }

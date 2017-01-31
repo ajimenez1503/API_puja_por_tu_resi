@@ -42,6 +42,7 @@ class Agreement
             'date_signed'=>$this->getDateSigned(),
             'file_agreement'=>$this->getFileAgreement(),
             'file_agreement_signed'=>$this->getFileAgreementSigned(),
+            'college_username'=>$this->getCollege()->getUsername(),
         );
         return $output;
     }
@@ -224,6 +225,17 @@ class Agreement
     public function getRoom()
     {
         return $this->room;
+    }
+
+
+    /**
+     * Get college
+     *
+     * @return \AppBundle\Entity\College
+     */
+    public function getCollege()
+    {
+        return $this->room->getCollege();
     }
 
     /**

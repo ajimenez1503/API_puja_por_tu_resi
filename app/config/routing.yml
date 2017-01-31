@@ -6,6 +6,10 @@ NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /api/doc
 
+##############################################################################
+#Lucky controller
+##############################################################################
+
 numberLucky:
     path:     /lucky/number/{min}
     defaults:  { _controller: AppBundle:Lucky:number, min: 1 }
@@ -22,18 +26,26 @@ testLucky:
     defaults:  { _controller: AppBundle:Lucky:test}
     methods:  [POST,GET]
 
+##############################################################################
+#Security controller
+##############################################################################
+
 login:
     path:     /login
     defaults: { _controller: AppBundle:Security:login }
     methods:  [GET,POST]
 
-SecuritycheckSesion:
+checkSesionSecurity:
     path:     /Security/checkSesion/
     defaults: { _controller: AppBundle:Security:checkSesion }
     methods:  [GET]
 
 logout:
     path: /logout
+
+##############################################################################
+#Signin controller
+##############################################################################
 
 collegeSignin:
     path:     /Signin/college/
@@ -45,6 +57,9 @@ studentSignin:
     defaults:  { _controller: AppBundle:Signin:student }
     methods:  [POST]
 
+##############################################################################
+# ProfileStudent controler
+##############################################################################
 
 getProfileStudent:
     path:     /ProfileStudent/get/
@@ -61,6 +76,9 @@ updateEmailProfileStudent:
     defaults:  { _controller: AppBundle:ProfileStudent:updateEmail}
     methods:  [POST]
 
+##############################################################################
+# Incidence controler
+##############################################################################
 
 createIncidence:
     path:     /Incidence/create/
@@ -81,6 +99,10 @@ updateStateIncidence:
     path:     /Incidence/updateState/
     defaults:  { _controller: AppBundle:Incidence:updateState}
     methods:  [POST]
+
+##############################################################################
+# Message controler
+##############################################################################
 
 createMessage:
     path:     /Message/create/
@@ -112,6 +134,7 @@ downloadMessage:
     defaults: { _controller: AppBundle:Message:download }
     methods:  [GET]
 
+# Rent controler
 createRent:
     path:     /Rent/create/
     defaults:  { _controller: AppBundle:Rent:create}
@@ -131,10 +154,15 @@ getUnpaidRent:
     path:     /Rent/getUnpaid/
     defaults:  { _controller: AppBundle:Rent:getUnpaid}
     methods:  [GET]
+
 downloadRent:
     path:  /Rent/download/{filename}
     defaults: { _controller: AppBundle:Rent:download }
     methods:  [GET]
+
+##############################################################################
+# Room controler
+##############################################################################
 
 createRoom:
     path:     /Room/create/
@@ -191,6 +219,10 @@ removeRoom:
     defaults: { _controller: AppBundle:Room:remove }
     methods:  [POST]
 
+##############################################################################
+# Bid controler
+##############################################################################
+
 createBid:
     path:     /Bid/create/
     defaults:  { _controller: AppBundle:Bid:create}
@@ -200,7 +232,6 @@ getBidsRoomBid:
     path:  /Bid/getBidsRoom/{id}
     defaults: { _controller: AppBundle:Bid:getBidsRoom }
     methods:  [GET]
-
 
 getBid:
     path:  /Bid/get/{id}
@@ -223,12 +254,14 @@ removeBidRoomStudentBid:
     defaults: { _controller: AppBundle:Bid:removeBidRoomStudent }
     methods:  [POST]
 
+##############################################################################
+# Agreement controler
+##############################################################################
 
 createAgreement:
     path:     /Agreement/create/
     defaults:  { _controller: AppBundle:Agreement:create}
     methods:  [POST]
-
 
 removeAgreement:
     path:     /Agreement/remove/

@@ -22,7 +22,7 @@ class Agreement
     {
         $this->file_agreement=null;
         $this->file_agreement_signed=null;
-        $this->date_signed=null;
+        $this->date_signed=date_create('now');
     }
 
 
@@ -36,6 +36,12 @@ class Agreement
             'id'=>$this->getId(),
             'room_id'=>$this->getRoom()->getId(),
             'student_username'=> $this->getStudent()->getUsername(),
+            'price'=>$this->getPrice(),
+            'date_start_school'=>$this->getDateStartSchool(),
+            'date_end_school'=>$this->getDateEndSchool(),
+            'date_signed'=>$this->getDateSigned(),
+            'file_agreement'=>$this->getFileAgreement(),
+            'file_agreement_signed'=>$this->getFileAgreementSigned(),
         );
         return $output;
     }

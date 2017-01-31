@@ -43,9 +43,6 @@ class Room
         return $this->id;
     }
 
-
-
-
     /**
     * @return JSON format of the room
     */

@@ -25,11 +25,13 @@ class Room
     private $wardrove;
     private $college;
     private $bids;
+    private $agreement;
 
 
     public function __construct()
     {
         $this->bids = new ArrayCollection();
+        $this->agreement= null;
     }
     /**
      * Get id
@@ -488,5 +490,29 @@ class Room
     public function getBids()
     {
         return $this->bids;
+    }
+
+    /**
+     * Set agreement
+     *
+     * @param \AppBundle\Entity\Agreement $agreement
+     *
+     * @return Room
+     */
+    public function setAgreement(\AppBundle\Entity\Agreement $agreement = null)
+    {
+        $this->agreement = $agreement;
+
+        return $this;
+    }
+
+    /**
+     * Get agreement
+     *
+     * @return \AppBundle\Entity\Agreement
+     */
+    public function getAgreement()
+    {
+        return $this->agreement;
     }
 }

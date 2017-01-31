@@ -1,0 +1,44 @@
+# src/AppBundle/Resources/config/doctrine/Agreement.orm.yml
+AppBundle\Entity\Agreement:
+    type: entity
+    table: agreement
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+            unique: TRUE
+    fields:
+        price:
+            type: float
+            unique: FALSE
+        date_start_school:
+            type: datetime
+            unique: FALSE
+        date_end_school:
+            type: datetime
+            unique: FALSE
+        file_agreement:
+            type: string
+            length: 60
+            unique: FALSE
+            nullable: TRUE
+        file_agreement_signed:
+            type: string
+            length: 60
+            unique: FALSE
+            nullable: TRUE
+
+    oneToOne:
+        student:
+            targetEntity: Student
+            inversedBy: agreement
+            joinColumn:
+                name: student_username
+                referencedColumnName: username
+
+        room:
+            targetEntity: Room
+            inversedBy: agreement
+            joinColumn:
+                name: room_id
+                referencedColumnName: id

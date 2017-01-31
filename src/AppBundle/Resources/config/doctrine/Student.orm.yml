@@ -40,3 +40,7 @@ AppBundle\Entity\Student:
         rents:
             targetEntity: Rent
             mappedBy: student
+    oneToOne:
+        agreement:
+          targetEntity: Agreement
+          mappedBy: student

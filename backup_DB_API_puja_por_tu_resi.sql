@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 25-01-2017 a las 21:21:39
+-- Tiempo de generación: 31-01-2017 a las 17:49:17
 -- Versión del servidor: 5.5.44-0ubuntu0.14.04.1
 -- Versión de PHP: 5.5.9-1ubuntu4.11
 
@@ -19,6 +19,26 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `API_puja_por_tu_resi`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `agreement`
+--
+
+CREATE TABLE IF NOT EXISTS `agreement` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `student_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `room_id` int(11) DEFAULT NULL,
+  `price` double NOT NULL,
+  `date_start_school` datetime NOT NULL,
+  `date_end_school` datetime NOT NULL,
+  `file_agreement` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `file_agreement_signed` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_2E655A244BD54AEC` (`student_username`),
+  UNIQUE KEY `UNIQ_2E655A2454177093` (`room_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -251,6 +271,13 @@ INSERT INTO `students` (`username`, `password`, `email`, `name`, `is_active`, `c
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `agreement`
+--
+ALTER TABLE `agreement`
+  ADD CONSTRAINT `FK_2E655A2454177093` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`),
+  ADD CONSTRAINT `FK_2E655A244BD54AEC` FOREIGN KEY (`student_username`) REFERENCES `students` (`username`);
 
 --
 -- Filtros para la tabla `bid`

@@ -19,6 +19,8 @@ class Student implements AdvancedUserInterface, \Serializable
     private $messages;
     private $bids;
     private $rents;
+    private $agreement;
+
 
     public function getUsername()
     {
@@ -33,6 +35,7 @@ class Student implements AdvancedUserInterface, \Serializable
         $this->messages = new ArrayCollection();
         $this->bids = new ArrayCollection();
         $this->rents = new ArrayCollection();
+        $this->agreement= null;
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
     }
@@ -405,5 +408,29 @@ class Student implements AdvancedUserInterface, \Serializable
         $now =  date_create('now');
         $interval = date_diff($this->getCreationDate(),$now);
         return $interval->format('%a');
+    }
+
+    /**
+     * Set agreement
+     *
+     * @param \AppBundle\Entity\Agreement $agreement
+     *
+     * @return Student
+     */
+    public function setAgreement(\AppBundle\Entity\Agreement $agreement = null)
+    {
+        $this->agreement = $agreement;
+
+        return $this;
+    }
+
+    /**
+     * Get agreement
+     *
+     * @return \AppBundle\Entity\Agreement
+     */
+    public function getAgreement()
+    {
+        return $this->agreement;
     }
 }

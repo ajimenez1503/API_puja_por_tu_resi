@@ -19,7 +19,7 @@ class Student implements AdvancedUserInterface, \Serializable
     private $messages;
     private $bids;
     private $rents;
-    private $agreement;
+    private $agreements;
 
 
     public function getUsername()
@@ -35,7 +35,8 @@ class Student implements AdvancedUserInterface, \Serializable
         $this->messages = new ArrayCollection();
         $this->bids = new ArrayCollection();
         $this->rents = new ArrayCollection();
-        $this->agreement= null;
+        $this->agreements = new ArrayCollection();
+
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
     }
@@ -411,26 +412,36 @@ class Student implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Set agreement
+     * Add agreement
      *
      * @param \AppBundle\Entity\Agreement $agreement
      *
      * @return Student
      */
-    public function setAgreement(\AppBundle\Entity\Agreement $agreement = null)
+    public function addAgreement(\AppBundle\Entity\Agreement $agreement)
     {
-        $this->agreement = $agreement;
+        $this->agreements[] = $agreement;
 
         return $this;
     }
 
     /**
-     * Get agreement
+     * Remove agreement
      *
-     * @return \AppBundle\Entity\Agreement
+     * @param \AppBundle\Entity\Agreement $agreement
      */
-    public function getAgreement()
+    public function removeAgreement(\AppBundle\Entity\Agreement $agreement)
     {
-        return $this->agreement;
+        $this->agreements->removeElement($agreement);
+    }
+
+    /**
+     * Get agreements
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAgreements()
+    {
+        return $this->agreements;
     }
 }

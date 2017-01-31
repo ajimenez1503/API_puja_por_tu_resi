@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Agreement
 {
     private $id;
-    private $point;
     private $room;
     private $student;
     private $price;
@@ -16,10 +15,14 @@ class Agreement
     private $date_end_school;
     private $file_agreement;
     private $file_agreement_signed;
+    private $date_signed;
 
 
     public function __construct()
     {
+        $this->file_agreement=null;
+        $this->file_agreement_signed=null;
+        $this->date_signed=null;
     }
 
 
@@ -31,7 +34,6 @@ class Agreement
     {
         $output=array(
             'id'=>$this->getId(),
-            'point' => $this->getPoint(),
             'room_id'=>$this->getRoom()->getId(),
             'student_username'=> $this->getStudent()->getUsername(),
         );
@@ -216,5 +218,29 @@ class Agreement
     public function getRoom()
     {
         return $this->room;
+    }
+
+    /**
+     * Set dateSigned
+     *
+     * @param \DateTime $dateSigned
+     *
+     * @return Agreement
+     */
+    public function setDateSigned($dateSigned)
+    {
+        $this->date_signed = $dateSigned;
+
+        return $this;
+    }
+
+    /**
+     * Get dateSigned
+     *
+     * @return \DateTime
+     */
+    public function getDateSigned()
+    {
+        return $this->date_signed;
     }
 }

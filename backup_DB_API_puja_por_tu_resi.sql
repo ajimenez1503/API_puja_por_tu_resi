@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 31-01-2017 a las 17:49:17
+-- Tiempo de generación: 31-01-2017 a las 19:00:35
 -- Versión del servidor: 5.5.44-0ubuntu0.14.04.1
 -- Versión de PHP: 5.5.9-1ubuntu4.11
 
@@ -35,10 +35,11 @@ CREATE TABLE IF NOT EXISTS `agreement` (
   `date_end_school` datetime NOT NULL,
   `file_agreement` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
   `file_agreement_signed` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `date_signed` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_2E655A244BD54AEC` (`student_username`),
-  UNIQUE KEY `UNIQ_2E655A2454177093` (`room_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  KEY `IDX_2E655A244BD54AEC` (`student_username`),
+  KEY `IDX_2E655A2454177093` (`room_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
 
 -- --------------------------------------------------------
 
@@ -276,8 +277,8 @@ INSERT INTO `students` (`username`, `password`, `email`, `name`, `is_active`, `c
 -- Filtros para la tabla `agreement`
 --
 ALTER TABLE `agreement`
-  ADD CONSTRAINT `FK_2E655A2454177093` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`),
-  ADD CONSTRAINT `FK_2E655A244BD54AEC` FOREIGN KEY (`student_username`) REFERENCES `students` (`username`);
+  ADD CONSTRAINT `FK_2E655A244BD54AEC` FOREIGN KEY (`student_username`) REFERENCES `students` (`username`),
+  ADD CONSTRAINT `FK_2E655A2454177093` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`);
 
 --
 -- Filtros para la tabla `bid`

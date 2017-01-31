@@ -25,13 +25,13 @@ class Room
     private $wardrove;
     private $college;
     private $bids;
-    private $agreement;
+    private $agreements;
 
 
     public function __construct()
     {
         $this->bids = new ArrayCollection();
-        $this->agreement= null;
+        $this->agreements = new ArrayCollection();
     }
     /**
      * Get id
@@ -492,27 +492,38 @@ class Room
         return $this->bids;
     }
 
+
     /**
-     * Set agreement
+     * Add agreement
      *
      * @param \AppBundle\Entity\Agreement $agreement
      *
      * @return Room
      */
-    public function setAgreement(\AppBundle\Entity\Agreement $agreement = null)
+    public function addAgreement(\AppBundle\Entity\Agreement $agreement)
     {
-        $this->agreement = $agreement;
+        $this->agreements[] = $agreement;
 
         return $this;
     }
 
     /**
-     * Get agreement
+     * Remove agreement
      *
-     * @return \AppBundle\Entity\Agreement
+     * @param \AppBundle\Entity\Agreement $agreement
      */
-    public function getAgreement()
+    public function removeAgreement(\AppBundle\Entity\Agreement $agreement)
     {
-        return $this->agreement;
+        $this->agreements->removeElement($agreement);
+    }
+
+    /**
+     * Get agreements
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAgreements()
+    {
+        return $this->agreements;
     }
 }

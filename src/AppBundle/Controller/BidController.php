@@ -35,7 +35,7 @@ class BidController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method create a bid by the user (Student). An user cannot bid more than 5 times neither bid twice for the same room. ",
+     *  description="This method create a bid by the user (Student). An user cannot bid more than 5 times neither bid twice for the same room. Can be called by user (Student). ",
      *  requirements={
      *      {
      *          "name"="room_id",
@@ -164,7 +164,7 @@ class BidController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Remove all the bids of a room by its id. Can be called by user (College).",
+     *  description="Remove all the bids of a room by its id. Can be called by user (College) or automatically.",
      * )
      */
     public function removeBidsRoomAction($id)

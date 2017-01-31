@@ -222,3 +222,15 @@ removeBidRoomStudentBid:
     path:  /Bid/removeBidRoomStudent/
     defaults: { _controller: AppBundle:Bid:removeBidRoomStudent }
     methods:  [POST]
+
+
+createAgreement:
+    path:     /Agreement/create/
+    defaults:  { _controller: AppBundle:Agreement:create}
+    methods:  [POST]
+
+
+removeAgreement:
+    path:     /Agreement/remove/
+    defaults:  { _controller: AppBundle:Agreement:remove}
+    methods:  [POST]

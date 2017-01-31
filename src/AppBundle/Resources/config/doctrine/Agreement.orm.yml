@@ -17,6 +17,10 @@ AppBundle\Entity\Agreement:
         date_end_school:
             type: datetime
             unique: FALSE
+        date_signed:
+            type: datetime
+            unique: FALSE
+            nullable: TRUE
         file_agreement:
             type: string
             length: 60
@@ -28,17 +32,17 @@ AppBundle\Entity\Agreement:
             unique: FALSE
             nullable: TRUE
 
-    oneToOne:
+    manyToOne:
         student:
             targetEntity: Student
-            inversedBy: agreement
+            inversedBy: agreements
             joinColumn:
                 name: student_username
                 referencedColumnName: username
 
         room:
             targetEntity: Room
-            inversedBy: agreement
+            inversedBy: agreements
             joinColumn:
                 name: room_id
                 referencedColumnName: id

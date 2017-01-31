@@ -70,7 +70,6 @@ AppBundle\Entity\Room:
         bids:
             targetEntity: Bid
             mappedBy: room
-    oneToOne:
-        agreement:
+        agreements:
           targetEntity: Agreement
           mappedBy: room

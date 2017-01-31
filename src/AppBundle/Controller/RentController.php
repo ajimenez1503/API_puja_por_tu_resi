@@ -133,7 +133,7 @@ class RentController extends Controller
      * Using knp_snappy and twig to generate a pdf file.
      * The name of the user is random.
      */
-    public function crete_receipt(/*$college_data,*/$student_data,$rent_data)
+    public function create_receipt(/*$college_data,*/$student_data,$rent_data)
     {
         $filename=md5(uniqid()).'.pdf';
         $this->get('knp_snappy.pdf')->generateFromHtml(
@@ -220,7 +220,7 @@ class RentController extends Controller
                     $rent->setCardHolder($cardHolder);
                     $rent->setCardNumber($cardNumber);
                     $rent->setDatePaid(date_create('now'));
-                    $file_name=$this->crete_receipt(/*$college_data*/$user,$rent);//TODO add college information
+                    $file_name=$this->create_receipt(/*$college_data*/$user,$rent);//TODO add college information
                     $rent->setFileReceipt($file_name);
                     $em = $this->getDoctrine()->getManager();
                     // tells Doctrine you want to (eventually) save the Product (no queries is done)

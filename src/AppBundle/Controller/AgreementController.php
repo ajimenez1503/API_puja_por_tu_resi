@@ -43,6 +43,28 @@ class AgreementController extends Controller
         return true;
     }
 
+    /**
+     * Create the agreement file by the date of the college, student, room and the current agreement.
+     * Using knp_snappy and twig to generate a pdf file.
+     */
+    public function create_agreement_file($college,$student,$room,$agreement)
+    {
+        $filename=md5(uniqid()).'.pdf';
+        $this->get('knp_snappy.pdf')->generateFromHtml(
+            $this->renderView(
+                'agreement.html.twig',
+                array(
+                    'college'  => $college->getJSON(),
+                    'student' =>$student->getJSON(),
+                    'room' =>$room->getJSON(),
+                    'agreement' =>$agreement->getJSON(),
+                )
+            ),
+            $this->container->getParameter('storageFiles')."/".$filename
+        );
+        return $filename;
+    }
+
      /**
       * @ApiDoc(
       *  description="This method create a Agreement between a student and a room. That fucntion is called by the system automatically.",
@@ -85,9 +107,10 @@ class AgreementController extends Controller
                 $agreement->setDateStartSchool($room->getDateStartSchool());
                 $agreement->setDateEndSchool($room->getDateEndSchool());
                 $agreement->setPrice($room->getPrice());
-                //TODO generate agreement file
                 $agreement->setStudent($student);
                 $agreement->setRoom($room);
+                $file_name=$this->create_agreement_file($room->getCollege(),$student,$room,$agreement);
+                $agreement->setFileAgreement($file_name);
 
                 $student->addAgreement($agreement);
                 $room->addAgreement($agreement);

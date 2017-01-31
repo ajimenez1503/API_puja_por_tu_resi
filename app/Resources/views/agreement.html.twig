@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style>
+        .left_college {
+            float: left;
+            border: 2px;
+            border-style: solid;
+            margin: 5%;
+            padding: 2%;
+        }
+        .right_student {
+            float: right;
+            border: 2px;
+            border-style: solid;
+            margin: 5%;
+            padding: 2%;
+        }
+        table{
+            width: 80%;
+            text-align: center;
+            margin: 0px auto;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+    <div class="left_college">
+        <p>Nombre:{{ college.companyName }}</p>
+        <p>Direccion:{{ college.address }}</p>
+        <p>CIF:{{ college.username }}</p>
+        <p>Teléfono: {{ college.telephone }}</p>
+        <p>EMail:{{ college.email }} </p>
+    </div>
+    <div class="right_student">
+        <p>Nombre: {{ student.name }}</p>
+        <p>DNI: {{ student.username }}</p>
+        <p>EMail: {{ student.email }}</p>
+    </div>
+
+    <p> Nota: La tenencia de esta factura no acredita el pago de la misma</p>
+</html>

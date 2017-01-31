@@ -444,4 +444,21 @@ class Student implements AdvancedUserInterface, \Serializable
     {
         return $this->agreements;
     }
+
+    /**
+     * Get agreements
+     *
+     * @return \AppBundle\Entity\Agreement $agreement or null
+     */
+    public function getCurrentAgreement()
+    {
+        $list_agreement=$this->getAgreements()->getValues();
+        $today=date_create('now');
+        for ($i = 0; $i < count($list_agreement); $i++) {
+            if ($list_agreement[$i]->getDateSigned()<= $today && $list_agreement[$i]->getDateStartSchool()>= $today){//the current date is ina contract
+                return $list_agreement[$i];
+            }
+        }
+        return null;
+    }
 }

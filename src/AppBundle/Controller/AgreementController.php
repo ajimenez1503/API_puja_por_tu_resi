@@ -109,4 +109,77 @@ class AgreementController extends Controller
         }
     }
 
+
+
+
+    /**
+     * @ApiDoc(
+     *  description="This method remove a Agreement between a student and a room (the agreement which is valid according to the dates). That fucntion is called by the system automatically.",
+     *  requirements={
+     *      {
+     *          "name"="room_id",
+     *          "dataType"="Integer",
+     *          "description"="Id of the room."
+     *      },
+     *      {
+     *          "name"="student_username",
+     *          "dataType"="String",
+     *          "description"="Username of a student"
+     *      },
+     *  },
+     * )
+     */
+   public function removeAction(Request $request)
+   {
+       $room_id=$request->request->get('room_id');
+       $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($room_id);
+       if (!$room) {
+           return $this->returnjson(False,'Habitacion con id '.$room_id.' no existe.');
+       }
+
+       if($this->validate_list_agreement_out_date($room->getAgreements()->getValues())){
+           return $this->returnjson(False,'Habitacion con id '.$room_id.' no tiene un contrato.');
+       }
+       $username=$request->request->get('student_username');
+       $student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username);
+       if (!$student) {
+           return $this->returnjson(False,'Estudiente con username '.$username.' no existe.');
+       }
+       if($this->validate_list_agreement_out_date($student->getAgreements()->getValues())){
+           return $this->returnjson(False,'Estudiente '.$username.' no tiene un contrato.');
+       }
+       if ($student->getRoles()[0]=="ROLE_STUDENT"){
+           $agreement=null;
+           $today=date_create('now');
+           $list_agreement=$student->getAgreements()->getValues();
+           for ($i = 0; $i < count($list_agreement); $i++) {
+               if ($list_agreement[$i]->getDateSigned()<= $today && $list_agreement[$i]->getDateStartSchool()>= $today){//the current date is ina contract
+                   $agreement=$list_agreement[$i];
+               }
+           }
+           if ($agreement){
+               try {
+                   $student->removeAgreement($agreement);
+                   $room->removeAgreement($agreement);
+                   $em = $this->getDoctrine()->getManager();
+                   // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                   $em->remove($agreement);
+                   $em->persist($student);
+                   $em->persist($room);
+                   // actually executes the queries (i.e. the INSERT query)
+                   //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                   $em->flush();
+               } catch (\Exception $pdo_ex) {
+                   return $this->returnjson(false,'SQL exception.'.$pdo_ex);
+               }
+               return $this->returnjson(true,'El contrato se ha eliminado correctamente.');
+           }else{
+               return $this->returnjson(False,'Estudiente '.$username.' no tiene un contrato.');
+           }
+
+       }else{
+           return $this->returnjson(False,'El usuario (residencia) no puede tener un contrato con una habitacion.');
+       }
+   }
+
 }

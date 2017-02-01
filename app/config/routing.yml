@@ -248,6 +248,11 @@ removeBidsRoomBid:
     defaults: { _controller: AppBundle:Bid:removeBidsRoom }
     methods:  [POST]
 
+removeBidsStudentBid:
+    path:  /Bid/removeBidsStudent/{username}
+    defaults: { _controller: AppBundle:Bid:removeBidsStudent }
+    methods:  [POST]
+
 
 removeBidRoomStudentBid:
     path:  /Bid/removeBidRoomStudent/

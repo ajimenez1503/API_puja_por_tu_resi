@@ -186,6 +186,31 @@ class BidController extends Controller
 
     /**
      * @ApiDoc(
+     *  description="Remove all the bids of a student by username. Can be called automatically.",
+     * )
+     */
+    public function removeBidsStudentAction($username)
+    {
+        if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username,1,10)){
+            return $this->returnjson(false,'DNI usurio no es valido.');
+        }
+        $user_student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username);
+        if(!$user_student){
+            return $this->returnjson(true,'No existe un estudiante con DNI '.$username.'.');
+        }else{
+            $list_bids=$user_student->getBids()->getValues();
+            $number_of_bid=count($list_bids);
+            for ($i = 0; $i < count($list_bids); $i++) {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($list_bids[$i]);
+                $em->flush();
+            }
+            return $this->returnjson(true,'Se han eliminado '.$number_of_bid.' pujas.');
+        }
+    }
+
+    /**
+     * @ApiDoc(
      *  description="Remove the bid of a user (student) above a room by its id. Can be called by user (Student).",
      *  requirements={
      *      {

@@ -607,7 +607,7 @@ class RoomController extends Controller
         }
         $colleges = $this->getDoctrine()->getRepository('AppBundle:College')->findAll();
         if (!$colleges) {
-            return $this->returnjson(true,'No hay ninguna residencia.');
+            return $this->returnjson(false,'No hay ninguna residencia.');
         }else {
             $output=array();
             for ($i = 0; $i < count($colleges); $i++) {

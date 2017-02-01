@@ -264,7 +264,7 @@ removeBidRoomStudentBid:
 ##############################################################################
 
 createAgreement:
-    path:     /Agreement/create/
+    path:     /Agreement/create/{room_id}/{username}
     defaults:  { _controller: AppBundle:Agreement:create}
     methods:  [POST]
 
@@ -276,6 +276,11 @@ removeAgreement:
 acceptAgreement:
     path:     /Agreement/accept/
     defaults:  { _controller: AppBundle:Agreement:accept}
+    methods:  [POST]
+
+assignedRoomsAgreement:
+    path:     /Agreement/assignedRooms/
+    defaults:  { _controller: AppBundle:Agreement:assignedRooms}
     methods:  [POST]
 
 downloadAgreement:

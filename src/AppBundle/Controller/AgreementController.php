@@ -72,9 +72,8 @@ class AgreementController extends Controller
       *  },
       * )
       */
-    public function createAction(Request $request)
+    public function createAction($room_id,$username)
     {
-        $room_id=$request->request->get('room_id');
         $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($room_id);
         if (!$room) {
             return $this->returnjson(False,'Habitacion con id '.$room_id.' no existe.');
@@ -83,7 +82,6 @@ class AgreementController extends Controller
         if($room->getCurrentAgreement()){
             return $this->returnjson(False,'Habitacion con id '.$room_id.' ya tiene un contrato.');
         }
-        $username=$request->request->get('student_username');
         $student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username);
         if (!$student) {
             return $this->returnjson(False,'Estudiente con username '.$username.' no existe.');
@@ -142,8 +140,8 @@ class AgreementController extends Controller
      *  },
      * )
      */
-   public function removeAction(Request $request)
-   {
+    public function removeAction(Request $request)
+    {
        $room_id=$request->request->get('room_id');
        $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($room_id);
        if (!$room) {
@@ -158,7 +156,7 @@ class AgreementController extends Controller
        if (!$student) {
            return $this->returnjson(False,'Estudiente con username '.$username.' no existe.');
        }
-       $agreement_student=$room->getCurrentAgreement();
+       $agreement_student=$student->getCurrentAgreement();
        if(!$agreement_student){
            return $this->returnjson(False,'Estudiente '.$username.' no tiene un contrato.');
        }
@@ -184,7 +182,7 @@ class AgreementController extends Controller
        }else{
            return $this->returnjson(False,'El usuario (residencia) no puede tener un contrato con una habitacion.');
        }
-   }
+    }
 
 
    /**
@@ -204,8 +202,8 @@ class AgreementController extends Controller
     *  },
     * )
     */
-  public function acceptAction(Request $request)
-  {
+    public function acceptAction(Request $request)
+    {
       $room_id=$request->request->get('room_id');
       $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($room_id);
       if (!$room) {
@@ -222,7 +220,7 @@ class AgreementController extends Controller
       if(!$student->getCurrentAgreement()){
           return $this->returnjson(False,'Estudiente '.$username.' ya tiene un contrato.');
       }
-      $agreement_student=$room->getCurrentAgreement();
+      $agreement_student=$student->getCurrentAgreement();
       if(!$agreement_student){
           return $this->returnjson(False,'Estudiente '.$username.' no tiene un contrato.');
       }
@@ -260,7 +258,72 @@ class AgreementController extends Controller
           return $this->returnjson(false,'SQL exception.'.$pdo_ex);
       }
       return $this->returnjson(true,'El contrato se ha aceptado correctamente.');
-  }
+    }
+
+
+  /**
+   * @ApiDoc(
+   *  description="This method assigned offered room to a student (with more point) the last day bid. That fucntion is called automatically.",
+   * )
+   */
+     public function assignedRoomsAction(Request $request)
+     {
+         //get the list of offeredrooms
+         //get the list of bid of every Room
+         //verify if the  student ( which more point) has already a signed currect contract or not.
+         //when assigned a student a room, remove all the bid of a student.
+         $colleges = $this->getDoctrine()->getRepository('AppBundle:College')->findAll();
+         if (!$colleges) {
+             return $this->returnjson(false,'No hay ninguna residencia.');
+         }else {
+             $output=array();
+             $today=date_create('now')->format('Y-m-d');//year month and day (not hour and minute)
+             for ($i = 0; $i < count($colleges); $i++) {
+                 //check if the college has OFFERED rooms
+                 $rooms=$colleges[$i]->getRooms();
+                 for ($j = 0; $j < count($rooms); $j++) {
+                     if($rooms[$j]->getDateEndBid()->format('Y-m-d')==$today){
+                         $bids=$rooms[$j]->getBids();
+                         if (count($bids)>0){
+                             $student=$bids[0]->getStudent();
+                             for($c=1; $c < count($bids); $c++) {//get the student with more point bid in a room
+                                if($bids[$c]->getStudent()->getPoint()>$student->getPoint()){
+                                    $student=$bids[$c]->getStudent();
+                                }
+                             }
+                             $agreement_student=$student->getCurrentAgreement();
+                             if(!$agreement_student){
+                                //$rooms[$j]  $student
+                                array_unshift($output,array(
+                                    'room' => $rooms[$j]->getId(),
+                                    'student_username' => $student->getUsername(),
+                                    'bid'=> $bids[0]->getId(),
+                                    )
+                                );
+
+                                //create a agrrement between a room anda user (student)
+                                $response = $this->forward('AppBundle:Agreement:create', array(
+                                    'username'  =>  $student->getUsername(),
+                                    'room_id' => $rooms[$j]->getId(),
+                                ));
+                                if (!json_decode($response->getContent(),true)['success']){
+                                    return $response;
+                                }
+                                //remove all the bid of a student
+                                $response = $this->forward('AppBundle:Bid:removeBidsStudent', array(
+                                    'username'  =>  $student->getUsername(),
+                                ));
+
+                                return $this->returnjson(true,'blabalbaa.',$output );
+                             }
+                         }
+                     }
+                 }
+             }
+             return $this->returnjson(true,'ouput.',$output);
+         }
+     }
+
 
   /**
    * @ApiDoc(
@@ -288,6 +351,9 @@ class AgreementController extends Controller
       $response->setContent($content);
       return $response;
   }
+
+
+
 
 
 }

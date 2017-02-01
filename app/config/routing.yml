@@ -267,3 +267,8 @@ removeAgreement:
     path:     /Agreement/remove/
     defaults:  { _controller: AppBundle:Agreement:remove}
     methods:  [POST]
+
+acceptAgreement:
+    path:     /Agreement/accept/
+    defaults:  { _controller: AppBundle:Agreement:accept}
+    methods:  [POST]

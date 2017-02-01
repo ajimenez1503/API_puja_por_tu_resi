@@ -178,12 +178,88 @@ class AgreementController extends Controller
                //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                $em->flush();
            } catch (\Exception $pdo_ex) {
-               return $this->returnjson(false,'SQL exception.'.$pdo_ex);
+               return $this->returnjson(false,'SQL exception.');
            }
            return $this->returnjson(true,'El contrato se ha eliminado correctamente.');
        }else{
            return $this->returnjson(False,'El usuario (residencia) no puede tener un contrato con una habitacion.');
        }
    }
+
+
+   /**
+    * @ApiDoc(
+    *  description="This method accept a Agreement between a student and a room. That fucntion is called by a user (student).",
+    *  requirements={
+    *      {
+    *          "name"="room_id",
+    *          "dataType"="Integer",
+    *          "description"="Id of the room."
+    *      },
+    *      {
+    *          "name"="file_agreement_signed",
+    *          "dataType"="File",
+    *          "description"="agreement signed "
+    *      },
+    *  },
+    * )
+    */
+  public function acceptAction(Request $request)
+  {
+      $room_id=$request->request->get('room_id');
+      $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($room_id);
+      if (!$room) {
+          return $this->returnjson(False,'Habitacion con id '.$room_id.' no existe.');
+      }
+      $agreement_room=$room->getCurrentAgreement();
+      if(!$agreement_room){
+          return $this->returnjson(False,'Habitacion con id '.$room_id.' no tiene un contrato.');
+      }
+      $student=$this->get('security.token_storage')->getToken()->getUser();
+      if ($student->getRoles()[0]!="ROLE_STUDENT"){
+          return $this->returnjson(False,'El usuario (residencia) no puede tener un contrato con una habitacion.');
+      }
+      if(!$student->getCurrentAgreement()){
+          return $this->returnjson(False,'Estudiente '.$username.' ya tiene un contrato.');
+      }
+      $agreement_student=$room->getCurrentAgreement();
+      if(!$agreement_student){
+          return $this->returnjson(False,'Estudiente '.$username.' no tiene un contrato.');
+      }
+      if($agreement_student!=$agreement_room){
+           return $this->returnjson(False,'Estudiente '.$username.'  y habitacion con id '.$room_id.' tienen distinto contrato.');
+      }
+      $file=$request->files->get('file_agreement_signed');
+      if (!$this->get('app.validate')->validatePDFFile($this->get('validator'),$file) and !$this->get('app.validate')->validateImageFile($this->get('validator'),$file)){
+          return $this->returnjson(false,'Archivo no es valido (PFD- IMG).');
+      }
+      $filename=md5(uniqid()).'.'.$file->getClientOriginalExtension();
+      $file->move($this->container->getParameter('storageFiles'),$filename);
+      try {
+          $agreement_student->setDateSigned(date_create('now'));
+          $agreement_student->setFileAgreementSigned($filename);
+          $em = $this->getDoctrine()->getManager();
+          //remove all the bid of a room removeBidsRoomAction($id)
+          $response = $this->forward('AppBundle:Bid:removeBidsRoom', array(
+              'id'  => $room->getId(),
+          ));
+          if (!json_decode($response->getContent(),true)['success']){
+              return $response;
+          }
+
+          //TODO generate the the first rent
+          // tells Doctrine you want to (eventually) save the Product (no queries is done)
+          $em->persist($agreement_student);
+          // actually executes the queries (i.e. the INSERT query)
+          //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+          $em->flush();
+      } catch (\Exception $pdo_ex) {
+          return $this->returnjson(false,'SQL exception.'.$pdo_ex);
+      }
+      return $this->returnjson(true,'El contrato se ha aceptado correctamente.');
+  }
+
+
+
 
 }

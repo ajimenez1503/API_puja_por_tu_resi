@@ -355,7 +355,7 @@ class AgreementController extends Controller
 
   /**
    * @ApiDoc(
-   *  description="Verify is a user has a agreement without signed. That fucntion is called by a user (student).",
+   *  description="Verify is a user has a agreement without signed. Return the agreemnt, college, room. That fucntion is called by a user (student).",
    * )
    */
    public function verifyUnsignedAction(Request $request)
@@ -366,11 +366,13 @@ class AgreementController extends Controller
         }
         $agreement=$student->getCurrentAgreement();
         if($agreement){
-            if(!$agreement->verifyAgreementSigned()){
-                return $this->returnjson(True,'Estudiente '.$student->getUsername().' tiene un contrato sin firmar.');
-            }else{
-                return $this->returnjson(False,'Estudiente '.$student->getUsername().' tiene un contrato firmado.');
-        }
+            $output=array(
+                'room' => $agreement->getRoom()->getJSON(),
+                'college' => $agreement->getCollege()->getJSON(),
+                'agreement'=>$agreement->getJSON(),
+                'agreement_signed'=>$agreement->verifyAgreementSigned(),
+            );
+            return $this->returnjson(True,'Estudiente '.$student->getUsername().' tiene un contrato.',$output);
         }else{
             return $this->returnjson(False,'Estudiente '.$student->getUsername().' no tiene contrato .');
         }

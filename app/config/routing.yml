@@ -287,3 +287,8 @@ downloadAgreement:
     path:  /Agreement/download/{filename}
     defaults: { _controller: AppBundle:Agreement:download }
     methods:  [GET]
+
+verifyUnsignedAgreement:
+    path:  /Agreement/verifyUnsigned/
+    defaults: { _controller: AppBundle:Agreement:verifyUnsigned }
+    methods:  [GET]

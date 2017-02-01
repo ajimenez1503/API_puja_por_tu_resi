@@ -353,6 +353,30 @@ class AgreementController extends Controller
   }
 
 
+  /**
+   * @ApiDoc(
+   *  description="Verify is a user has a agreement without signed. That fucntion is called by a user (student).",
+   * )
+   */
+   public function verifyUnsignedAction(Request $request)
+   {
+        $student=$this->get('security.token_storage')->getToken()->getUser();
+        if ($student->getRoles()[0]!="ROLE_STUDENT"){
+            return $this->returnjson(False,'El usuario (residencia) no puede tener un contrato con una habitacion.');
+        }
+        $agreement=$student->getCurrentAgreement();
+        if($agreement){
+            if(!$agreement->verifyAgreementSigned()){
+                return $this->returnjson(True,'Estudiente '.$student->getUsername().' tiene un contrato sin firmar.');
+            }else{
+                return $this->returnjson(False,'Estudiente '.$student->getUsername().' tiene un contrato firmado.');
+        }
+        }else{
+            return $this->returnjson(False,'Estudiente '.$student->getUsername().' no tiene contrato .');
+        }
+   }
+
+
 
 
 

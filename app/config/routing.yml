@@ -272,3 +272,8 @@ acceptAgreement:
     path:     /Agreement/accept/
     defaults:  { _controller: AppBundle:Agreement:accept}
     methods:  [POST]
+
+downloadAgreement:
+    path:  /Agreement/download/{filename}
+    defaults: { _controller: AppBundle:Agreement:download }
+    methods:  [GET]

@@ -229,6 +229,9 @@ class AgreementController extends Controller
       if($agreement_student!=$agreement_room){
            return $this->returnjson(False,'Estudiente '.$username.'  y habitacion con id '.$room_id.' tienen distinto contrato.');
       }
+      if($agreement_student->verifyAgreementSigned()){
+          return $this->returnjson(false,'El contrato con id '.$agreement_student->getId().' ya esta firmado con fecha: '.$agreement_student->getDateSigned()->format('Y-m-d H:i'));
+      }
       $file=$request->files->get('file_agreement_signed');
       if (!$this->get('app.validate')->validatePDFFile($this->get('validator'),$file) and !$this->get('app.validate')->validateImageFile($this->get('validator'),$file)){
           return $this->returnjson(false,'Archivo no es valido (PFD- IMG).');

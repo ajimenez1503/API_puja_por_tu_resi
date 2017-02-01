@@ -261,4 +261,19 @@ class Agreement
     {
         return $this->date_signed;
     }
+
+
+    /**
+     * Verify is a agreement is signed
+     *
+     * @return \Bool
+     */
+    public function verifyAgreementSigned()
+    {
+        if ($this->file_agreement_signed){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

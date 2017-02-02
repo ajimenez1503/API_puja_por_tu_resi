@@ -292,3 +292,9 @@ verifyUnsignedAgreement:
     path:  /Agreement/verifyUnsigned/
     defaults: { _controller: AppBundle:Agreement:verifyUnsigned }
     methods:  [GET]
+
+
+roomVerifyUnsignedAgreement:
+    path:  /Agreement/roomVerifyUnsigned/{room_id}
+    defaults: { _controller: AppBundle:Agreement:roomVerifyUnsigned }
+    methods:  [GET]

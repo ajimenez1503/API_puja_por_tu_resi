@@ -125,17 +125,12 @@ class AgreementController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method remove a Agreement between a student and a room (the agreement which is valid according to the dates). That fucntion is called by the system automatically.",
+     *  description="This method remove a Agreement between a student and a room (the agreement which is valid according to the dates). That fucntion is called by the the user(Student).",
      *  requirements={
      *      {
      *          "name"="room_id",
      *          "dataType"="Integer",
      *          "description"="Id of the room."
-     *      },
-     *      {
-     *          "name"="student_username",
-     *          "dataType"="String",
-     *          "description"="Username of a student"
      *      },
      *  },
      * )
@@ -151,10 +146,9 @@ class AgreementController extends Controller
        if(!$agreement_room){
            return $this->returnjson(False,'Habitacion con id '.$room_id.' no tiene un contrato.');
        }
-       $username=$request->request->get('student_username');
-       $student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username);
-       if (!$student) {
-           return $this->returnjson(False,'Estudiente con username '.$username.' no existe.');
+       $student=$this->get('security.token_storage')->getToken()->getUser();
+       if ($student->getRoles()[0]!="ROLE_STUDENT"){
+           return $this->returnjson(False,'El usuario (residencia) no puede tener un contrato con una habitacion.');
        }
        $agreement_student=$student->getCurrentAgreement();
        if(!$agreement_student){
@@ -372,11 +366,37 @@ class AgreementController extends Controller
                 'agreement'=>$agreement->getJSON(),
                 'agreement_signed'=>$agreement->verifyAgreementSigned(),
             );
-            return $this->returnjson(True,'Estudiente '.$student->getUsername().' tiene un contrato.',$output);
+            return $this->returnjson(True,'Estudiante '.$student->getUsername().' tiene un contrato.',$output);
         }else{
-            return $this->returnjson(False,'Estudiente '.$student->getUsername().' no tiene contrato .');
+            return $this->returnjson(False,'Estudiante '.$student->getUsername().' no tiene contrato .');
         }
    }
+
+
+
+   /**
+    * @ApiDoc(
+    *  description="Verify is a room has a agreement without signed. Return the agreemnt. That fucntion is called by a user (College).",
+    * )
+    */
+    public function roomVerifyUnsignedAction($room_id)
+    {
+        $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($room_id);
+        if (!$room) {
+            return $this->returnjson(False,'Habitacion con id '.$room_id.' no existe.');
+        }
+        $agreement=$room->getCurrentAgreement();
+        if($agreement){
+            $output=array(
+                 'student'=>$agreement->getStudent()->getJSON(),
+                 'agreement'=>$agreement->getJSON(),
+                 'agreement_signed'=>$agreement->verifyAgreementSigned(),
+            );
+            return $this->returnjson(True,'Room '.$room_id.' tiene un contrato.',$output);
+        }else{
+            return $this->returnjson(False,'Room '.$room_id.' no tiene contrato .');
+        }
+    }
 
 
 

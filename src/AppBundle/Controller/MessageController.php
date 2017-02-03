@@ -282,7 +282,7 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get number of unread message from a student. This function can be called by User (College).",
+     *  description="Get number of unread message from a specific student. This function can be called by User (College).",
      * )
      */
     public function countUnreadStudentAction($username_student)
@@ -366,20 +366,84 @@ class MessageController extends Controller
         $messages=$user->getMessages()->getValues();
         for ($i = 0; $i < count($messages); $i++) {
             try {
-                if ($user->getRoles()[0]=="ROLE_STUDENT"){
+                if ($user->getRoles()[0]=="ROLE_STUDENT" &&  !$messages[$i]->getReadByStudent()){
                     $messages[$i]->setReadByStudent(true);
-                }elseif ($user->getRoles()[0]=="ROLE_COLLEGE"){
+
+                    $em = $this->getDoctrine()->getManager();
+                    // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                    $em->persist($messages[$i]);
+                    // actually executes the queries (i.e. the INSERT query)
+                    //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                    $em->flush();
+                }elseif ($user->getRoles()[0]=="ROLE_COLLEGE" &&  !$messages[$i]->getReadByCollege()){
                     $messages[$i]->setReadByCollege(true);
+
+                    $em = $this->getDoctrine()->getManager();
+                    // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                    $em->persist($messages[$i]);
+                    // actually executes the queries (i.e. the INSERT query)
+                    //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                    $em->flush();
                 }
-                $em = $this->getDoctrine()->getManager();
-                // tells Doctrine you want to (eventually) save the Product (no queries is done)
-                $em->persist($messages[$i]);
-                // actually executes the queries (i.e. the INSERT query)
-                //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
-                $em->flush();
+
             } catch (\Exception $pdo_ex) {
                 return $this->returnjson(false,'SQL exception.');
             }
+        }
+        return $this->returnjson(true,'Todos mensajes se ha leido correctamente.');
+    }
+
+
+
+    /**
+     * @ApiDoc(
+     *  description="This method set ReadByCollege=true of a all the messages of user with a specific student. This function can be called by User (College).",
+     * )
+     */
+    public function openStudentAction($username_student)
+    {
+        $user=$this->get('security.token_storage')->getToken()->getUser();
+        if ($user->getRoles()[0]=="ROLE_COLLEGE"){//college
+            //validate $username
+            if (is_null($username_student) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username_student,9,9)){
+                    return $this->returnjson(False,'Username '.$username_student.' no es valido.');
+            }
+            $student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username_student);
+            if (!$student) {
+                return $this->returnjson(False,'estudiante con username '.$username_student.' no existe.');
+            }
+            //verify signed agreement and college
+            $agreement=$student->getCurrentAgreement();
+            if($agreement){
+                if($agreement->verifyAgreementSigned()){
+                    if ($agreement->getCollege()==$user){
+                        $messages=$user->getMessages()->getValues();
+                        for ($i = 0; $i < count($messages); $i++) {
+                            if( !$messages[$i]->getReadByCollege()){
+                                try {
+                                    $messages[$i]->setReadByCollege(true);
+                                    $em = $this->getDoctrine()->getManager();
+                                    // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                                    $em->persist($messages[$i]);
+                                    // actually executes the queries (i.e. the INSERT query)
+                                    //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                                    $em->flush();
+                                } catch (\Exception $pdo_ex) {
+                                    return $this->returnjson(false,'SQL exception.');
+                                }
+                            }
+                        }
+                    }else{
+                        return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero no con esta residencia '.$user->getUsername().'');
+                    }
+                }else{
+                    return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero sin firmar.');
+                }
+            }else{
+                return $this->returnjson(false,'El estudiante '.$student->getUsername().' no tiene contrato con ninguna residencai.');
+            }
+        }else{
+            return $this->returnjson(False,'Dont allow for another ROLEs');
         }
         return $this->returnjson(true,'Todos mensajes se ha leido correctamente.');
     }

@@ -129,6 +129,11 @@ openAllMessage:
     defaults:  { _controller: AppBundle:Message:openAll}
     methods:  [POST]
 
+openStudentMessage:
+    path:     /Message/openStudent/{username_student}
+    defaults:  { _controller: AppBundle:Message:openStudent}
+    methods:  [POST]
+
 openMessage:
     path:     /Message/open/
     defaults:  { _controller: AppBundle:Message:open}

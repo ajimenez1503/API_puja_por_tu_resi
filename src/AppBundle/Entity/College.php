@@ -477,6 +477,25 @@ class College implements AdvancedUserInterface, \Serializable
         return $this->rooms;
     }
 
+
+
+    /**
+     * Get all the student who have a agreemtn with a college
+     *
+     * @return \Array student
+     */
+    public function getStudents()
+    {
+        $rooms=$this->rooms;
+        $output=array();
+        for ($i = 0; $i < count($rooms); $i++) {
+            if($rooms[$i]->getCurrentAgreement()->verifyAgreementSigned()){
+                array_unshift($output,$rooms[$i]->getCurrentAgreement()->getStudent());
+            }
+        }
+        return $output;
+    }
+
     /**
      * Set wifi
      *
@@ -680,7 +699,7 @@ class College implements AdvancedUserInterface, \Serializable
         $today=date_create('now');
         $output=array();
         for ($i = 0; $i < count($rooms); $i++) {
-            if($rooms[$i]->getDateStartBid()<=$today && $rooms[$i]->getDateEndBid()>=$today){
+            if($rooms[$i]->getDateStartBid()<=$today && $rooms[$i]->getDateEndBid()>=$today){//TODO use the format year-month-day to compare
                 array_unshift($output,$rooms[$i]->getJSON());
             }
         }

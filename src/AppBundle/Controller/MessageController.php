@@ -47,6 +47,11 @@ class MessageController extends Controller
      *          "dataType"="File",
      *          "description"="File of the attachedfile file. It is optional. It can be image or pdf format. "
      *      },
+     *      {
+     *          "name"="student_username",
+     *          "dataType"="String",
+     *          "description"="Optianl atribute. If the college create the message, need the student. . "
+     *      },
      *  },
      * )
      */
@@ -67,28 +72,56 @@ class MessageController extends Controller
             $filename=md5(uniqid()).'.'.$file->getClientOriginalExtension();
             $file->move($this->container->getParameter('storageFiles'),$filename);
         }
-
-        try {
-            $user=$this->get('security.token_storage')->getToken()->getUser();
-            //TODO If ROLE_STUDENT get the college by the agreement
-            //TODO elese, get the username_student in the request
-            $message = new Message();
-            $message->setStudent($user);
-            $message->setSenderType($user->getRoles()[0]);
-            $message->setMessage($message_text);
-            if (!is_null($file)){
-                $message->setFileAttached($filename);
+        $user=$this->get('security.token_storage')->getToken()->getUser();
+        if ($user->getRoles()[0]=="ROLE_STUDENT"){//student
+            $agreement=$user->getCurrentAgreement();
+            if($agreement){
+                if($agreement->verifyAgreementSigned()){
+                    try {
+                        $college=$agreement->getCollege();
+                        $message = new Message();
+                        $message->setStudent($user);
+                        $message->setCollege($college);
+                        $message->setSenderType($user->getRoles()[0]);
+                        $message->setMessage($message_text);
+                        if (!is_null($file)){
+                            $message->setFileAttached($filename);
+                        }
+                        $message->setReadByStudent(true);
+                        $college->addMessage($message);
+                        $user->addMessage($message);
+                        $em = $this->getDoctrine()->getManager();
+                        // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                        $em->persist($message);
+                        $em->persist($user);
+                        $em->persist($college);
+                        // actually executes the queries (i.e. the INSERT query)
+                        //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                        $em->flush();
+                    } catch (\Exception $pdo_ex) {
+                        return $this->returnjson(false,'SQL exception.');
+                    }
+                }else{
+                    return $this->returnjson(false,'El estudiente tiene un contrato pero sin firmar.');
+                }
+            }else{
+                return $this->returnjson(false,'El estudiente no tiene contrato con ninguna residencai.');
             }
-            $user->addMessage($message);
-            $em = $this->getDoctrine()->getManager();
-            // tells Doctrine you want to (eventually) save the Product (no queries is done)
-            $em->persist($message);
-            $em->persist($user);
-            // actually executes the queries (i.e. the INSERT query)
-            //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
-            $em->flush();
-        } catch (\Exception $pdo_ex) {
-            return $this->returnjson(false,'SQL exception.');
+        }elseif ($user->getRoles()[0]=="ROLE_COLLEGE"){//college
+            return $this->returnjson(False,'college not sent email');
+            //get the username_student in the request
+            $username_student=$request->request->get('student_username');
+            //validate $username
+            if (is_null($username_student) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username_student,9,9)){
+                    return $this->returnjson(False,'Username '.$username_student.' no es valido.');
+            }
+            $student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username_student);
+            if (!$student) {
+                return $this->returnjson(False,'Estudiente con username '.$username_student.' no existe.');
+            }
+            //TODO verify signed agreement and college
+        }else{
+            return $this->returnjson(False,'ROLE unknow');
         }
         return $this->returnjson(true,'El mensaje se ha creado correctamente.');
     }

@@ -196,15 +196,57 @@ class MessageController extends Controller
     /**
      * @ApiDoc(
      *  description="Get list of messages of a user (Student || College). In JSON format. This function can be called by User (College/Student).",
+     *  requirements={
+     *      {
+     *          "name"="username_student",
+     *          "dataType"="String",
+     *          "description"="Optianl atribute. If the college create the message, need the student. . "
+     *      },
+     *  },
      * )
      */
     public function getAction(Request $request)
     {
-        $user=$this->get('security.token_storage')->getToken()->getUser();
-        $messages=$user->getMessages()->getValues();
         $output=array();
-        for ($i = 0; $i < count($messages); $i++) {
-            array_unshift($output,$messages[$i]->getJSON());
+        $user=$this->get('security.token_storage')->getToken()->getUser();
+        if ($user->getRoles()[0]=="ROLE_COLLEGE"){//college
+            $username_student=$request->query->get('username_student');
+            //validate $username
+            if (is_null($username_student) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username_student,9,9)){
+                    return $this->returnjson(False,'Username '.$username_student.' no es valido.');
+            }
+            $student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username_student);
+            if (!$student) {
+                return $this->returnjson(False,'estudiante con username '.$username_student.' no existe.');
+            }
+            //verify signed agreement and college
+            $agreement=$student->getCurrentAgreement();
+            if($agreement){
+                if($agreement->verifyAgreementSigned()){
+                    if ($agreement->getCollege()==$user){
+                        $messages=$user->getMessages()->getValues();
+                        for ($i = 0; $i < count($messages); $i++) {
+                            if($messages[$i]->getStudent()==$student){
+                                array_unshift($output,$messages[$i]->getJSON());
+                            }
+                        }
+                    }else{
+                        return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero no con esta residencia '.$user->getUsername().'');
+                    }
+                }else{
+                    return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero sin firmar.');
+                }
+            }else{
+                return $this->returnjson(false,'El estudiante '.$student->getUsername().' no tiene contrato con ninguna residencai.');
+            }
+
+        }elseif ($user->getRoles()[0]=="ROLE_STUDENT"){//college
+            $messages=$user->getMessages()->getValues();
+            for ($i = 0; $i < count($messages); $i++) {
+                array_unshift($output,$messages[$i]->getJSON());
+            }
+        }else{
+            return $this->returnjson(False,'ROLE unknow');
         }
         return $this->returnjson(true,'Lista de mensajes.',$output);
     }

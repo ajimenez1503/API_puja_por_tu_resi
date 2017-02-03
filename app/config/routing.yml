@@ -119,6 +119,11 @@ countUnreadMessage:
     defaults:  { _controller: AppBundle:Message:countUnread}
     methods:  [GET]
 
+countUnreadStudentMessage:
+    path:     /Message/countUnreadStudent/{username_student}
+    defaults:  { _controller: AppBundle:Message:countUnreadStudent}
+    methods:  [GET]
+
 openAllMessage:
     path:     /Message/openAll/
     defaults:  { _controller: AppBundle:Message:openAll}

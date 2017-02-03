@@ -279,6 +279,53 @@ class MessageController extends Controller
     }
 
 
+
+    /**
+     * @ApiDoc(
+     *  description="Get number of unread message from a student. This function can be called by User (College).",
+     * )
+     */
+    public function countUnreadStudentAction($username_student)
+    {
+        $user=$this->get('security.token_storage')->getToken()->getUser();
+        if ($user->getRoles()[0]=="ROLE_COLLEGE"){//college
+            $count=0;
+            //validate $username
+            if (is_null($username_student) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username_student,9,9)){
+                    return $this->returnjson(False,'Username '.$username_student.' no es valido.');
+            }
+            $student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username_student);
+            if (!$student) {
+                return $this->returnjson(False,'estudiante con username '.$username_student.' no existe.');
+            }
+            //verify signed agreement and college
+            $agreement=$student->getCurrentAgreement();
+            if($agreement){
+                if($agreement->verifyAgreementSigned()){
+                    if ($agreement->getCollege()==$user){
+                        $messages=$user->getMessages()->getValues();
+                        for ($i = 0; $i < count($messages); $i++) {
+                            if($messages[$i]->getStudent()==$student && !$messages[$i]->getReadByCollege()){
+                                    $count+=1;
+                            }
+                        }
+                    }else{
+                        return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero no con esta residencia '.$user->getUsername().'');
+                    }
+                }else{
+                    return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero sin firmar.');
+                }
+            }else{
+                return $this->returnjson(false,'El estudiante '.$student->getUsername().' no tiene contrato con ninguna residencai.');
+            }
+
+        }else{
+            return $this->returnjson(False,'Dont allow for another ROLEs');
+        }
+        return $this->returnjson(true,'Numero de mensajes sin leer.',$count);
+    }
+
+
     /**
      * @ApiDoc(
      *  description="Download attached file of the message. This function can be called by User (College/Student).",

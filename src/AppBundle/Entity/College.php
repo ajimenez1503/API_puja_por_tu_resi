@@ -486,11 +486,13 @@ class College implements AdvancedUserInterface, \Serializable
      */
     public function getStudents()
     {
-        $rooms=$this->rooms;
+        $rooms=$this->getRooms()->getValues();
         $output=array();
         for ($i = 0; $i < count($rooms); $i++) {
-            if($rooms[$i]->getCurrentAgreement()->verifyAgreementSigned()){
-                array_unshift($output,$rooms[$i]->getCurrentAgreement()->getStudent());
+            if($rooms[$i]->getCurrentAgreement()){
+                if($rooms[$i]->getCurrentAgreement()->verifyAgreementSigned()){
+                    array_unshift($output,$rooms[$i]->getCurrentAgreement()->getStudent());
+                }
             }
         }
         return $output;

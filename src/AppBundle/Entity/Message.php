@@ -98,6 +98,8 @@ class Message
             'file_attached'=>$this->getFileAttached(),
             'date'=>$this->getDate(),
             'senderType'=>$this->getSenderType(),
+            'college_name'=>$this->getCollege()->getCompanyName(),
+            'student_name'=>$this->getStudent()->getName(),
         );
         return $output;
     }

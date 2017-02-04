@@ -131,7 +131,7 @@ countUnreadMessage:
     methods:  [GET]
 
 countUnreadStudentMessage:
-    path:     /Message/countUnreadStudent/{username_student}
+    path:     /Message/countUnreadStudent/
     defaults:  { _controller: AppBundle:Message:countUnreadStudent}
     methods:  [GET]
 

@@ -282,47 +282,35 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get number of unread message from a specific student. This function can be called by User (College).",
+     *  description="Get number of unread message from all the student of a college . This function can be called by User (College).",
      * )
      */
-    public function countUnreadStudentAction($username_student)
+    public function countUnreadStudentAction()
     {
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRoles()[0]=="ROLE_COLLEGE"){//college
-            $count=0;
-            //validate $username
-            if (is_null($username_student) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username_student,9,9)){
-                    return $this->returnjson(False,'Username '.$username_student.' no es valido.');
-            }
-            $student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username_student);
-            if (!$student) {
-                return $this->returnjson(False,'estudiante con username '.$username_student.' no existe.');
-            }
-            //verify signed agreement and college
-            $agreement=$student->getCurrentAgreement();
-            if($agreement){
-                if($agreement->verifyAgreementSigned()){
-                    if ($agreement->getCollege()==$user){
-                        $messages=$user->getMessages()->getValues();
-                        for ($i = 0; $i < count($messages); $i++) {
-                            if($messages[$i]->getStudent()==$student && !$messages[$i]->getReadByCollege()){
-                                    $count+=1;
-                            }
-                        }
-                    }else{
-                        return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero no con esta residencia '.$user->getUsername().'');
+            $output=array();
+            $messages=$user->getMessages()->getValues();
+            $student=$user->getStudents();
+            $output=array();
+            for ($i = 0; $i < count($student); $i++) {
+                $count=0;
+                for ($j = 0; $j < count($messages); $j++) {
+                    if($messages[$j]->getStudent()==$student && !$messages[$j]->getReadByCollege()){
+                            $count+=1;
                     }
-                }else{
-                    return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero sin firmar.');
                 }
-            }else{
-                return $this->returnjson(false,'El estudiante '.$student->getUsername().' no tiene contrato con ninguna residencai.');
+                array_unshift($output,
+                    array(
+                        'unread'=>$count,
+                        'student'=>$student[$i]->getJSON(),
+                    )
+                );
             }
-
+            return $this->returnjson(true,'Lista studiantes',$output);
         }else{
             return $this->returnjson(False,'Dont allow for another ROLEs');
         }
-        return $this->returnjson(true,'Numero de mensajes sin leer.',$count);
     }
 
 

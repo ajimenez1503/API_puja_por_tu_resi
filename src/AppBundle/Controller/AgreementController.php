@@ -108,7 +108,7 @@ class AgreementController extends Controller
                 $em->persist($agreement);
                 $em->persist($student);
                 $em->persist($room);
-                // actually executes the queries (i.e. the INSERT query)
+                
                 //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                 $em->flush();
             } catch (\Exception $pdo_ex) {
@@ -166,7 +166,7 @@ class AgreementController extends Controller
                $em->remove($agreement_student);
                $em->persist($student);
                $em->persist($room);
-               // actually executes the queries (i.e. the INSERT query)
+               
                //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                $em->flush();
            } catch (\Exception $pdo_ex) {
@@ -245,7 +245,7 @@ class AgreementController extends Controller
           //TODO generate the the first rent
           // tells Doctrine you want to (eventually) save the Product (no queries is done)
           $em->persist($agreement_student);
-          // actually executes the queries (i.e. the INSERT query)
+          
           //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
           $em->flush();
       } catch (\Exception $pdo_ex) {

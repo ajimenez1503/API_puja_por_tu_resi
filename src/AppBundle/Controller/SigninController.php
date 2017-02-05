@@ -238,7 +238,7 @@ class SigninController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 // tells Doctrine you want to (eventually) save the Product (no queries is done)
                 $em->persist($college);
-                // actually executes the queries (i.e. the INSERT query)
+
                 //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                 $em->flush();
             } catch (\Exception $pdo_ex) {
@@ -347,7 +347,7 @@ class SigninController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 // tells Doctrine you want to (eventually) save the Product (no queries is done)
                 $em->persist($Student);
-                // actually executes the queries (i.e. the INSERT query)
+
                 //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                 $em->flush();
             } catch (\Exception $pdo_ex) {

@@ -106,6 +106,8 @@ class Student implements AdvancedUserInterface, \Serializable
             'name' => $this->getName(),
             'email'=>$this->getEmail(),
             'creationDate'=>$this->getCreationDate(),
+            'point'=>$this->get_point(),
+            'ROLE'=>$this->getRoles(),
         );
         return $output;
     }

@@ -96,7 +96,7 @@ class MessageController extends Controller
                         $em->persist($message);
                         $em->persist($user);
                         $em->persist($college);
-                        // actually executes the queries (i.e. the INSERT query)
+                        
                         //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                         $em->flush();
                     } catch (\Exception $pdo_ex) {
@@ -140,7 +140,7 @@ class MessageController extends Controller
                             $em->persist($message);
                             $em->persist($user);
                             $em->persist($student);
-                            // actually executes the queries (i.e. the INSERT query)
+                            
                             //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                             $em->flush();
                         } catch (\Exception $pdo_ex) {
@@ -183,7 +183,7 @@ class MessageController extends Controller
             $em = $this->getDoctrine()->getManager();
             // tells Doctrine you want to (eventually) save the Product (no queries is done)
             $em->persist($message);
-            // actually executes the queries (i.e. the INSERT query)
+            
             //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
             $em->flush();
         } catch (\Exception $pdo_ex) {
@@ -360,7 +360,7 @@ class MessageController extends Controller
                     $em = $this->getDoctrine()->getManager();
                     // tells Doctrine you want to (eventually) save the Product (no queries is done)
                     $em->persist($messages[$i]);
-                    // actually executes the queries (i.e. the INSERT query)
+                    
                     //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                     $em->flush();
                 }elseif ($user->getRoles()[0]=="ROLE_COLLEGE" &&  !$messages[$i]->getReadByCollege()){
@@ -369,7 +369,7 @@ class MessageController extends Controller
                     $em = $this->getDoctrine()->getManager();
                     // tells Doctrine you want to (eventually) save the Product (no queries is done)
                     $em->persist($messages[$i]);
-                    // actually executes the queries (i.e. the INSERT query)
+                    
                     //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                     $em->flush();
                 }
@@ -413,7 +413,7 @@ class MessageController extends Controller
                                     $em = $this->getDoctrine()->getManager();
                                     // tells Doctrine you want to (eventually) save the Product (no queries is done)
                                     $em->persist($messages[$i]);
-                                    // actually executes the queries (i.e. the INSERT query)
+                                    
                                     //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                                     $em->flush();
                                 } catch (\Exception $pdo_ex) {

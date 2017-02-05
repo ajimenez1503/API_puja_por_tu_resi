@@ -40,16 +40,7 @@ class ProfileStudentController extends Controller
     public function getAction()
     {
         $user=$this->get('security.token_storage')->getToken()->getUser();
-        $data=array(
-            'name'=>$user->getName(),
-            'username' => $user->getUsername(),
-            'email'=>$user->getEmail(),
-            'isvalid'=>$user->getIsActive(),
-            'ROLE'=>$user->getRoles(),
-            'date_creation'=>$user->getCreationDate(),
-            'point'=>$user->get_point(),
-        );
-        return $this->returnjson(true,'Data user.',$data);
+        return $this->returnjson(true,'Data user.',$user->getJSON());
     }
 
 
@@ -89,9 +80,8 @@ class ProfileStudentController extends Controller
             $user->setPassword($new_passwor_encoded);
 
             $em = $this->getDoctrine()->getManager();
-            // tells Doctrine you want to (eventually) save the Product (no queries is done)
             $em->persist($user);
-            // actually executes the queries (i.e. the INSERT query)
+
             //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
             $em->flush();
         } catch (\Exception $pdo_ex) {
@@ -126,7 +116,7 @@ class ProfileStudentController extends Controller
             $em = $this->getDoctrine()->getManager();
             // tells Doctrine you want to (eventually) save the Product (no queries is done)
             $em->persist($user);
-            // actually executes the queries (i.e. the INSERT query)
+
             //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
             $em->flush();
         } catch (\Exception $pdo_ex) {

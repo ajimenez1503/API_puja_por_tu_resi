@@ -66,7 +66,7 @@ class RentController extends Controller
                 // tells Doctrine you want to (eventually) save the Product (no queries is done)
                 $em->persist($rent);
                 $em->persist($user_student);
-                // actually executes the queries (i.e. the INSERT query)
+                
                 //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                 $em->flush();
             } catch (\Exception $pdo_ex) {
@@ -225,7 +225,7 @@ class RentController extends Controller
                     $em = $this->getDoctrine()->getManager();
                     // tells Doctrine you want to (eventually) save the Product (no queries is done)
                     $em->persist($rent);
-                    // actually executes the queries (i.e. the INSERT query)
+                    
                     //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                     $em->flush();
                 } catch (\Exception $pdo_ex) {

@@ -113,6 +113,14 @@ updateTelephoneProfileCollege:
     methods:  [POST]
 
 
+updateUrlProfileCollege:
+    path:     /ProfileCollege/updateUrl/
+    defaults:  { _controller: AppBundle:ProfileCollege:updateUrl}
+    methods:  [POST]
+
+
+
+
 
 ##############################################################################
 # Incidence controler

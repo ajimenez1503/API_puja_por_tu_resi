@@ -107,6 +107,11 @@ updateAddressProfileCollege:
     defaults:  { _controller: AppBundle:ProfileCollege:updateAddress}
     methods:  [POST]
 
+updateTelephoneProfileCollege:
+    path:     /ProfileCollege/updateTelephone/
+    defaults:  { _controller: AppBundle:ProfileCollege:updateTelephone}
+    methods:  [POST]
+
 
 
 ##############################################################################

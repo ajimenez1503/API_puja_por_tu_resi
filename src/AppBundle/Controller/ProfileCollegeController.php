@@ -200,7 +200,41 @@ class ProfileCollegeController extends Controller
             } catch (\Exception $pdo_ex) {
                 return $this->returnjson(false,'SQL exception.');
             }
-            return $this->returnjson(true,'El email se ha cambiado correctamente.');
+            return $this->returnjson(true,'La dirreccion se ha cambiado correctamente.');
+        }
+
+
+        /**
+         * @ApiDoc(
+         *  description="This method update the telephone of a user (College). Can be called by user (College).",
+         *  requirements={
+         *      {
+         *          "name"="telephone",
+         *          "dataType"="String",
+         *          "description"="Telephone of the user"
+         *      },
+         *  },
+         * )
+         */
+        public function updateTelephoneAction(Request $request)
+        {
+            $telephone=$request->request->get('telephone');
+            if (is_null($telephone) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$telephone,1,15)){
+                    return $this->returnjson(false,' Telefono no es correcto [1,15].');
+            }
+            try {
+                $user=$this->get('security.token_storage')->getToken()->getUser();
+                $user->setTelephone($telephone);
+                $em = $this->getDoctrine()->getManager();
+                // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                $em->persist($user);
+
+                //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                $em->flush();
+            } catch (\Exception $pdo_ex) {
+                return $this->returnjson(false,'SQL exception.');
+            }
+            return $this->returnjson(true,'El telefono se ha cambiado correctamente.');
         }
 
 

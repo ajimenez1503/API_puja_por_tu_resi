@@ -32,6 +32,17 @@ class ProfileCollegeController extends Controller
         return $response;
     }
 
+    /**
+     * @ApiDoc(
+     *  description="Get data of the user (College ). Can be called by user (Collge).",
+     * )
+     */
+    public function getAction()
+    {
+        $user=$this->get('security.token_storage')->getToken()->getUser();
+        return $this->returnjson(true,'Data user.',$user->getJSON());
+    }
+
 
     /**
      * @ApiDoc(

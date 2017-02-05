@@ -82,6 +82,11 @@ updateEmailProfileStudent:
 # ProfileCollege controler
 ##############################################################################
 
+getProfileCollege:
+    path:     /ProfileCollege/get/
+    defaults:  { _controller: AppBundle:ProfileCollege:get}
+    methods:  [GET]
+
 getStudentsProfileCollege:
     path:     /ProfileCollege/getStudents/
     defaults:  { _controller: AppBundle:ProfileCollege:getStudents}

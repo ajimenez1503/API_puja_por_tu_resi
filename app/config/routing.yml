@@ -92,6 +92,16 @@ getStudentsProfileCollege:
     defaults:  { _controller: AppBundle:ProfileCollege:getStudents}
     methods:  [GET]
 
+updatePasswordProfileCollege:
+    path:     /ProfileCollege/updatePassword/
+    defaults:  { _controller: AppBundle:ProfileCollege:updatePassword}
+    methods:  [POST]
+
+updateEmailProfileCollege:
+    path:     /ProfileCollege/updateEmail/
+    defaults:  { _controller: AppBundle:ProfileCollege:updateEmail}
+    methods:  [POST]
+
 ##############################################################################
 # Incidence controler
 ##############################################################################

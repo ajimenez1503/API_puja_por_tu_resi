@@ -220,7 +220,7 @@ class ProfileCollegeController extends Controller
         {
             $telephone=$request->request->get('telephone');
             if (is_null($telephone) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$telephone,1,15)){
-                    return $this->returnjson(false,' Telefono no es correcto [1,15].');
+                return $this->returnjson(false,' Telefono no es correcto [1,15].');
             }
             try {
                 $user=$this->get('security.token_storage')->getToken()->getUser();
@@ -238,27 +238,95 @@ class ProfileCollegeController extends Controller
         }
 
 
+
+
+
+
         /**
          * @ApiDoc(
-         *  description="This method update the url of a user (College). Can be called by user (College).",
+         *  description="This method update the equipment of a user (College). Can be called by user (College).",
          *  requirements={
          *      {
-         *          "name"="url",
-         *          "dataType"="String",
-         *          "description"="Url of the user"
+         *          "name"="wifi",
+         *          "dataType"="boolean",
+         *          "description"="True if the college has wifi."
+         *      },
+         *      {
+         *          "name"="elevator",
+         *          "dataType"="boolean",
+         *          "description"="True if the college has elevator."
+         *      },
+         *      {
+         *          "name"="canteen",
+         *          "dataType"="boolean",
+         *          "description"="True if the college has canteen."
+         *      },
+         *      {
+         *          "name"="hours24",
+         *          "dataType"="boolean",
+         *          "description"="True if the college has hours24 receptions."
+         *      },
+         *      {
+         *          "name"="laundry",
+         *          "dataType"="boolean",
+         *          "description"="True if the college has laundry."
+         *      },
+         *      {
+         *          "name"="gym",
+         *          "dataType"="boolean",
+         *          "description"="True if the college has gym."
+         *      },
+         *      {
+         *          "name"="study_room",
+         *          "dataType"="boolean",
+         *          "description"="True if the college has study_room."
+         *      },
+         *      {
+         *          "name"="heating",
+         *          "dataType"="boolean",
+         *          "description"="True if the college has heating."
          *      },
          *  },
          * )
          */
-        public function updateUrlAction(Request $request)
+        public function updateEuipmentAction(Request $request)
         {
-            $url=$request->request->get('url');
-            if (is_null($url) || !$this->get('app.validate')->validateURL($this->get('validator'),$url)){
-                return $this->returnjson(false,' url no es correcta .');
+            $wifi =$request->request->get('wifi');
+            $elevator =$request->request->get('elevator');
+            $canteen=$request->request->get('canteen');
+            $hours24=$request->request->get('hours24');
+            $laundry =$request->request->get('laundry');
+            $gym =$request->request->get('gym');
+            $study_room =$request->request->get('study_room');
+            $heating =$request->request->get('heating');
+
+            if (is_null($wifi) || !$this->get('app.validate')->validateBool($wifi)){
+                return $this->returnjson(false,'wifi debe ser true or false.');
+            }
+            if (is_null($canteen) || !$this->get('app.validate')->validateBool($canteen)){
+                return $this->returnjson(false,'canteen debe ser true or false.');
+            }
+            if (is_null($elevator) || !$this->get('app.validate')->validateBool($elevator)){
+                return $this->returnjson(false,'elevator debe ser true or false.');
+            }
+            if (is_null($hours24) || !$this->get('app.validate')->validateBool($hours24)){
+                return $this->returnjson(false,'hours24 debe ser true or false.');
+            }
+            if (is_null($laundry) || !$this->get('app.validate')->validateBool($laundry)){
+                return $this->returnjson(false,'laundry debe ser true or false.');
+            }
+            if (is_null($gym) || !$this->get('app.validate')->validateBool($gym)){
+                return $this->returnjson(false,'gym debe ser true or false.');
+            }
+            if (is_null($study_room) || !$this->get('app.validate')->validateBool($study_room)){
+                return $this->returnjson(false,'study_room debe ser true or false.');
+            }
+            if (is_null($heating) || !$this->get('app.validate')->validateBool($heating)){
+                return $this->returnjson(false,'$heating debe ser true or false.');
             }
             try {
                 $user=$this->get('security.token_storage')->getToken()->getUser();
-                $user->seturl($url);
+                $user->setEquipment($wifi,$elevator,$canteen,$hours24,$laundry,$gym,$study_room,$heating);
                 $em = $this->getDoctrine()->getManager();
                 // tells Doctrine you want to (eventually) save the Product (no queries is done)
                 $em->persist($user);

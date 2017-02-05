@@ -150,4 +150,59 @@ class ProfileCollegeController extends Controller
 
 
 
+        /**
+         * @ApiDoc(
+         *  description="This method update the address of a user (College). Can be called by user (College).",
+         *  requirements={
+         *      {
+         *          "name"="address",
+         *          "dataType"="String",
+         *          "description"="Address of the College"
+         *      },
+         *      {
+         *          "name"="lat",
+         *          "dataType"="float",
+         *          "description"="Latitude of the Address  of the College"
+         *      },
+         *      {
+         *          "name"="lng",
+         *          "dataType"="float",
+         *          "description"="Longitude of the Address  of the College"
+         *      },
+         *  },
+         * )
+         */
+        public function updateAddressAction(Request $request)
+        {
+            $address=$request->request->get('address');
+            $lat=$request->request->get('lat');
+            $lng=$request->request->get('lng');
+            if (is_null($address) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$address,1,30)){
+                return $this->returnjson(false,' Direecion no es correcta  [1,30].');
+            }
+            if (is_null($lat)){
+                return $this->returnjson(false,' Latitude no es correcta .');
+            }
+            if (is_null($lat)){
+                return $this->returnjson(false,' Longitude no es correcta .');
+            }
+            try {
+                $user=$this->get('security.token_storage')->getToken()->getUser();
+                $user->setAddress($address);
+                $user->setLatitude($lat);
+                $user->setLongitude($lng);
+                $em = $this->getDoctrine()->getManager();
+                // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                $em->persist($user);
+
+                //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                $em->flush();
+            } catch (\Exception $pdo_ex) {
+                return $this->returnjson(false,'SQL exception.');
+            }
+            return $this->returnjson(true,'El email se ha cambiado correctamente.');
+        }
+
+
+
 }

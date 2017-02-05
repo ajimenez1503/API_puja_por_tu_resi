@@ -142,6 +142,16 @@ class SigninController extends Controller
      *          "description"="Address of the College"
      *      },
      *      {
+     *          "name"="lat",
+     *          "dataType"="float",
+     *          "description"="Latitude of the Address  of the College"
+     *      },
+     *      {
+     *          "name"="lng",
+     *          "dataType"="float",
+     *          "description"="Longitude of the Address  of the College"
+     *      },
+     *      {
      *          "name"="telephone",
      *          "dataType"="String",
      *          "description"="Telephone of the user"

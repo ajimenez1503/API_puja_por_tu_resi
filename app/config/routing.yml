@@ -102,6 +102,13 @@ updateEmailProfileCollege:
     defaults:  { _controller: AppBundle:ProfileCollege:updateEmail}
     methods:  [POST]
 
+updateAddressProfileCollege:
+    path:     /ProfileCollege/updateAddress/
+    defaults:  { _controller: AppBundle:ProfileCollege:updateAddress}
+    methods:  [POST]
+
+
+
 ##############################################################################
 # Incidence controler
 ##############################################################################

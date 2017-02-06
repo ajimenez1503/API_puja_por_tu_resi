@@ -323,7 +323,7 @@ class ProfileCollegeController extends Controller
          *  },
          * )
          */
-        public function updateEuipmentAction(Request $request)
+        public function updateEquipmentAction(Request $request)
         {
             $wifi =$request->request->get('wifi');
             $elevator =$request->request->get('elevator');

@@ -118,6 +118,10 @@ updateURLProfileCollege:
     defaults:  { _controller: AppBundle:ProfileCollege:updateURL}
     methods:  [POST]
 
+updateEquipmentProfileCollege:
+    path:     /ProfileCollege/updateEquipment/
+    defaults:  { _controller: AppBundle:ProfileCollege:updateEquipment}
+    methods:  [POST]
 
 
 

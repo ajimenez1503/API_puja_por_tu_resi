@@ -177,8 +177,8 @@ class ProfileCollegeController extends Controller
             $address=$request->request->get('address');
             $lat=$request->request->get('lat');
             $lng=$request->request->get('lng');
-            if (is_null($address) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$address,1,30)){
-                return $this->returnjson(false,' Direecion no es correcta  [1,30].');
+            if (is_null($address) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$address,1,200)){
+                return $this->returnjson(false,' Direecion no es correcta  [1,200].');
             }
             if (is_null($lat)){
                 return $this->returnjson(false,' Latitude no es correcta .');
@@ -235,6 +235,40 @@ class ProfileCollegeController extends Controller
                 return $this->returnjson(false,'SQL exception.');
             }
             return $this->returnjson(true,'El telefono se ha cambiado correctamente.');
+        }
+
+
+        /**
+         * @ApiDoc(
+         *  description="This method update the URL of a user (College). Can be called by user (College).",
+         *  requirements={
+         *      {
+         *          "name"="URL",
+         *          "dataType"="String",
+         *          "description"="URL of the user"
+         *      },
+         *  },
+         * )
+         */
+        public function updateURLAction(Request $request)
+        {
+            $url=$request->request->get('URL');
+            if (is_null($url) || !$this->get('app.validate')->validateURL($this->get('validator'),$url)){
+                return $this->returnjson(false,' La url no es correcta.');
+            }
+            try {
+                $user=$this->get('security.token_storage')->getToken()->getUser();
+                $user->seturl($url);
+                $em = $this->getDoctrine()->getManager();
+                // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                $em->persist($user);
+
+                //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                $em->flush();
+            } catch (\Exception $pdo_ex) {
+                return $this->returnjson(false,'SQL exception.');
+            }
+            return $this->returnjson(true,'La url se ha cambiado correctamente.');
         }
 
 
@@ -336,7 +370,7 @@ class ProfileCollegeController extends Controller
             } catch (\Exception $pdo_ex) {
                 return $this->returnjson(false,'SQL exception.');
             }
-            return $this->returnjson(true,'La url se ha cambiado correctamente.');
+            return $this->returnjson(true,'El equipamiento se ha cambiado correctamente.');
         }
 
 

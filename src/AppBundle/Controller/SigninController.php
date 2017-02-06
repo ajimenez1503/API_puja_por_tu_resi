@@ -62,8 +62,8 @@ class SigninController extends Controller
         if (is_null($companyName) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$companyName,1)){
                 $message=$message.' Nombre comapañia no es correcto [1,max].';
         }
-        if (is_null($address) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$address,1,30)){
-                $message=$message.' Direecion no es correcta  [1,30].';
+        if (is_null($address) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$address,1,200)){
+                $message=$message.' Direecion no es correcta  [1,200].';
         }
         if (is_null($telephone) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$telephone,1,15)){
                 $message=$message.' Telefono no es correcto [1,15].';

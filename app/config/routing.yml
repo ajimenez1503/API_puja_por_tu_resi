@@ -113,9 +113,9 @@ updateTelephoneProfileCollege:
     methods:  [POST]
 
 
-updateUrlProfileCollege:
-    path:     /ProfileCollege/updateUrl/
-    defaults:  { _controller: AppBundle:ProfileCollege:updateUrl}
+updateURLProfileCollege:
+    path:     /ProfileCollege/updateURL/
+    defaults:  { _controller: AppBundle:ProfileCollege:updateURL}
     methods:  [POST]
 
 

@@ -177,6 +177,30 @@ class IncidenceController extends Controller
     }
 
 
+    /**
+     * @ApiDoc(
+     *  description="Get number of incident In status OEPN. Can be called by user (College).",
+     * )
+     */
+    public function getNumberOpenAction(Request $request)
+    {
+        $count=0;
+        $user=$this->get('security.token_storage')->getToken()->getUser();
+        //get all the user by all the agreement in date
+        //return all the incidences of all the user
+        $list_students=$user->getStudents();
+        for($j=0;$j< count($list_students);$j++){
+            $incidences=$list_students[$j]->getIncidences()->getValues();
+            for ($i = 0; $i < count($incidences); $i++) {
+                if($incidences[$i]->getStatus()=="OPEN"){
+                    $count++;
+                }
+            }
+        }
+        return $this->returnjson(true,'Numero de inicidencias abiertas ',$count);
+    }
+
+
 
     /**
      * @ApiDoc(

@@ -123,9 +123,6 @@ updateEquipmentProfileCollege:
     defaults:  { _controller: AppBundle:ProfileCollege:updateEquipment}
     methods:  [POST]
 
-
-
-
 ##############################################################################
 # Incidence controler
 ##############################################################################
@@ -138,6 +135,11 @@ createIncidence:
 getIncidence:
     path:     /Incidence/get/
     defaults:  { _controller: AppBundle:Incidence:get}
+    methods:  [GET]
+
+getNumberOpenIncidence:
+    path:     /Incidence/getNumberOpen/
+    defaults:  { _controller: AppBundle:Incidence:getNumberOpen}
     methods:  [GET]
 
 downloadIncidence:

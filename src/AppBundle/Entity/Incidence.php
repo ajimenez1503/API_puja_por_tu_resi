@@ -162,6 +162,7 @@ class Incidence
             'description' => $this->getDescription(),
             'file_name'=>$this->getFileName(),
             'date'=>$this->getDate(),
+            'student_username'=> $this->getStudent()->getUsername(),
         );
         return $output;
     }

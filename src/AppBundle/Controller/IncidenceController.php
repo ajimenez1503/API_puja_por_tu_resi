@@ -78,7 +78,7 @@ class IncidenceController extends Controller
             // tells Doctrine you want to (eventually) save the Product (no queries is done)
             $em->persist($incidence);
             $em->persist($user);
-            
+
             //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
             $em->flush();
         } catch (\Exception $pdo_ex) {
@@ -90,7 +90,7 @@ class IncidenceController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method update the state of a incidence. Can be called by user (College/Student).",
+     *  description="This method update the state of a incidence. Can be called by user (College).",
      *  requirements={
      *      {
      *          "name"="id",
@@ -123,7 +123,7 @@ class IncidenceController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 // tells Doctrine you want to (eventually) save the Product (no queries is done)
                 $em->persist($incidence);
-                
+
                 //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                 $em->flush();
             } catch (\Exception $pdo_ex) {
@@ -147,25 +147,32 @@ class IncidenceController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get list of incident of a user in a JSON format. Can be called by user (Student).",
+     *  description="Get list of incident of a user in a JSON format. Can be called by user (Student/College).",
      * )
      */
     public function getAction(Request $request)
     {
+        $output=array();
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRoles()[0]=="ROLE_STUDENT"){
             $incidences=$user->getIncidences()->getValues();
-
-            $output=array();
             for ($i = 0; $i < count($incidences); $i++) {
-                array_push($output,$incidences[$i]->getJSON()
-                );
+                array_push($output,$incidences[$i]->getJSON());
             }
             return $this->returnjson(true,'Lista de inicidencias.',$output);
-        }else{//TODO get all the user by all the agreement in date
+        }elseif ($user->getRoles()[0]=="ROLE_COLLEGE") {
+            //get all the user by all the agreement in date
             //return all the incidences of all the user
-            return $this->returnjson(False,'College_incidences is not done yet.',$output);
-
+            $list_students=$user->getStudents();
+            for($j=0;$j< count($list_students);$j++){
+                $incidences=$list_students[$j]->getIncidences()->getValues();
+                for ($i = 0; $i < count($incidences); $i++) {
+                    array_push($output,$incidences[$i]->getJSON());
+                }
+            }
+            return $this->returnjson(true,'Lista de inicidencias.',$output);
+        }else{
+            return $this->returnjson(False,'Unknow roles .');
         }
     }
 

@@ -28,12 +28,11 @@
     </style>
 </head>
     <div class="left_college">
-        <p>Nombre: GLOBAL SUITE, S.L.</p>
-        <p>Direccion:sdfdsadasDA, ESPAÑA</p>
-        <p>CIF:asdfsaddsa</p>
-        <p>Teléfono: asdfsdfsad</p>
-        <p>eMail:isdfasdfasuites.com</p>
-        <p>IBAN:Esafsdfsa83180</p>
+        <p>Nombre:{{ college.companyName }}</p>
+        <p>Direccion:{{ college.address }}</p>
+        <p>CIF:{{ college.username }}</p>
+        <p>Teléfono: {{ college.telephone }}</p>
+        <p>EMail:{{ college.email }} </p>
     </div>
     <div class="right_student">
         <p>Nombre: {{ student.name }}</p>

@@ -205,7 +205,7 @@ class RentController extends Controller
      * Using knp_snappy and twig to generate a pdf file.
      * The name of the user is random.
      */
-    public function create_receipt(/*$college_data,*/$student_data,$rent_data)
+    public function create_receipt($college_data,$student_data,$rent_data)
     {
         $filename=md5(uniqid()).'.pdf';
         $this->get('knp_snappy.pdf')->generateFromHtml(
@@ -214,7 +214,7 @@ class RentController extends Controller
                 array(
                     'rent'  => $rent_data->getJSON(),
                     'student' =>$student_data->getJSON(),
-                    //TODO add college information from the agreement
+                    'college' =>$college_data->getJSON(),
                 )
             ),
             $this->container->getParameter('storageFiles')."/".$filename
@@ -286,27 +286,36 @@ class RentController extends Controller
         }else{
             $user=$this->get('security.token_storage')->getToken()->getUser();
             if ($user->getRoles()[0]=="ROLE_STUDENT"){
-                //TODO verify that the user has a agreement
-                try {
-                    //TODO get college by the agreement
-                    $rent->setStatusPaid(true);
-                    $rent->setCardHolder($cardHolder);
-                    $rent->setCardNumber($cardNumber);
-                    $rent->setDatePaid(date_create('now'));
-                    $file_name=$this->create_receipt(/*$college_data*/$user,$rent);//TODO add college information
-                    $rent->setFileReceipt($file_name);
-                    $em = $this->getDoctrine()->getManager();
-                    // tells Doctrine you want to (eventually) save the Product (no queries is done)
-                    $em->persist($rent);
+                $agreement=$user->getCurrentAgreement();
+                if($agreement){
+                    if($agreement->verifyAgreementSigned()){
+                        try {
+                            //TODO get college by the agreement
+                            $rent->setStatusPaid(true);
+                            $rent->setCardHolder($cardHolder);
+                            $rent->setCardNumber($cardNumber);
+                            $rent->setDatePaid(date_create('now'));
+                            $college_data=$agreement->getRoom()->getCollege();
+                            $file_name=$this->create_receipt($college_data,$user,$rent);
+                            $rent->setFileReceipt($file_name);
+                            $em = $this->getDoctrine()->getManager();
+                            // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                            $em->persist($rent);
 
-                    //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
-                    $em->flush();
-                } catch (\Exception $pdo_ex) {
-                    return $this->returnjson(false,'SQL exception.'.$pdo_ex);
+                            //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                            $em->flush();
+                        } catch (\Exception $pdo_ex) {
+                            return $this->returnjson(false,'SQL exception.'.$pdo_ex);
+                        }
+                        return $this->returnjson(true,'La mensualidad se ha pagado correctamente.');
+                    }else{
+                        return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero sin firmar.');
+                    }
+                }else{
+                    return $this->returnjson(false,'El estudiante '.$student->getUsername().' no tiene contrato con ninguna residencai.');
                 }
-                return $this->returnjson(true,'La mensualidad se ha pagado correctamente.');
             }else{
-                return $this->returnjson(false,'La mensualidad no puede ser pagada por una residencia.');
+                return $this->returnjson(false,'La mensualidad no puede ser pagada por otro role.');
             }
         }
     }

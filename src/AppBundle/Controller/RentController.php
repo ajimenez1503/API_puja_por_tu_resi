@@ -35,44 +35,59 @@ class RentController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method create a rent of a moth without pay yet. This order is automatically. It is called without authentication ",
+     *  description="This method create all the rents of a user during his agreement. One per moth. It is called without authentication ",
      *  requirements={
      *      {
-     *          "name"="student",
+     *          "name"="username_student",
      *          "dataType"="String",
      *          "description"="Username of the user Student"
      *      },
      *  },
      * )
      */
-    public function createAction(Request $request)
+    public function createAllAction($username_student)
     {
-        $username_student=$request->request->get('student');
         if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username_student,1,10)){
             return $this->returnjson(false,'DNI usurio no es valido.');
         }
-        $user_student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username_student);
-        if(!$user_student){
+        $student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username_student);
+        if(!$student){
             return $this->returnjson(true,'No existe un estudiante con DNI '.$username_student.'.');
         }else{
-            //if the user has a agreement
-            try {
-                $rent = new Rent();
-                $rent->setStudent($user_student);
-                $rent->setPrice(100);//TODO $agreement->getPrice();
-                $user_student->addRent($rent);
+            $agreement=$student->getCurrentAgreement();
+            if($agreement){
+                if($agreement->verifyAgreementSigned()){
+                    $interval=date_diff($agreement->getDateStartSchool(), $agreement->getDateEndSchool());
+                    $number_month=$interval->m + ($interval->y * 12)+ ($interval->d / 30);
+                    $month=$agreement->getDateStartSchool();
+                    for( $c=0;$c<$number_month;$c++){
+                        try {
+                            $rent = new Rent();
+                            $rent->setStudent($student);
+                            $rent->setPrice($agreement->getPrice());
+                            $rent->setDate($month);
+                            $student->addRent($rent);
 
-                $em = $this->getDoctrine()->getManager();
-                // tells Doctrine you want to (eventually) save the Product (no queries is done)
-                $em->persist($rent);
-                $em->persist($user_student);
+                            $em = $this->getDoctrine()->getManager();
+                            // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                            $em->persist($rent);
+                            $em->persist($student);
 
-                //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
-                $em->flush();
-            } catch (\Exception $pdo_ex) {
-                return $this->returnjson(false,'SQL exception. '.$pdo_ex);
+                            //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                            $em->flush();
+                        } catch (\Exception $pdo_ex) {
+                            return $this->returnjson(false,'SQL exception. '.$pdo_ex);
+                        }
+                        $month=$month->add(new \DateInterval('P1M'));
+                    }
+                    return $this->returnjson(true,'Las mensualidades se ha creado correctamente.',$number_month);
+
+                }else{
+                    return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero sin firmar.');
+                }
+            }else{
+                return $this->returnjson(false,'El estudiante '.$student->getUsername().' no tiene contrato con ninguna residencai.');
             }
-            return $this->returnjson(true,'La mensualidad se ha creado correctamente.');
         }
 
     }

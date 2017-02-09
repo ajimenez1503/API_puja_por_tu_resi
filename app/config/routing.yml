@@ -198,9 +198,9 @@ downloadMessage:
 ##############################################################################
 # Rent controler
 ##############################################################################
-createRent:
-    path:     /Rent/create/
-    defaults:  { _controller: AppBundle:Rent:create}
+createAllRent:
+    path:     /Rent/createAll/{username_student}
+    defaults:  { _controller: AppBundle:Rent:createAll}
     methods:  [POST]
 
 payRent:

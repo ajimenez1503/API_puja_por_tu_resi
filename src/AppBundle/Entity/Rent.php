@@ -22,7 +22,6 @@ class Rent
     {
         $this->status_paid = 0;
         $this->read_by_student = 0;
-        $this->date=date_create('now');
         $this->card_holder = null;#Generate in the pay method
         $this->card_number = null;#Generate in the pay method
     }

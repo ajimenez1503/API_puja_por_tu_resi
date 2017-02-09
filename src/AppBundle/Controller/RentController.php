@@ -109,6 +109,60 @@ class RentController extends Controller
         }
     }
 
+
+
+
+
+    /**
+     * @ApiDoc(
+     *  description="Get list of rent of a user (Student). In JSON format. This function can be called by User (College).",
+     *  requirements={
+     *      {
+     *          "name"="username_student",
+     *          "dataType"="String",
+     *          "description"="Username of the student  "
+     *      },
+     *  },
+     * )
+     */
+    public function getStudentAction($username_student)
+    {
+        $output=array();
+        $user=$this->get('security.token_storage')->getToken()->getUser();
+        if ($user->getRoles()[0]=="ROLE_COLLEGE"){//college
+            //validate $username
+            if (is_null($username_student) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username_student,9,9)){
+                    return $this->returnjson(False,'Username '.$username_student.' no es valido.');
+            }
+            $student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username_student);
+            if (!$student) {
+                return $this->returnjson(False,'estudiante con username '.$username_student.' no existe.');
+            }
+            //verify signed agreement and college
+            $agreement=$student->getCurrentAgreement();
+            if($agreement){
+                if($agreement->verifyAgreementSigned()){
+                    if ($agreement->getCollege()==$user){
+                        $rents=$student->getRents()->getValues();
+                        for ($i = 0; $i < count($rents); $i++) {
+                            array_unshift($output,$rents[$i]->getJSON());
+                        }
+                    }else{
+                        return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero no con esta residencia '.$user->getUsername().'');
+                    }
+                }else{
+                    return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero sin firmar.');
+                }
+            }else{
+                return $this->returnjson(false,'El estudiante '.$student->getUsername().' no tiene contrato con ninguna residencai.');
+            }
+            return $this->returnjson(true,'Lista de pagos.',$output);
+        }else{
+            return $this->returnjson(False,'ROLE unknow');
+        }
+    }
+
+
     /**
      * @ApiDoc(
      *  description="Get list of rents without pay of a user (Student). Can be called by user (Student/College).",

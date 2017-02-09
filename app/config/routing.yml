@@ -195,8 +195,9 @@ downloadMessage:
     path:  /Message/download/{filename}
     defaults: { _controller: AppBundle:Message:download }
     methods:  [GET]
-
+##############################################################################
 # Rent controler
+##############################################################################
 createRent:
     path:     /Rent/create/
     defaults:  { _controller: AppBundle:Rent:create}
@@ -211,6 +212,12 @@ getRent:
     path:     /Rent/get/
     defaults:  { _controller: AppBundle:Rent:get}
     methods:  [GET]
+
+getStudentRent:
+    path:     /Rent/getStudent/{username_student}
+    defaults:  { _controller: AppBundle:Rent:getStudent}
+    methods:  [GET]
+
 
 getUnpaidRent:
     path:     /Rent/getUnpaid/

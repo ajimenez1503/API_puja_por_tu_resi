@@ -96,6 +96,7 @@ class Rent
             'price'=>$this->getPrice(),
             'date'=>$this->getDate(),
             'month'=>date_format($this->getDate(),"F"),
+            'year'=>date_format($this->getDate(),"Y"),
             'file_receipt'=>$this->getFileReceipt(),
             'date_paid'=>$this->getDatePaid(),
             'card_number'=>$this->getCardNumber(),

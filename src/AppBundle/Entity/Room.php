@@ -533,9 +533,9 @@ class Room
     public function getCurrentAgreement()
     {
         $list_agreement=$this->getAgreements()->getValues();
-        $today=date_create('now');
+        $today=date_create('now')->format('Y-m-d');//year month and day (not hour and minute)
         for ($i = 0; $i < count($list_agreement); $i++) {
-            if ($list_agreement[$i]->getDateSigned()<= $today && $list_agreement[$i]->getDateStartSchool()>= $today){//the current date is ina contract
+            if ($list_agreement[$i]->getDateSigned()->format('Y-m-d')<= $today && $list_agreement[$i]->getDateStartSchool()->format('Y-m-d')>= $today){//the current date is ina contract
                 return $list_agreement[$i];
             }
         }

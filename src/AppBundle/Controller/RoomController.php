@@ -210,7 +210,7 @@ class RoomController extends Controller
                 // tells Doctrine you want to (eventually) save the Product (no queries is done)
                 $em->persist($room);
                 $em->persist($user);
-                
+
                 //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                 $em->flush();
             }else{
@@ -255,13 +255,13 @@ class RoomController extends Controller
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRoles()[0]=="ROLE_COLLEGE"){
             $rooms=$user->getRooms()->getValues();
-            $today=date_create('now');
+            $today=date_create('now')->format('Y-m-d');
             $output=array();
             for ($i = 0; $i < count($rooms); $i++) {
                 if(
-                    ($rooms[$i]->getDateStartSchool()>$today && $rooms[$i]->getDateEndBid()<$today) ||//between bid and school
-                    ($rooms[$i]->getDateStartSchool()>$today && $rooms[$i]->getDateStartBid()>$today)||//before bid and before school
-                    ($rooms[$i]->getDateEndBid()<$today && $rooms[$i]->getDateEndSchool()<$today)  //after bid and after school
+                    ($rooms[$i]->getDateStartSchool()->format('Y-m-d')>$today && $rooms[$i]->getDateEndBid()->format('Y-m-d')<$today) ||//between bid and school
+                    ($rooms[$i]->getDateStartSchool()->format('Y-m-d')>$today && $rooms[$i]->getDateStartBid()->format('Y-m-d')>$today)||//before bid and before school
+                    ($rooms[$i]->getDateEndBid()->format('Y-m-d')<$today && $rooms[$i]->getDateEndSchool()->format('Y-m-d')<$today)  //after bid and after school
                 ){
                     array_unshift($output,$rooms[$i]->getJSON());
                 }
@@ -282,10 +282,10 @@ class RoomController extends Controller
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRoles()[0]=="ROLE_COLLEGE"){
             $rooms=$user->getRooms()->getValues();
-            $today=date_create('now');
+            $today=date_create('now')->format('Y-m-d');//year month and day (not hour and minute)
             $output=array();
             for ($i = 0; $i < count($rooms); $i++) {
-                if($rooms[$i]->getDateStartBid()<=$today && $rooms[$i]->getDateEndBid()>=$today){
+                if($rooms[$i]->getDateStartBid()->format('Y-m-d')<=$today && $rooms[$i]->getDateEndBid()->format('Y-m-d')>=$today){
                     array_unshift($output,$rooms[$i]->getJSON());
                 }
             }
@@ -324,11 +324,11 @@ class RoomController extends Controller
         if (!$room) {
             return $this->returnjson(False,'Habitacion with id '.$id.' doesnt exists.');
         }else {
-            $today=date_create('now');
+            $today=date_create('now')->format('Y-m-d');//year month and day (not hour and minute)
             if(
-                ($room->getDateStartSchool()>$today && $room->getDateEndBid()<$today) ||//between bid and school
-                ($room->getDateStartSchool()>$today && $room->getDateStartBid()>$today)||//before bid and before school
-                ($room->getDateEndBid()<$today && $room->getDateEndSchool()<$today)  //after bid and after school
+                ($room->getDateStartSchool()->format('Y-m-d')>$today && $room->getDateEndBid()->format('Y-m-d')<$today) ||//between bid and school
+                ($room->getDateStartSchool()->format('Y-m-d')>$today && $room->getDateStartBid()->format('Y-m-d')>$today)||//before bid and before school
+                ($room->getDateEndBid()->format('Y-m-d')<$today && $room->getDateEndSchool()->format('Y-m-d')<$today)  //after bid and after school
             ){
                 $em = $this->getDoctrine()->getManager();
                 $em->remove($room);
@@ -457,7 +457,7 @@ class RoomController extends Controller
             $em = $this->getDoctrine()->getManager();
             // tells Doctrine you want to (eventually) save the Product (no queries is done)
             $em->persist($room);
-            
+
             //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
             $em->flush();
         } catch (\Exception $pdo_ex) {

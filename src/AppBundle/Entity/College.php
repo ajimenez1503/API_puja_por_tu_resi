@@ -698,10 +698,10 @@ class College implements AdvancedUserInterface, \Serializable
     public function getOFFEREDroom()
     {
         $rooms=$this->getRooms()->getValues();
-        $today=date_create('now');
+        $today=date_create('now')->format('Y-m-d');//year month and day (not hour and minute)
         $output=array();
         for ($i = 0; $i < count($rooms); $i++) {
-            if($rooms[$i]->getDateStartBid()<=$today && $rooms[$i]->getDateEndBid()>=$today){//TODO use the format year-month-day to compare
+            if($rooms[$i]->getDateStartBid()->format('Y-m-d')<=$today && $rooms[$i]->getDateEndBid()->format('Y-m-d')>=$today){//TODO use the format year-month-day to compare
                 array_unshift($output,$rooms[$i]->getJSON());
             }
         }

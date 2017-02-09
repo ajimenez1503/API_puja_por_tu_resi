@@ -108,7 +108,7 @@ class AgreementController extends Controller
                 $em->persist($agreement);
                 $em->persist($student);
                 $em->persist($room);
-                
+
                 //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                 $em->flush();
             } catch (\Exception $pdo_ex) {
@@ -166,7 +166,7 @@ class AgreementController extends Controller
                $em->remove($agreement_student);
                $em->persist($student);
                $em->persist($room);
-               
+
                //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                $em->flush();
            } catch (\Exception $pdo_ex) {
@@ -242,10 +242,17 @@ class AgreementController extends Controller
               return $response;
           }
 
-          //TODO generate the the first rent
+          // generate all the rents of the student in the agreement
+          $response = $this->forward('AppBundle:Rent:createAll', array(
+              'username_student'  => $student->getUsername(),
+          ));
+          if (!json_decode($response->getContent(),true)['success']){
+              return $response;
+          }
+
           // tells Doctrine you want to (eventually) save the Product (no queries is done)
           $em->persist($agreement_student);
-          
+
           //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
           $em->flush();
       } catch (\Exception $pdo_ex) {
@@ -308,7 +315,7 @@ class AgreementController extends Controller
                                     'username'  =>  $student->getUsername(),
                                 ));
 
-                                return $this->returnjson(true,'blabalbaa.',$output );
+                                return $this->returnjson(true,'List de habitaciones asignadas.',$output );
                              }
                          }
                      }

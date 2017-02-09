@@ -98,7 +98,7 @@ class IncidenceController extends Controller
      *          "description"="ID of the inicidence"
      *      },
      *      {
-     *          "name"="state",
+     *          "name"="status",
      *          "dataType"="String",
      *          "description"="New state of the incidence. state=['OPEN' or 'IN PROGRESS' or 'DONE']"
      *      },
@@ -108,10 +108,10 @@ class IncidenceController extends Controller
     public function updateStateAction(Request $request)
     {
         $id=$request->request->get('id');
-        $state=$request->request->get('state');
+        $status=$request->request->get('status');
         //validate state.
-        if (!$this->validateState($state)){
-            return $this->returnjson(false,'El estado '.$state.' no es valido.');
+        if (!$this->validateState($status)){
+            return $this->returnjson(false,'El estado '.$status.' no es valido.');
         }
         $incidence = $this->getDoctrine()->getRepository('AppBundle:Incidence')->find($id);
         if (!$incidence){
@@ -119,7 +119,7 @@ class IncidenceController extends Controller
         }else{
             try {
 
-                $incidence->setStatus($state);
+                $incidence->setStatus($status);
                 $em = $this->getDoctrine()->getManager();
                 // tells Doctrine you want to (eventually) save the Product (no queries is done)
                 $em->persist($incidence);
@@ -129,16 +129,16 @@ class IncidenceController extends Controller
             } catch (\Exception $pdo_ex) {
                 return $this->returnjson(false,'SQL exception.');
             }
-            return $this->returnjson(true,'La incidencia se ha actualizado correctamente con el nuevo estado '.$state.'.');
+            return $this->returnjson(true,'La incidencia se ha actualizado correctamente con el nuevo estado '.$status.'.');
         }
 
     }
 
 
 
-    public function validateState($state)
+    public function validateState($status)
     {
-        if($state=="OPEN" or $state=="IN PROGRESS" or $state=="DONE"){
+        if($status=="OPEN" or $status=="IN PROGRESS" or $status=="DONE"){
             return true;
         }else{
             return false;

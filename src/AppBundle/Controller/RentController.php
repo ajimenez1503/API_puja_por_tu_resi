@@ -55,8 +55,8 @@ class RentController extends Controller
         if(!$user_student){
             return $this->returnjson(true,'No existe un estudiante con DNI '.$username_student.'.');
         }else{
+            //if the user has a agreement
             try {
-                //TODO get price of agrement between college and user
                 $rent = new Rent();
                 $rent->setStudent($user_student);
                 $rent->setPrice(100);//TODO $agreement->getPrice();
@@ -66,7 +66,7 @@ class RentController extends Controller
                 // tells Doctrine you want to (eventually) save the Product (no queries is done)
                 $em->persist($rent);
                 $em->persist($user_student);
-                
+
                 //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                 $em->flush();
             } catch (\Exception $pdo_ex) {
@@ -80,24 +80,31 @@ class RentController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get list of rents of a user (Student). Format JSON. Can be called by user (Student/College).",
+     *  description="Get list of rents of a user. Format JSON. Can be called by user (Student/College).",
      * )
      */
     public function getAction(Request $request)
     {
+        $output=array();
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRoles()[0]=="ROLE_STUDENT"){
             $rents=$user->getRents()->getValues();
-
-            $output=array();
             for ($i = 0; $i < count($rents); $i++) {
                 array_unshift($output,$rents[$i]->getJSON());
             }
             return $this->returnjson(true,'Lista de pagos.',$output);
+        }elseif ($user->getRoles()[0]=="ROLE_COLLEGE") {
+            $list_students=$user->getStudents();// get all the user by all the agreement in date
+            for($j=0;$j< count($list_students);$j++){
+                $rents=$list_students[$j]->getRents()->getValues();
+                for ($i = 0; $i < count($rents); $i++) {
+                    array_push($output,$rents[$i]->getJSON());
+                }
+            }
+            return $this->returnjson(true,'Lista de pagos.',$output);//return all the rents of all the user
         }else{
-            //TODO get all the user by all the agreement in date
-            //return all the rents of all the user or a specify user  $user=$request->request->get('user');
-            return $this->returnjson(False,'College_retns is not done yet.',$output);
+
+            return $this->returnjson(False,'Unknow roles ');
 
         }
     }
@@ -214,6 +221,7 @@ class RentController extends Controller
         }else{
             $user=$this->get('security.token_storage')->getToken()->getUser();
             if ($user->getRoles()[0]=="ROLE_STUDENT"){
+                //TODO verify that the user has a agreement
                 try {
                     //TODO get college by the agreement
                     $rent->setStatusPaid(true);
@@ -225,7 +233,7 @@ class RentController extends Controller
                     $em = $this->getDoctrine()->getManager();
                     // tells Doctrine you want to (eventually) save the Product (no queries is done)
                     $em->persist($rent);
-                    
+
                     //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
                     $em->flush();
                 } catch (\Exception $pdo_ex) {
@@ -237,6 +245,7 @@ class RentController extends Controller
             }
         }
     }
+
 
     /**
      * @ApiDoc(

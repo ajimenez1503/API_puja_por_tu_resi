@@ -92,6 +92,16 @@ getStudentsProfileCollege:
     defaults:  { _controller: AppBundle:ProfileCollege:getStudents}
     methods:  [GET]
 
+getStudentsCompleteProfileCollege:
+    path:     /ProfileCollege/getStudentsComplete/
+    defaults:  { _controller: AppBundle:ProfileCollege:getStudentsComplete}
+    methods:  [GET]
+
+getStudentCompleteProfileCollege:
+    path:     /ProfileCollege/getStudentComplete/{username_student}
+    defaults:  { _controller: AppBundle:ProfileCollege:getStudentComplete}
+    methods:  [GET]
+
 updatePasswordProfileCollege:
     path:     /ProfileCollege/updatePassword/
     defaults:  { _controller: AppBundle:ProfileCollege:updatePassword}

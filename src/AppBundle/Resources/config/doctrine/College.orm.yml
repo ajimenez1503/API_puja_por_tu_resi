@@ -73,3 +73,6 @@ AppBundle\Entity\College:
         rooms:
             targetEntity: Room
             mappedBy: college
+        banks:
+            targetEntity: Bank
+            mappedBy: college

@@ -1,0 +1,32 @@
+# src/AppBundle/Resources/config/doctrine/Room.orm.yml
+AppBundle\Entity\Bank:
+    type: entity
+    table: bank
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+            unique: TRUE
+    fields:
+        IBAN:
+            type: string
+            length: 30
+            unique: FALSE
+        SWIFT:
+            type: string
+            length: 30
+            unique: FALSE
+        count_holder:
+            type: string
+            length: 30
+            unique: FALSE
+        activate:
+            type: boolean
+            unique: FALSE
+    manyToOne:
+        college:
+            targetEntity: College
+            inversedBy: banks
+            joinColumn:
+                name: college_username
+                referencedColumnName: username

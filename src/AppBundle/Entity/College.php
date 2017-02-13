@@ -30,12 +30,14 @@ class College implements AdvancedUserInterface, \Serializable
     private $gym;
     private $study_room;
     private $heating;
+    private $banks;
 
 
     public function __construct()
     {
         $this->isActive = true;
         $this->messages = new ArrayCollection();
+        $this->banks = new ArrayCollection();
         $this->rooms = new ArrayCollection();
         $this->wifi = false;
         $this->elevator = false;
@@ -708,4 +710,38 @@ class College implements AdvancedUserInterface, \Serializable
         return $output;
     }
 
+
+    /**
+     * Add bank
+     *
+     * @param \AppBundle\Entity\Bank $bank
+     *
+     * @return College
+     */
+    public function addBank(\AppBundle\Entity\Bank $bank)
+    {
+        $this->banks[] = $bank;
+
+        return $this;
+    }
+
+    /**
+     * Remove bank
+     *
+     * @param \AppBundle\Entity\Bank $bank
+     */
+    public function removeBank(\AppBundle\Entity\Bank $bank)
+    {
+        $this->banks->removeElement($bank);
+    }
+
+    /**
+     * Get banks
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBanks()
+    {
+        return $this->banks;
+    }
 }

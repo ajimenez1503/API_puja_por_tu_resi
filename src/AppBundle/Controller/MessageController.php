@@ -296,7 +296,7 @@ class MessageController extends Controller
             for ($i = 0; $i < count($student); $i++) {
                 $count=0;
                 for ($j = 0; $j < count($messages); $j++) {
-                    if($messages[$j]->getStudent()==$student && !$messages[$j]->getReadByCollege()){
+                    if($messages[$j]->getStudent()==$student[$i] && !$messages[$j]->getReadByCollege()){
                             $count+=1;
                     }
                 }

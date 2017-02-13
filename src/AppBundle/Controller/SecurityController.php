@@ -39,7 +39,6 @@ class SecurityController extends Controller
              $user=$this->get('security.token_storage')->getToken()->getUser();
              $data=array(
                  'username' => $user->getUsername(),
-                 'isvalid'=>$user->getIsActive(),
                  'ROLE'=>$user->getRoles(),
              );
              $response->setData(array(

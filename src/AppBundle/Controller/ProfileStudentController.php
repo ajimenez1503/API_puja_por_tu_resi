@@ -32,6 +32,7 @@ class ProfileStudentController extends Controller
         return $response;
     }
 
+
     /**
      * @ApiDoc(
      *  description="Get data of the user (student) : name, username, email, ROLE, date_creation, point. Can be called by user (Student).",
@@ -124,5 +125,4 @@ class ProfileStudentController extends Controller
         }
         return $this->returnjson(true,'El email se ha cambiado correctamente.');
     }
-
 }

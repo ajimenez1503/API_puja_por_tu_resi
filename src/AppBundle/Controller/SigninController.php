@@ -33,7 +33,6 @@ class SigninController extends Controller
     }
 
 
-
     /**
     * Validate input of the register of the student
     *
@@ -111,6 +110,7 @@ class SigninController extends Controller
                 'message' => $message);
         }
     }
+
 
     /**
      * @ApiDoc(
@@ -263,6 +263,7 @@ class SigninController extends Controller
         }
     }
 
+
     /**
     * Validate input of the register of the student
     *
@@ -298,8 +299,8 @@ class SigninController extends Controller
                 'success' => false,
                 'message' => $message);
         }
-
     }
+
 
     /**
      * @ApiDoc(
@@ -371,5 +372,4 @@ class SigninController extends Controller
             return $this->returnjson(false,'Username ya existe.');
         }
     }
-
 }

@@ -66,8 +66,6 @@ class SecurityController extends Controller
     }
 
 
-
-
     /**
      * @ApiDoc(
      *  description="This method verify if a user (which role) is connected in the system. Can be called by user (College/Student). ",

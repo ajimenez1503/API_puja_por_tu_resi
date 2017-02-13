@@ -9,7 +9,6 @@ NelmioApiDocBundle:
 ##############################################################################
 #Lucky controller
 ##############################################################################
-
 numberLucky:
     path:     /lucky/number/{min}
     defaults:  { _controller: AppBundle:Lucky:number, min: 1 }
@@ -29,7 +28,6 @@ testLucky:
 ##############################################################################
 #Security controller
 ##############################################################################
-
 login:
     path:     /login
     defaults: { _controller: AppBundle:Security:login }
@@ -60,7 +58,6 @@ studentSignin:
 ##############################################################################
 # ProfileStudent controler
 ##############################################################################
-
 getProfileStudent:
     path:     /ProfileStudent/get/
     defaults:  { _controller: AppBundle:ProfileStudent:get}
@@ -75,13 +72,9 @@ updateEmailProfileStudent:
     path:     /ProfileStudent/updateEmail/
     defaults:  { _controller: AppBundle:ProfileStudent:updateEmail}
     methods:  [POST]
-
-
-
 ##############################################################################
 # ProfileCollege controler
 ##############################################################################
-
 getProfileCollege:
     path:     /ProfileCollege/get/
     defaults:  { _controller: AppBundle:ProfileCollege:get}
@@ -132,14 +125,17 @@ updateEquipmentProfileCollege:
     path:     /ProfileCollege/updateEquipment/
     defaults:  { _controller: AppBundle:ProfileCollege:updateEquipment}
     methods:  [POST]
-
 ##############################################################################
 # Incidence controler
 ##############################################################################
-
 createIncidence:
     path:     /Incidence/create/
     defaults:  { _controller: AppBundle:Incidence:create}
+    methods:  [POST]
+
+updateStateIncidence:
+    path:     /Incidence/updateState/
+    defaults:  { _controller: AppBundle:Incidence:updateState}
     methods:  [POST]
 
 getIncidence:
@@ -157,15 +153,9 @@ downloadIncidence:
     defaults: { _controller: AppBundle:Incidence:download }
     methods:  [GET]
 
-updateStateIncidence:
-    path:     /Incidence/updateState/
-    defaults:  { _controller: AppBundle:Incidence:updateState}
-    methods:  [POST]
-
 ##############################################################################
 # Message controler
 ##############################################################################
-
 createMessage:
     path:     /Message/create/
     defaults:  { _controller: AppBundle:Message:create}
@@ -196,11 +186,6 @@ openStudentMessage:
     defaults:  { _controller: AppBundle:Message:openStudent}
     methods:  [POST]
 
-openMessage:
-    path:     /Message/open/
-    defaults:  { _controller: AppBundle:Message:open}
-    methods:  [POST]
-
 downloadMessage:
     path:  /Message/download/{filename}
     defaults: { _controller: AppBundle:Message:download }
@@ -228,7 +213,6 @@ getStudentRent:
     defaults:  { _controller: AppBundle:Rent:getStudent}
     methods:  [GET]
 
-
 getUnpaidRent:
     path:     /Rent/getUnpaid/
     defaults:  { _controller: AppBundle:Rent:getUnpaid}
@@ -238,11 +222,9 @@ downloadRent:
     path:  /Rent/download/{filename}
     defaults: { _controller: AppBundle:Rent:download }
     methods:  [GET]
-
 ##############################################################################
 # Room controler
 ##############################################################################
-
 createRoom:
     path:     /Room/create/
     defaults:  { _controller: AppBundle:Room:create}
@@ -297,11 +279,9 @@ removeRoom:
     path:  /Room/remove/{id}
     defaults: { _controller: AppBundle:Room:remove }
     methods:  [POST]
-
 ##############################################################################
 # Bid controler
 ##############################################################################
-
 createBid:
     path:     /Bid/create/
     defaults:  { _controller: AppBundle:Bid:create}
@@ -332,16 +312,13 @@ removeBidsStudentBid:
     defaults: { _controller: AppBundle:Bid:removeBidsStudent }
     methods:  [POST]
 
-
 removeBidRoomStudentBid:
     path:  /Bid/removeBidRoomStudent/
     defaults: { _controller: AppBundle:Bid:removeBidRoomStudent }
     methods:  [POST]
-
 ##############################################################################
 # Agreement controler
 ##############################################################################
-
 createAgreement:
     path:     /Agreement/create/{room_id}/{username}
     defaults:  { _controller: AppBundle:Agreement:create}
@@ -371,7 +348,6 @@ verifyUnsignedAgreement:
     path:  /Agreement/verifyUnsigned/
     defaults: { _controller: AppBundle:Agreement:verifyUnsigned }
     methods:  [GET]
-
 
 roomVerifyUnsignedAgreement:
     path:  /Agreement/roomVerifyUnsigned/{room_id}

@@ -35,7 +35,7 @@ class RentController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method create all the rents of a user during his agreement. One per moth. It is called without authentication ",
+     *  description="This method create all the rents of a user during his agreement. One per moth. It is called  automatically (ROLE_ADMIN)",
      *  requirements={
      *      {
      *          "name"="username_student",
@@ -89,7 +89,6 @@ class RentController extends Controller
                 return $this->returnjson(false,'El estudiante '.$student->getUsername().' no tiene contrato con ninguna residencai.');
             }
         }
-
     }
 
 
@@ -118,14 +117,9 @@ class RentController extends Controller
             }
             return $this->returnjson(true,'Lista de pagos.',$output);//return all the rents of all the user
         }else{
-
             return $this->returnjson(False,'Unknow roles ');
-
         }
     }
-
-
-
 
 
     /**
@@ -144,61 +138,54 @@ class RentController extends Controller
     {
         $output=array();
         $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRoles()[0]=="ROLE_COLLEGE"){//college
-            //validate $username
-            if (is_null($username_student) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username_student,9,9)){
-                    return $this->returnjson(False,'Username '.$username_student.' no es valido.');
-            }
-            $student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username_student);
-            if (!$student) {
-                return $this->returnjson(False,'estudiante con username '.$username_student.' no existe.');
-            }
-            //verify signed agreement and college
-            $agreement=$student->getCurrentAgreement();
-            if($agreement){
-                if($agreement->verifyAgreementSigned()){
-                    if ($agreement->getCollege()==$user){
-                        $rents=$student->getRents()->getValues();
-                        for ($i = 0; $i < count($rents); $i++) {
-                            array_push($output,$rents[$i]->getJSON());
-                        }
-                    }else{
-                        return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero no con esta residencia '.$user->getUsername().'');
+        //validate $username
+        if (is_null($username_student) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username_student,9,9)){
+                return $this->returnjson(False,'Username '.$username_student.' no es valido.');
+        }
+        $student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username_student);
+        if (!$student) {
+            return $this->returnjson(False,'estudiante con username '.$username_student.' no existe.');
+        }
+        //verify signed agreement and college
+        $agreement=$student->getCurrentAgreement();
+        if($agreement){
+            if($agreement->verifyAgreementSigned()){
+                if ($agreement->getCollege()==$user){
+                    $rents=$student->getRents()->getValues();
+                    for ($i = 0; $i < count($rents); $i++) {
+                        array_push($output,$rents[$i]->getJSON());
                     }
                 }else{
-                    return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero sin firmar.');
+                    return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero no con esta residencia '.$user->getUsername().'');
                 }
             }else{
-                return $this->returnjson(false,'El estudiante '.$student->getUsername().' no tiene contrato con ninguna residencai.');
+                return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero sin firmar.');
             }
-            return $this->returnjson(true,'Lista de pagos.',$output);
         }else{
-            return $this->returnjson(False,'ROLE unknow');
+            return $this->returnjson(false,'El estudiante '.$student->getUsername().' no tiene contrato con ninguna residencai.');
         }
+        return $this->returnjson(true,'Lista de pagos.',$output);
     }
 
 
     /**
      * @ApiDoc(
-     *  description="Get list of rents without pay of a user (Student). Can be called by user (College).",
+     *  description="Get list of rents without pay of a user (Student). Can be called by user (Student).",
      * )
      */
     public function getUnpaidAction(Request $request)
     {
         $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRoles()[0]=="ROLE_STUDENT"){
-            $messages=$user->getRents()->getValues();
-            $output=array();
-            for ($i = 0; $i < count($messages); $i++) {
-                if (!$messages[$i]->getStatusPaid()){
-                    array_push($output,$messages[$i]->getJSON());
-                }
+        $messages=$user->getRents()->getValues();
+        $output=array();
+        for ($i = 0; $i < count($messages); $i++) {
+            if (!$messages[$i]->getStatusPaid()){
+                array_push($output,$messages[$i]->getJSON());
             }
-            return $this->returnjson(true,'Lista de mensualidades sin pagar.',$output);
-        }else{
-            return $this->returnjson(False,'unknown role.');
         }
+        return $this->returnjson(true,'Lista de mensualidades sin pagar.',$output);
     }
+
 
     /**
      * Create the receipt file by the date of the college, student, and the current rent.
@@ -285,37 +272,33 @@ class RentController extends Controller
             return $this->returnjson(false,'La mensualidad con id '.$id.' no existe.');
         }else{
             $user=$this->get('security.token_storage')->getToken()->getUser();
-            if ($user->getRoles()[0]=="ROLE_STUDENT"){
-                $agreement=$user->getCurrentAgreement();
-                if($agreement){
-                    if($agreement->verifyAgreementSigned()){
-                        try {
-                            //TODO get college by the agreement
-                            $rent->setStatusPaid(true);
-                            $rent->setCardHolder($cardHolder);
-                            $rent->setCardNumber($cardNumber);
-                            $rent->setDatePaid(date_create('now'));
-                            $college_data=$agreement->getRoom()->getCollege();
-                            $file_name=$this->create_receipt($college_data,$user,$rent);
-                            $rent->setFileReceipt($file_name);
-                            $em = $this->getDoctrine()->getManager();
-                            // tells Doctrine you want to (eventually) save the Product (no queries is done)
-                            $em->persist($rent);
+            $agreement=$user->getCurrentAgreement();
+            if($agreement){
+                if($agreement->verifyAgreementSigned()){
+                    try {
+                        //TODO get college by the agreement
+                        $rent->setStatusPaid(true);
+                        $rent->setCardHolder($cardHolder);
+                        $rent->setCardNumber($cardNumber);
+                        $rent->setDatePaid(date_create('now'));
+                        $college_data=$agreement->getRoom()->getCollege();
+                        $file_name=$this->create_receipt($college_data,$user,$rent);
+                        $rent->setFileReceipt($file_name);
+                        $em = $this->getDoctrine()->getManager();
+                        // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                        $em->persist($rent);
 
-                            //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
-                            $em->flush();
-                        } catch (\Exception $pdo_ex) {
-                            return $this->returnjson(false,'SQL exception.'.$pdo_ex);
-                        }
-                        return $this->returnjson(true,'La mensualidad se ha pagado correctamente.');
-                    }else{
-                        return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero sin firmar.');
+                        //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                        $em->flush();
+                    } catch (\Exception $pdo_ex) {
+                        return $this->returnjson(false,'SQL exception.'.$pdo_ex);
                     }
+                    return $this->returnjson(true,'La mensualidad se ha pagado correctamente.');
                 }else{
-                    return $this->returnjson(false,'El estudiante '.$student->getUsername().' no tiene contrato con ninguna residencai.');
+                    return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero sin firmar.');
                 }
             }else{
-                return $this->returnjson(false,'La mensualidad no puede ser pagada por otro role.');
+                return $this->returnjson(false,'El estudiante '.$student->getUsername().' no tiene contrato con ninguna residencai.');
             }
         }
     }

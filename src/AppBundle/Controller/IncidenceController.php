@@ -90,7 +90,7 @@ class IncidenceController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method update the state of a incidence. Can be called by user (College).",
+     *  description="This method update the state of a incidence. Can be called by user (College/ADMIN).",
      *  requirements={
      *      {
      *          "name"="id",
@@ -118,7 +118,6 @@ class IncidenceController extends Controller
             return $this->returnjson(False,'La inicidencia con id '.$id.' no existe.');
         }else{
             try {
-
                 $incidence->setStatus($status);
                 $em = $this->getDoctrine()->getManager();
                 // tells Doctrine you want to (eventually) save the Product (no queries is done)
@@ -135,7 +134,6 @@ class IncidenceController extends Controller
     }
 
 
-
     public function validateState($status)
     {
         if($status=="OPEN" or $status=="IN PROGRESS" or $status=="DONE"){
@@ -144,6 +142,7 @@ class IncidenceController extends Controller
             return false;
         }
     }
+
 
     /**
      * @ApiDoc(
@@ -172,14 +171,14 @@ class IncidenceController extends Controller
             }
             return $this->returnjson(true,'Lista de inicidencias.',$output);
         }else{
-            return $this->returnjson(False,'Unknow roles .');
+            return $this->returnjson(False,'Unknow roles.');
         }
     }
 
 
     /**
      * @ApiDoc(
-     *  description="Get number of incident In status OEPN. Can be called by user (College).",
+     *  description="Get number of incident In status OPEN. Can be called by user (College).",
      * )
      */
     public function getNumberOpenAction(Request $request)
@@ -199,7 +198,6 @@ class IncidenceController extends Controller
         }
         return $this->returnjson(true,'Numero de inicidencias abiertas ',$count);
     }
-
 
 
     /**
@@ -228,6 +226,4 @@ class IncidenceController extends Controller
         $response->setContent($content);
         return $response;
     }
-
-
 }

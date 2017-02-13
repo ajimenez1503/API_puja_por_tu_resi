@@ -47,6 +47,58 @@ security:
     - { path: ^/api/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/Signin/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/lucky/test/ , roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/lucky/helloo/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    #AGREEMENT CONTROLLER
+    - { path: ^/Agreement/create/ , roles: ROLE_ADMIN }
+    - { path: ^/Agreement/remove/ , roles: ROLE_STUDENT }
+    - { path: ^/Agreement/accept/ , roles: ROLE_STUDENT }
+    - { path: ^/Agreement/assignedRooms/ , roles: ROLE_ADMIN }
+    - { path: ^/Agreement/download/ , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
+    - { path: ^/Agreement/verifyUnsigned/ , roles: ROLE_STUDENT }
+    - { path: ^/Agreement/roomVerifyUnsigned/ , roles: ROLE_COLLEGE }
+    #BID CONTROLLER
+    - { path: ^/Bid/create/ , roles: ROLE_STUDENT }
+    - { path: ^/Bid/getBidsRoom/ , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
+    - { path: ^/Bid/get/ , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
+    - { path: ^/Bid/remove/ , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
+    - { path: ^/Bid/removeBidsRoom/ , roles: [ ROLE_COLLEGE, ROLE_ADMIN] }
+    - { path: ^/Bid/removeBidsStudent/ , roles: ROLE_ADMIN }
+    - { path: ^/Bid/removeBidRoomStudent/ , roles: ROLE_STUDENT }
+    #INCIDENCE CONTROLLER
+    - { path: ^/Incidence/create/ , roles: ROLE_STUDENT }
+    - { path: ^/Incidence/updateState/ , roles: [ROLE_COLLEGE, ROLE_ADMIN] }
+    - { path: ^/Incidence/get/ , roles: [ROLE_STUDENT, ROLE_COLLEGE] }
+    - { path: ^/Incidence/getNumberOpen/ , roles: ROLE_COLLEGE }
+    - { path: ^/Incidence/download/ , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
+    #MESSAGE CONTROLLER
+    - { path: ^/Message/create/ , roles:  [ROLE_STUDENT, ROLE_COLLEGE]  }
+    - { path: ^/Message/get/ , roles:  [ROLE_STUDENT, ROLE_COLLEGE]  }
+    - { path: ^/Message/countUnread/ , roles:  [ROLE_STUDENT, ROLE_COLLEGE]  }
+    - { path: ^/Message/countUnreadStudent/ , roles:   ROLE_COLLEGE }
+    - { path: ^/Message/openAll/ , roles:  [ROLE_STUDENT, ROLE_COLLEGE]  }
+    - { path: ^/Message/openStudent/ , roles: ROLE_COLLEGE  }
+    - { path: ^/Message/download/ , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
+    #PROFILE COLLEGE  CONTROLLER
+    - { path: ^/ProfileCollege/ , roles: ROLE_COLLEGE }
+    #PROFILE STUDENT  CONTROLLER
+    - { path: ^/ProfileStudent/ , roles: ROLE_STUDENT }
+    #RENT  CONTROLLER
+    - { path: ^/Rent/createAll , roles: ROLE_ADMIN }
+    - { path: ^/Rent/pay , roles: ROLE_STUDENT }
+    - { path: ^/Rent/get , roles:  [ROLE_STUDENT, ROLE_COLLEGE]  }
+    - { path: ^/Rent/getStudent , roles: ROLE_COLLEGE }
+    - { path: ^/Rent/getUnpaid , roles: ROLE_STUDENT }
+    - { path: ^/Rent/download , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
+    #ROOM  CONTROLLER
+    - { path: ^/Room/create/ , roles: ROLE_COLLEGE }
+    - { path: ^/Room/updateDate/ , roles: ROLE_COLLEGE }
+    - { path: ^/Room/getAll/ , roles: ROLE_COLLEGE }
+    - { path: ^/Room/getOFFERED/ , roles: ROLE_COLLEGE }
+    - { path: ^/Room/getFREE/ , roles: ROLE_COLLEGE }
+    - { path: ^/Room/get/ , roles: ROLE_COLLEGE }
+    - { path: ^/Room/remove/ , roles: ROLE_COLLEGE }
+    - { path: ^/Room/getSearch/ , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
+    - { path: ^/Room/getAllCompanyName/ , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
+    - { path: ^/Room/getSearchAll/ , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
+    - { path: ^/Room/download/ , roles:  [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
+    #Rest of the request
     - { path: ^/, roles: [ROLE_STUDENT, ROLE_COLLEGE] }

@@ -35,7 +35,7 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method create a message by the user (Student)",
+     *  description="This method create a message by the user (Student/COLLEGE)",
      *  requirements={
      *      {
      *          "name"="message",
@@ -156,40 +156,9 @@ class MessageController extends Controller
                 return $this->returnjson(false,'El estudiante '.$student->getUsername().' no tiene contrato con ninguna residencai.');
             }
         }else{
-            return $this->returnjson(False,'ROLE unknow');
+            return $this->returnjson(False,'ROLE unknown.');
         }
         return $this->returnjson(true,'El mensaje se ha creado correctamente.');
-    }
-
-
-    /**
-     * @ApiDoc(
-     *  description="This methodo open a message by the 'id'.",
-     *  requirements={
-     *      {
-     *          "name"="id",
-     *          "dataType"="integer",
-     *          "description"="ID of the message"
-     *      },
-     *  },
-     * )
-     */
-    public function openAction(Request $request)
-    {
-        $id=$request->request->get('id');
-        try {
-            $message = $this->getDoctrine()->getRepository('AppBundle:Message')->find($id);
-            $message->setOpen(true);
-            $em = $this->getDoctrine()->getManager();
-            // tells Doctrine you want to (eventually) save the Product (no queries is done)
-            $em->persist($message);
-
-            //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
-            $em->flush();
-        } catch (\Exception $pdo_ex) {
-            return $this->returnjson(false,'SQL exception.');
-        }
-        return $this->returnjson(true,'El mensaje se ha leido correctamente.');
     }
 
 
@@ -252,7 +221,6 @@ class MessageController extends Controller
     }
 
 
-
     /**
      * @ApiDoc(
      *  description="Get number of unread message of a user. This function can be called by User (College/Student).",
@@ -279,7 +247,6 @@ class MessageController extends Controller
     }
 
 
-
     /**
      * @ApiDoc(
      *  description="Get number of unread message from all the student of a college . This function can be called by User (College).",
@@ -287,60 +254,27 @@ class MessageController extends Controller
      */
     public function countUnreadStudentAction()
     {
+        $output=array();
+
         $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRoles()[0]=="ROLE_COLLEGE"){//college
-            $output=array();
-            $messages=$user->getMessages()->getValues();
-            $student=$user->getStudents();
-            $output=array();
-            for ($i = 0; $i < count($student); $i++) {
-                $count=0;
-                for ($j = 0; $j < count($messages); $j++) {
-                    if($messages[$j]->getStudent()==$student[$i] && !$messages[$j]->getReadByCollege()){
-                            $count+=1;
-                    }
+        $messages=$user->getMessages()->getValues();
+        $student=$user->getStudents();
+        for ($i = 0; $i < count($student); $i++) {
+            $count=0;
+            for ($j = 0; $j < count($messages); $j++) {
+                if($messages[$j]->getStudent()==$student[$i] && !$messages[$j]->getReadByCollege()){
+                        $count+=1;
                 }
-                array_unshift($output,
-                    array(
-                        'unread'=>$count,
-                        'student'=>$student[$i]->getJSON(),
-                    )
-                );
             }
-            return $this->returnjson(true,'Lista studiantes',$output);
-        }else{
-            return $this->returnjson(False,'Dont allow for another ROLEs');
+            array_unshift($output,
+                array(
+                    'unread'=>$count,
+                    'student'=>$student[$i]->getJSON(),
+                )
+            );
         }
+        return $this->returnjson(true,'Lista studiantes',$output);
     }
-
-
-    /**
-     * @ApiDoc(
-     *  description="Download attached file of the message. This function can be called by User (College/Student).",
-     *  requirements={
-     *      {
-     *          "name"="filename",
-     *          "dataType"="String",
-     *          "description"="Filename of the file to download"
-     *      },
-     *  },
-     * )
-     */
-    public function downloadAction($filename)
-    {
-        $path = $this->container->getParameter('storageFiles');
-        $content = file_get_contents($path.'/'.$filename);
-        $response = new Response();
-        //set headers
-        //$response->headers->set("Access-Control-Expose-Headers", "Content-Disposition");
-        $response->headers->add(array('Access-Control-Expose-Headers' =>  'Content-Disposition'));
-        $response->headers->set('Content-Type', 'mime/type');
-        $response->headers->set('Content-Disposition', 'attachment;filename="'.$filename);
-
-        $response->setContent($content);
-        return $response;
-    }
-
 
 
     /**
@@ -382,7 +316,6 @@ class MessageController extends Controller
     }
 
 
-
     /**
      * @ApiDoc(
      *  description="This method set ReadByCollege=true of a all the messages of user with a specific student. This function can be called by User (College).",
@@ -391,50 +324,72 @@ class MessageController extends Controller
     public function openStudentAction($username_student)
     {
         $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRoles()[0]=="ROLE_COLLEGE"){//college
-            //validate $username
-            if (is_null($username_student) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username_student,9,9)){
-                    return $this->returnjson(False,'Username '.$username_student.' no es valido.');
-            }
-            $student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username_student);
-            if (!$student) {
-                return $this->returnjson(False,'estudiante con username '.$username_student.' no existe.');
-            }
-            //verify signed agreement and college
-            $agreement=$student->getCurrentAgreement();
-            if($agreement){
-                if($agreement->verifyAgreementSigned()){
-                    if ($agreement->getCollege()==$user){
-                        $messages=$user->getMessages()->getValues();
-                        for ($i = 0; $i < count($messages); $i++) {
-                            if( !$messages[$i]->getReadByCollege()){
-                                try {
-                                    $messages[$i]->setReadByCollege(true);
-                                    $em = $this->getDoctrine()->getManager();
-                                    // tells Doctrine you want to (eventually) save the Product (no queries is done)
-                                    $em->persist($messages[$i]);
+        //validate $username
+        if (is_null($username_student) || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$username_student,9,9)){
+                return $this->returnjson(False,'Username '.$username_student.' no es valido.');
+        }
+        $student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username_student);
+        if (!$student) {
+            return $this->returnjson(False,'estudiante con username '.$username_student.' no existe.');
+        }
+        //verify signed agreement and college
+        $agreement=$student->getCurrentAgreement();
+        if($agreement){
+            if($agreement->verifyAgreementSigned()){
+                if ($agreement->getCollege()==$user){
+                    $messages=$user->getMessages()->getValues();
+                    for ($i = 0; $i < count($messages); $i++) {
+                        if( !$messages[$i]->getReadByCollege()){
+                            try {
+                                $messages[$i]->setReadByCollege(true);
+                                $em = $this->getDoctrine()->getManager();
+                                // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                                $em->persist($messages[$i]);
 
-                                    //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
-                                    $em->flush();
-                                } catch (\Exception $pdo_ex) {
-                                    return $this->returnjson(false,'SQL exception.');
-                                }
+                                //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                                $em->flush();
+                            } catch (\Exception $pdo_ex) {
+                                return $this->returnjson(false,'SQL exception.');
                             }
                         }
-                    }else{
-                        return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero no con esta residencia '.$user->getUsername().'');
                     }
                 }else{
-                    return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero sin firmar.');
+                    return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero no con esta residencia '.$user->getUsername().'');
                 }
             }else{
-                return $this->returnjson(false,'El estudiante '.$student->getUsername().' no tiene contrato con ninguna residencai.');
+                return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero sin firmar.');
             }
         }else{
-            return $this->returnjson(False,'Dont allow for another ROLEs');
+            return $this->returnjson(false,'El estudiante '.$student->getUsername().' no tiene contrato con ninguna residencai.');
         }
         return $this->returnjson(true,'Todos mensajes se ha leido correctamente.');
     }
 
 
+    /**
+     * @ApiDoc(
+     *  description="Download attached file of the message. This function can be called by User (College/Student).",
+     *  requirements={
+     *      {
+     *          "name"="filename",
+     *          "dataType"="String",
+     *          "description"="Filename of the file to download"
+     *      },
+     *  },
+     * )
+     */
+    public function downloadAction($filename)
+    {
+        $path = $this->container->getParameter('storageFiles');
+        $content = file_get_contents($path.'/'.$filename);
+        $response = new Response();
+        //set headers
+        //$response->headers->set("Access-Control-Expose-Headers", "Content-Disposition");
+        $response->headers->add(array('Access-Control-Expose-Headers' =>  'Content-Disposition'));
+        $response->headers->set('Content-Type', 'mime/type');
+        $response->headers->set('Content-Disposition', 'attachment;filename="'.$filename);
+
+        $response->setContent($content);
+        return $response;
+    }
 }

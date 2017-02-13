@@ -33,6 +33,7 @@ class AgreementController extends Controller
         return $response;
     }
 
+
     /**
      * Create the agreement file by the date of the college, student, room and the current agreement.
      * Using knp_snappy and twig to generate a pdf file.
@@ -55,9 +56,10 @@ class AgreementController extends Controller
         return $filename;
     }
 
+
      /**
       * @ApiDoc(
-      *  description="This method create a Agreement between a student and a room. That fucntion is called by the system automatically.",
+      *  description="This method create a Agreement between a student and a room. That fucntion is called by the system automatically (ROLE_ADMIN).",
       *  requirements={
       *      {
       *          "name"="room_id",
@@ -121,11 +123,9 @@ class AgreementController extends Controller
     }
 
 
-
-
     /**
      * @ApiDoc(
-     *  description="This method remove a Agreement between a student and a room (the agreement which is valid according to the dates). That fucntion is called by the the user(Student).",
+     *  description="This method remove a Agreement between a student and a room (the agreement which is valid according to the dates). That fucntion is called by the the user (Student).",
      *  requirements={
      *      {
      *          "name"="room_id",
@@ -147,9 +147,6 @@ class AgreementController extends Controller
            return $this->returnjson(False,'Habitacion con id '.$room_id.' no tiene un contrato.');
        }
        $student=$this->get('security.token_storage')->getToken()->getUser();
-       if ($student->getRoles()[0]!="ROLE_STUDENT"){
-           return $this->returnjson(False,'El usuario (residencia) no puede tener un contrato con una habitacion.');
-       }
        $agreement_student=$student->getCurrentAgreement();
        if(!$agreement_student){
            return $this->returnjson(False,'Estudiente '.$username.' no tiene un contrato.');
@@ -157,29 +154,25 @@ class AgreementController extends Controller
        if($agreement_student!=$agreement_room){
             return $this->returnjson(False,'Estudiente '.$username.'  y habitacion con id '.$room_id.' tienen distinto contrato.');
        }
-       if ($student->getRoles()[0]=="ROLE_STUDENT"){
-           try {
-               $student->removeAgreement($agreement_student);
-               $room->removeAgreement($agreement_student);
-               $em = $this->getDoctrine()->getManager();
-               // tells Doctrine you want to (eventually) save the Product (no queries is done)
-               $em->remove($agreement_student);
-               $em->persist($student);
-               $em->persist($room);
+       try {
+           $student->removeAgreement($agreement_student);
+           $room->removeAgreement($agreement_student);
+           $em = $this->getDoctrine()->getManager();
+           // tells Doctrine you want to (eventually) save the Product (no queries is done)
+           $em->remove($agreement_student);
+           $em->persist($student);
+           $em->persist($room);
 
-               //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
-               $em->flush();
-           } catch (\Exception $pdo_ex) {
-               return $this->returnjson(false,'SQL exception.');
-           }
-           return $this->returnjson(true,'El contrato se ha eliminado correctamente.');
-       }else{
-           return $this->returnjson(False,'El usuario (residencia) no puede tener un contrato con una habitacion.');
+           //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+           $em->flush();
+       } catch (\Exception $pdo_ex) {
+           return $this->returnjson(false,'SQL exception.');
        }
+       return $this->returnjson(true,'El contrato se ha eliminado correctamente.');
     }
 
 
-   /**
+    /**
     * @ApiDoc(
     *  description="This method accept a Agreement between a student and a room. That fucntion is called by a user (student).",
     *  requirements={
@@ -208,9 +201,6 @@ class AgreementController extends Controller
           return $this->returnjson(False,'Habitacion con id '.$room_id.' no tiene un contrato.');
       }
       $student=$this->get('security.token_storage')->getToken()->getUser();
-      if ($student->getRoles()[0]!="ROLE_STUDENT"){
-          return $this->returnjson(False,'El usuario (residencia) no puede tener un contrato con una habitacion.');
-      }
       if(!$student->getCurrentAgreement()){
           return $this->returnjson(False,'Estudiente '.$username.' ya tiene un contrato.');
       }
@@ -262,38 +252,38 @@ class AgreementController extends Controller
     }
 
 
-  /**
-   * @ApiDoc(
-   *  description="This method assigned offered room to a student (with more point) the last day bid. That fucntion is called automatically.",
-   * )
-   */
-     public function assignedRoomsAction(Request $request)
-     {
-         //get the list of offeredrooms
-         //get the list of bid of every Room
-         //verify if the  student ( which more point) has already a signed currect contract or not.
-         //when assigned a student a room, remove all the bid of a student.
-         $colleges = $this->getDoctrine()->getRepository('AppBundle:College')->findAll();
-         if (!$colleges) {
-             return $this->returnjson(false,'No hay ninguna residencia.');
-         }else {
-             $output=array();
-             $today=date_create('now')->format('Y-m-d');//year month and day (not hour and minute)
-             for ($i = 0; $i < count($colleges); $i++) {
-                 //check if the college has OFFERED rooms
-                 $rooms=$colleges[$i]->getRooms();
-                 for ($j = 0; $j < count($rooms); $j++) {
-                     if($rooms[$j]->getDateEndBid()->format('Y-m-d')==$today){
-                         $bids=$rooms[$j]->getBids();
-                         if (count($bids)>0){
-                             $student=$bids[0]->getStudent();
-                             for($c=1; $c < count($bids); $c++) {//get the student with more point bid in a room
+    /**
+    * @ApiDoc(
+    *  description="This method assigned offered room to a student (with more point) the last day bid. That fucntion is called automatically (ROLE_ADMIN).",
+    * )
+    */
+    public function assignedRoomsAction(Request $request)
+    {
+        //get the list of offeredrooms
+        //get the list of bid of every Room
+        //verify if the  student ( which more point) has already a signed currect contract or not.
+        //when assigned a student a room, remove all the bid of a student.
+        $colleges = $this->getDoctrine()->getRepository('AppBundle:College')->findAll();
+        if (!$colleges) {
+            return $this->returnjson(false,'No hay ninguna residencia.');
+        }else {
+            $output=array();
+            $today=date_create('now')->format('Y-m-d');//year month and day (not hour and minute)
+            for ($i = 0; $i < count($colleges); $i++) {
+                //check if the college has OFFERED rooms
+                $rooms=$colleges[$i]->getRooms();
+                for ($j = 0; $j < count($rooms); $j++) {
+                    if($rooms[$j]->getDateEndBid()->format('Y-m-d')==$today){
+                        $bids=$rooms[$j]->getBids();
+                        if (count($bids)>0){
+                            $student=$bids[0]->getStudent();
+                            for($c=1; $c < count($bids); $c++) {//get the student with more point bid in a room
                                 if($bids[$c]->getStudent()->getPoint()>$student->getPoint()){
                                     $student=$bids[$c]->getStudent();
                                 }
-                             }
-                             $agreement_student=$student->getCurrentAgreement();
-                             if(!$agreement_student){
+                            }
+                            $agreement_student=$student->getCurrentAgreement();
+                            if(!$agreement_student){
                                 //$rooms[$j]  $student
                                 array_unshift($output,array(
                                     'room' => $rooms[$j]->getId(),
@@ -316,42 +306,42 @@ class AgreementController extends Controller
                                 ));
 
                                 return $this->returnjson(true,'List de habitaciones asignadas.',$output );
-                             }
-                         }
-                     }
-                 }
-             }
-             return $this->returnjson(true,'ouput.',$output);
-         }
-     }
+                            }
+                        }
+                    }
+                }
+            }
+            return $this->returnjson(true,'ouput.',$output);
+        }
+    }
 
 
-  /**
-   * @ApiDoc(
-   *  description="Download agreement file. Can be called by user (Student/College).",
-   *  requirements={
-   *      {
-   *          "name"="filename",
-   *          "dataType"="String",
-   *          "description"="Filename agreement"
-   *      },
-   *  },
-   * )
-   */
-  public function downloadAction($filename)
-  {
-      $path = $this->container->getParameter('storageFiles');
-      $content = file_get_contents($path.'/'.$filename);
-      $response = new Response();
-      //set headers
-      //$response->headers->set("Access-Control-Expose-Headers", "Content-Disposition");
-      $response->headers->add(array('Access-Control-Expose-Headers' =>  'Content-Disposition'));
-      $response->headers->set('Content-Type', 'mime/type');
-      $response->headers->set('Content-Disposition', 'attachment;filename="'.$filename);
+    /**
+    * @ApiDoc(
+    *  description="Download agreement file. Can be called by user (Student/College/ADMIN).",
+    *  requirements={
+    *      {
+    *          "name"="filename",
+    *          "dataType"="String",
+    *          "description"="Filename agreement"
+    *      },
+    *  },
+    * )
+    */
+    public function downloadAction($filename)
+    {
+        $path = $this->container->getParameter('storageFiles');
+        $content = file_get_contents($path.'/'.$filename);
+        $response = new Response();
+        //set headers
+        //$response->headers->set("Access-Control-Expose-Headers", "Content-Disposition");
+        $response->headers->add(array('Access-Control-Expose-Headers' =>  'Content-Disposition'));
+        $response->headers->set('Content-Type', 'mime/type');
+        $response->headers->set('Content-Disposition', 'attachment;filename="'.$filename);
 
-      $response->setContent($content);
-      return $response;
-  }
+        $response->setContent($content);
+        return $response;
+    }
 
 
   /**
@@ -362,9 +352,6 @@ class AgreementController extends Controller
    public function verifyUnsignedAction(Request $request)
    {
         $student=$this->get('security.token_storage')->getToken()->getUser();
-        if ($student->getRoles()[0]!="ROLE_STUDENT"){
-            return $this->returnjson(False,'El usuario (residencia) no puede tener un contrato con una habitacion.');
-        }
         $agreement=$student->getCurrentAgreement();
         if($agreement){
             $output=array(
@@ -378,7 +365,6 @@ class AgreementController extends Controller
             return $this->returnjson(False,'Estudiante '.$student->getUsername().' no tiene contrato .');
         }
    }
-
 
 
    /**
@@ -404,9 +390,4 @@ class AgreementController extends Controller
             return $this->returnjson(False,'Room '.$room_id.' no tiene contrato .');
         }
     }
-
-
-
-
-
 }

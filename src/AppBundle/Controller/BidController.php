@@ -53,38 +53,34 @@ class BidController extends Controller
             return $this->returnjson(False,'Habitacion con id '.$room_id.' no existe.');
         }else {
             $user=$this->get('security.token_storage')->getToken()->getUser();
-            if ($user->getRoles()[0]=="ROLE_STUDENT"){
-                //Check that the user has not more that 5 bid already.
-                $list_bids=$user->getBids();
-                if (count($list_bids)<5){
-                    //check if the user already have bid for that room_id
-                    for ($i = 0; $i < count($list_bids); $i++) {
-                        if ($list_bids[$i]->getRoom()==$room){
-                            return $this->returnjson(False,'El usuario ya ha pujada por esta habitacion.');
-                        }
+            //Check that the user has not more that 5 bid already.
+            $list_bids=$user->getBids();
+            if (count($list_bids)<5){
+                //check if the user already have bid for that room_id
+                for ($i = 0; $i < count($list_bids); $i++) {
+                    if ($list_bids[$i]->getRoom()==$room){
+                        return $this->returnjson(False,'El usuario ya ha pujada por esta habitacion.');
                     }
-                    try {
-                        $bid = new Bid();
-                        $bid->setStudent($user);
-                        $bid->setRoom($room);
-                        $bid->setPoint($user->get_point());
-                        $user->addBid($bid);
-                        $em = $this->getDoctrine()->getManager();
-                        // tells Doctrine you want to (eventually) save the Product (no queries is done)
-                        $em->persist($bid);
-                        $em->persist($user);
-                        
-                        //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
-                        $em->flush();
-                    } catch (\Exception $pdo_ex) {
-                        return $this->returnjson(false,'SQL exception.');
-                    }
-                    return $this->returnjson(true,'La apuesta se ha creado correctamente.');
-                }else{
-                    return $this->returnjson(False,'El usuario ya ha pujada por 5 habitaciones.');
                 }
+                try {
+                    $bid = new Bid();
+                    $bid->setStudent($user);
+                    $bid->setRoom($room);
+                    $bid->setPoint($user->get_point());
+                    $user->addBid($bid);
+                    $em = $this->getDoctrine()->getManager();
+                    // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                    $em->persist($bid);
+                    $em->persist($user);
+
+                    //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                    $em->flush();
+                } catch (\Exception $pdo_ex) {
+                    return $this->returnjson(false,'SQL exception.');
+                }
+                return $this->returnjson(true,'La apuesta se ha creado correctamente.');
             }else{
-                return $this->returnjson(False,'El usuario (residencia) no puede pujar por una habitacion.');
+                return $this->returnjson(False,'El usuario ya ha pujada por 5 habitaciones.');
             }
         }
     }
@@ -92,7 +88,7 @@ class BidController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get all the bid of a room by its id. Can be called by user (College/Student). Format JSON.",
+     *  description="Get all the bid of a room by its id. Can be called by user (College/Student/ADMIN). Format JSON.",
      * )
      */
     public function getBidsRoomAction($id)
@@ -112,6 +108,7 @@ class BidController extends Controller
         }
     }
 
+
     /**
      * Sort a array which is composed by dict
      */
@@ -128,7 +125,7 @@ class BidController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get data of a bid. Can be called by user (College/Student). Format JSON.",
+     *  description="Get data of a bid. Can be called by user (College/Student/ALL). Format JSON.",
      * )
      */
     public function getAction($id)
@@ -144,7 +141,7 @@ class BidController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Remove a bid. Can be called by user (College/Student).",
+     *  description="Remove a bid. Can be called by user (College/Student/ADMIN).",
      * )
      */
     public function removeAction($id)
@@ -161,10 +158,9 @@ class BidController extends Controller
     }
 
 
-
     /**
      * @ApiDoc(
-     *  description="Remove all the bids of a room by its id. Can be called by user (College) or automatically.",
+     *  description="Remove all the bids of a room by its id. Can be called by user (College/ADMIN).",
      * )
      */
     public function removeBidsRoomAction($id)
@@ -184,9 +180,10 @@ class BidController extends Controller
         }
     }
 
+
     /**
      * @ApiDoc(
-     *  description="Remove all the bids of a student by username. Can be called automatically.",
+     *  description="Remove all the bids of a student by username. Can be called automatically (ROLE_ADMIN).",
      * )
      */
     public function removeBidsStudentAction($username)
@@ -209,6 +206,7 @@ class BidController extends Controller
         }
     }
 
+
     /**
      * @ApiDoc(
      *  description="Remove the bid of a user (student) above a room by its id. Can be called by user (Student).",
@@ -229,22 +227,16 @@ class BidController extends Controller
             return $this->returnjson(False,'Habitacion con id '.$id.' no existe.');
         }else {
             $user=$this->get('security.token_storage')->getToken()->getUser();
-            if ($user->getRoles()[0]=="ROLE_STUDENT"){
-                $list_bids=$room->getBids()->getValues();
-                for ($i = 0; $i < count($list_bids); $i++) {
-                    if ($list_bids[$i]->getStudent()==$user){
-                        $em = $this->getDoctrine()->getManager();
-                        $em->remove($list_bids[$i]);
-                        $em->flush();
-                        return $this->returnjson(true,'Se han eliminado la puja.');
-                    }
+            $list_bids=$room->getBids()->getValues();
+            for ($i = 0; $i < count($list_bids); $i++) {
+                if ($list_bids[$i]->getStudent()==$user){
+                    $em = $this->getDoctrine()->getManager();
+                    $em->remove($list_bids[$i]);
+                    $em->flush();
+                    return $this->returnjson(true,'Se han eliminado la puja.');
                 }
-                return $this->returnjson(true,'El usuario no tiene pujas en esta habitacion.');
-            }else{
-                return $this->returnjson(False,'El usuario (residencia) no puede eliminar la puja.');
             }
+            return $this->returnjson(true,'El usuario no tiene pujas en esta habitacion.');
         }
     }
-
-
 }

@@ -14,7 +14,6 @@ use AppBundle\Entity\Room;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
-
 class RoomController extends Controller
 {
 
@@ -133,7 +132,7 @@ class RoomController extends Controller
         $desk=$request->request->get('desk');
         $wardrove=$request->request->get('wardrove');
 
-        //TODO validate everything
+        // validate everything
         if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$name)){
                 return $this->returnjson(false,'Nombre no es valido (size).');
         }
@@ -232,17 +231,12 @@ class RoomController extends Controller
     public function getAllAction(Request $request)
     {
         $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRoles()[0]=="ROLE_COLLEGE"){
-            $rooms=$user->getRooms()->getValues();
-
-            $output=array();
-            for ($i = 0; $i < count($rooms); $i++) {
-                array_unshift($output,$rooms[$i]->getJSON());
-            }
-            return $this->returnjson(true,'Lista de habitaciones.',$output);
-        }else{
-            return $this->returnjson(False,'The user Student cannot get rooms');
+        $rooms=$user->getRooms()->getValues();
+        $output=array();
+        for ($i = 0; $i < count($rooms); $i++) {
+            array_unshift($output,$rooms[$i]->getJSON());
         }
+        return $this->returnjson(true,'Lista de habitaciones.',$output);
     }
 
     /**
@@ -253,52 +247,44 @@ class RoomController extends Controller
     public function getFREEAction(Request $request)
     {
         $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRoles()[0]=="ROLE_COLLEGE"){
-            $rooms=$user->getRooms()->getValues();
-            $today=date_create('now')->format('Y-m-d');
-            $output=array();
-            for ($i = 0; $i < count($rooms); $i++) {
-                if(
-                    ($rooms[$i]->getDateStartSchool()->format('Y-m-d')>$today && $rooms[$i]->getDateEndBid()->format('Y-m-d')<$today) ||//between bid and school
-                    ($rooms[$i]->getDateStartSchool()->format('Y-m-d')>$today && $rooms[$i]->getDateStartBid()->format('Y-m-d')>$today)||//before bid and before school
-                    ($rooms[$i]->getDateEndBid()->format('Y-m-d')<$today && $rooms[$i]->getDateEndSchool()->format('Y-m-d')<$today)  //after bid and after school
-                ){
-                    array_unshift($output,$rooms[$i]->getJSON());
-                }
+        $rooms=$user->getRooms()->getValues();
+        $today=date_create('now')->format('Y-m-d');
+        $output=array();
+        for ($i = 0; $i < count($rooms); $i++) {
+            if(
+                ($rooms[$i]->getDateStartSchool()->format('Y-m-d')>$today && $rooms[$i]->getDateEndBid()->format('Y-m-d')<$today) ||//between bid and school
+                ($rooms[$i]->getDateStartSchool()->format('Y-m-d')>$today && $rooms[$i]->getDateStartBid()->format('Y-m-d')>$today)||//before bid and before school
+                ($rooms[$i]->getDateEndBid()->format('Y-m-d')<$today && $rooms[$i]->getDateEndSchool()->format('Y-m-d')<$today)  //after bid and after school
+            ){
+                array_unshift($output,$rooms[$i]->getJSON());
             }
-            return $this->returnjson(true,'Lista de habitaciones sin usar (libres).',$output);
-        }else{
-            return $this->returnjson(False,'The user Student cannot get rooms');
         }
+        return $this->returnjson(true,'Lista de habitaciones sin usar (libres).',$output);
     }
 
     /**
      * @ApiDoc(
-     *  description="Get list of OFFERED rooms of a user (College). Format JSON. Can be called by user (College/Student).",
+     *  description="Get list of OFFERED rooms of a user (College). Format JSON. Can be called by user (College).",
      * )
      */
     public function getOFFEREDAction(Request $request)
     {
         $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRoles()[0]=="ROLE_COLLEGE"){
-            $rooms=$user->getRooms()->getValues();
-            $today=date_create('now')->format('Y-m-d');//year month and day (not hour and minute)
-            $output=array();
-            for ($i = 0; $i < count($rooms); $i++) {
-                if($rooms[$i]->getDateStartBid()->format('Y-m-d')<=$today && $rooms[$i]->getDateEndBid()->format('Y-m-d')>=$today){
-                    array_unshift($output,$rooms[$i]->getJSON());
-                }
+        $rooms=$user->getRooms()->getValues();
+        $today=date_create('now')->format('Y-m-d');//year month and day (not hour and minute)
+        $output=array();
+        for ($i = 0; $i < count($rooms); $i++) {
+            if($rooms[$i]->getDateStartBid()->format('Y-m-d')<=$today && $rooms[$i]->getDateEndBid()->format('Y-m-d')>=$today){
+                array_unshift($output,$rooms[$i]->getJSON());
             }
-            return $this->returnjson(true,'Lista de habitaciones para pujar.',$output);
-        }else{
-            return $this->returnjson(False,'The user Student cannot get rooms');
         }
+        return $this->returnjson(true,'Lista de habitaciones para pujar.',$output);
     }
 
 
     /**
      * @ApiDoc(
-     *  description="Get room of the id of a user (College). Format JSON.",
+     *  description="Get room of the id of a user (College). Format JSON. Can be called by user (College).",
      * )
      */
     public function getAction($id)
@@ -312,10 +298,9 @@ class RoomController extends Controller
     }
 
 
-
     /**
      * @ApiDoc(
-     *  description="Remove room of the id of a user (College).",
+     *  description="Remove room of the id of a user (College). Can be called by user (College).",
      * )
      */
     public function removeAction($id)
@@ -343,7 +328,7 @@ class RoomController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Download pictures rooms.",
+     *  description="Download pictures rooms. Can be called by user (College/STUDENT/ADMIN).",
      *  requirements={
      *      {
      *          "name"="filename",
@@ -369,10 +354,9 @@ class RoomController extends Controller
     }
 
 
-
     /**
      * @ApiDoc(
-     *  description="This method update the date bid/school of a room.. Can be called by user (College).",
+     *  description="This method update the date bid/school of a room. Can be called by user (College).",
      *  requirements={
      *      {
      *          "name"="id",
@@ -469,7 +453,7 @@ class RoomController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get all the colleges with the data of college and all the OFFERED room. This function can be called by User (College/Student). Format JSON.",
+     *  description="Get all the colleges with the data of college and all the OFFERED room. This function can be called by User (College/Student/ADMIN). Format JSON.",
      * )
      */
     public function getSearchAllAction(Request $request)
@@ -489,7 +473,6 @@ class RoomController extends Controller
                 }
             }
             return $this->returnjson(true,'Lista de residencias y habitaciones para pujar.',$output);
-
         }
     }
 
@@ -497,7 +480,7 @@ class RoomController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get all the colleges with the data of college and all the OFFERED room. The college and the room should pass the restrictions: price, equipment, specific_college. This function can be called by User (College/Student). Format JSON.",
+     *  description="Get all the colleges with the data of college and all the OFFERED room. The college and the room should pass the restrictions: price, equipment, specific_college. This function can be called by User (College/Student/ADMIN). Format JSON.",
      *  requirements={
      *      {
      *          "name"="college_company_name",
@@ -647,14 +630,13 @@ class RoomController extends Controller
                 }
             }
             return $this->returnjson(true,'Lista de residencias y habitaciones para pujar.',$output);
-
         }
     }
 
 
     /**
      * @ApiDoc(
-     *  description="Get the companyName of all the colleges. This function can be called by User (College/Student). Format JSON.",
+     *  description="Get the companyName of all the colleges. This function can be called by User (College/Student/ADMIN). Format JSON.",
      * )
      */
     public function getAllCompanyNameAction(Request $request)

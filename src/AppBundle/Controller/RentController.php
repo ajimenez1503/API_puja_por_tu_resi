@@ -35,7 +35,7 @@ class RentController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method create all the rents of a user during his agreement. One per moth. It is called  automatically (ROLE_ADMIN)",
+     *  description="This method create all the rents of a user during his agreement. One per moth. Can be called by user (ADMIN) automatically",
      *  requirements={
      *      {
      *          "name"="username_student",
@@ -124,7 +124,7 @@ class RentController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get list of rent of a user (Student). In JSON format. This function can be called by User (College).",
+     *  description="Get list of rent of a user (Student). In JSON format. Can be called by user (College).",
      *  requirements={
      *      {
      *          "name"="username_student",

@@ -453,7 +453,7 @@ class RoomController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get all the colleges with the data of college and all the OFFERED room. This function can be called by User (College/Student/ADMIN). Format JSON.",
+     *  description="Get all the colleges with the data of college and all the OFFERED room. This function can be called by User (College/Student/ADMIN).",
      * )
      */
     public function getSearchAllAction(Request $request)
@@ -480,7 +480,7 @@ class RoomController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get all the colleges with the data of college and all the OFFERED room. The college and the room should pass the restrictions: price, equipment, specific_college. This function can be called by User (College/Student/ADMIN). Format JSON.",
+     *  description="Get all the colleges with the data of college and all the OFFERED room. The college and the room should pass the restrictions: price, equipment, specific_college. This function can be called by User (College/Student/ADMIN)",
      *  requirements={
      *      {
      *          "name"="college_company_name",
@@ -636,7 +636,7 @@ class RoomController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get the companyName of all the colleges. This function can be called by User (College/Student/ADMIN). Format JSON.",
+     *  description="Get the companyName of all the colleges. This function can be called by User (College/Student/ADMIN).",
      * )
      */
     public function getAllCompanyNameAction(Request $request)

@@ -35,7 +35,7 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method create a message by the user (Student/COLLEGE)",
+     *  description="This method create a message by the user (Student/COLLEGE). Can be called by user (College/Student).",
      *  requirements={
      *      {
      *          "name"="message",
@@ -164,7 +164,7 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get list of messages of a user (Student || College). In JSON format. This function can be called by User (College/Student).",
+     *  description="Get list of messages of a user (Student || College). Can be called by user (College/Student).",
      *  requirements={
      *      {
      *          "name"="username_student",
@@ -223,7 +223,7 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get number of unread message of a user. This function can be called by User (College/Student).",
+     *  description="Get number of unread message of a user. Can be called by user (College/Student).",
      * )
      */
     public function countUnreadAction(Request $request)
@@ -249,7 +249,7 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get number of unread message from all the student of a college . This function can be called by User (College).",
+     *  description="Get number of unread message from all the student of a college. Can be called by user (College).",
      * )
      */
     public function countUnreadStudentAction()
@@ -279,7 +279,7 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method set ReadBy=true of a all the messages of user. This function can be called by User (College/Student).",
+     *  description="This method set ReadBy=true of a all the messages of user. Can be called by user (College/Student).",
      * )
      */
     public function openAllAction(Request $request)
@@ -318,7 +318,7 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method set ReadByCollege=true of a all the messages of user with a specific student. This function can be called by User (College).",
+     *  description="This method set ReadByCollege=true of a all the messages of user with a specific student. Can be called by user (College).",
      * )
      */
     public function openStudentAction($username_student)
@@ -368,7 +368,7 @@ class MessageController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Download attached file of the message. This function can be called by User (College/Student).",
+     *  description="Download attached file of the message. Can be called by user (College/Student).",
      *  requirements={
      *      {
      *          "name"="filename",

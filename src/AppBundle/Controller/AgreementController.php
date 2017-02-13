@@ -59,7 +59,7 @@ class AgreementController extends Controller
 
      /**
       * @ApiDoc(
-      *  description="This method create a Agreement between a student and a room. That fucntion is called by the system automatically (ROLE_ADMIN).",
+      *  description="This method create a Agreement between a student and a room. Can be called by user(ADMIN) automatically.",
       *  requirements={
       *      {
       *          "name"="room_id",
@@ -125,7 +125,7 @@ class AgreementController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method remove a Agreement between a student and a room (the agreement which is valid according to the dates). That fucntion is called by the the user (Student).",
+     *  description="This method remove a Agreement between a student and a room (the agreement which is valid according to the dates). Can be called by user (Student).",
      *  requirements={
      *      {
      *          "name"="room_id",
@@ -174,7 +174,7 @@ class AgreementController extends Controller
 
     /**
     * @ApiDoc(
-    *  description="This method accept a Agreement between a student and a room. That fucntion is called by a user (student).",
+    *  description="This method accept a Agreement between a student and a room. Can be called by user  (student).",
     *  requirements={
     *      {
     *          "name"="room_id",
@@ -254,7 +254,7 @@ class AgreementController extends Controller
 
     /**
     * @ApiDoc(
-    *  description="This method assigned offered room to a student (with more point) the last day bid. That fucntion is called automatically (ROLE_ADMIN).",
+    *  description="This method assigned offered room to a student (with more point) the last day bid. Can be called by user (ADMIN) automatically.",
     * )
     */
     public function assignedRoomsAction(Request $request)
@@ -369,7 +369,7 @@ class AgreementController extends Controller
 
    /**
     * @ApiDoc(
-    *  description="Verify is a room has a agreement without signed. Return the agreemnt. That fucntion is called by a user (College).",
+    *  description="Verify is a room has a agreement without signed. Return the agreemnt. Can be called by user (College).",
     * )
     */
     public function roomVerifyUnsignedAction($room_id)

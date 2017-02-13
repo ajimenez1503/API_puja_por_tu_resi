@@ -47,7 +47,7 @@ class ProfileCollegeController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get all the student of a college. Can be called by user (College ).",
+     *  description="Get all the student of a college. Can be called by user (College).",
      * )
      */
     public function getStudentsAction()
@@ -366,7 +366,7 @@ class ProfileCollegeController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get all the student of a college. For every student get: list_rents, room, agreement, student_data. Can be called by user (College ).",
+     *  description="Get all the student of a college. For every student get: list_rents, room, agreement, student_data. Can be called by user (College).",
      * )
      */
     public function getStudentsCompleteAction()

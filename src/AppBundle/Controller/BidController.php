@@ -88,7 +88,7 @@ class BidController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get all the bid of a room by its id. Can be called by user (College/Student/ADMIN). Format JSON.",
+     *  description="Get all the bid of a room by its id. Can be called by user (College/Student/ADMIN).",
      * )
      */
     public function getBidsRoomAction($id)
@@ -125,7 +125,7 @@ class BidController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get data of a bid. Can be called by user (College/Student/ALL). Format JSON.",
+     *  description="Get data of a bid. Can be called by user (College/Student/ADMIN).",
      * )
      */
     public function getAction($id)
@@ -183,7 +183,7 @@ class BidController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Remove all the bids of a student by username. Can be called automatically (ROLE_ADMIN).",
+     *  description="Remove all the bids of a student by username. Can be called by user (ADMIN) automatically.",
      * )
      */
     public function removeBidsStudentAction($username)

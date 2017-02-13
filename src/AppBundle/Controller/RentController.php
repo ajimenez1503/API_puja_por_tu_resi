@@ -258,7 +258,7 @@ class RentController extends Controller
         $cardNumber=$request->request->get('cardNumber');
         $cardNumber=preg_replace("/\D/", "", $cardNumber);//Delete everthing that is not a digit
 
-        if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$cardHolder,1,20)){
+        if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$cardHolder,1,30)){
             return $this->returnjson(false,'Propietario de la tarjeta no es valido.');
         }if (!$this->get('app.validate')->validateLuhnCardNumber($this->get('validator'),$cardNumber)){
             return $this->returnjson(false,'Numero de tarjeta no es valido.');

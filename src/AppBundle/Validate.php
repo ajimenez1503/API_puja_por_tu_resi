@@ -6,6 +6,9 @@ use Symfony\Component\Validator\Constraints\Length as LengthConstraint;
 use Symfony\Component\Validator\Constraints\Url as UrlConstraint;
 use Symfony\Component\Validator\Constraints\File as FileValidatorConstraint;
 use Symfony\Component\Validator\Constraints\Luhn as LuhnValidatorConstraint;
+use Symfony\Component\Validator\Constraints\Iban as IbanConstraint;
+use Symfony\Component\Validator\Constraints\Bic as BicConstraint;
+
 
 
 
@@ -50,6 +53,55 @@ class Validate
         $errors = $validator->validate(
             $CardNumber,
             $LuhnValidatorConstraint
+        );
+        if ($errors==""){//if it is empty
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+
+    /**
+    * Validate IBAN
+    *
+    * @param validator_module  $validator
+    * @param string $IBAN    IBAN
+    *
+    * @return bool
+    */
+    public function validateIBAN($validator,$IBAN)
+    {
+        $IbanConstraint = new IbanConstraint();
+        $IbanConstraint->message = 'IBAN is not correct.';
+        $errors = $validator->validate(
+            $IBAN,
+            $IbanConstraint
+        );
+        if ($errors==""){//if it is empty
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+    /**
+    * Validate BIC
+    *
+    * @param validator_module  $validator
+    * @param string $BIC    BIC
+    *
+    * @return bool
+    */
+    public function validateBIC($validator,$BIC)
+    {
+        $BicConstraint = new BicConstraint();
+        $BicConstraint->message = 'BIC is not correct.';
+        $errors = $validator->validate(
+            $BIC,
+            $BicConstraint
         );
         if ($errors==""){//if it is empty
             return true;

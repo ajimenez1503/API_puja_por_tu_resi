@@ -21,7 +21,7 @@ class Bank
     /**
      * @var string
      */
-    private $SWIFT;
+    private $BIC;
 
     /**
      * @var string
@@ -78,27 +78,27 @@ class Bank
     }
 
     /**
-     * Set sWIFT
+     * Set BIC
      *
-     * @param string $sWIFT
+     * @param string $BIC
      *
      * @return Bank
      */
-    public function setSWIFT($sWIFT)
+    public function setBIC($bIC)
     {
-        $this->SWIFT = $sWIFT;
+        $this->BIC = $bIC;
 
         return $this;
     }
 
     /**
-     * Get sWIFT
+     * Get BIC
      *
      * @return string
      */
-    public function getSWIFT()
+    public function getBIC()
     {
-        return $this->SWIFT;
+        return $this->BIC;
     }
 
     /**

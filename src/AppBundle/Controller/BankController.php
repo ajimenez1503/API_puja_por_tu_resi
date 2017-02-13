@@ -43,9 +43,9 @@ class BankController extends Controller
      *          "description"="IBAN of the bank account."
      *      },
      *      {
-     *          "name"="SWIFT",
+     *          "name"="BIC",
      *          "dataType"="string",
-     *          "description"="SWIFT of the bank account."
+     *          "description"="BIC of the bank account."
      *      },
      *      {
      *          "name"="account_holder",
@@ -57,15 +57,21 @@ class BankController extends Controller
      */
     public function createAction(Request $request)
     {
-        $IBAN=$request->request->get('IBAN');
-        $SWIFT=$request->request->get('SWIFT');
+        $IBAN=str_replace(' ', '',$request->request->get('IBAN',""));
+        $BIC=str_replace(' ', '',$request->request->get('BIC'));
         $account_holder=$request->request->get('account_holder');
-
+        if ($IBAN=="" || !$this->get('app.validate')->validateIBAN($this->get('validator'),$IBAN)){
+            return $this->returnjson(false,'IBAN no es valido.');
+        }if ($BIC=="" || !$this->get('app.validate')->validateBIC($this->get('validator'),$BIC)){
+            return $this->returnjson(false,'BIC no es valido.');
+        }if ($account_holder=="" || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$account_holder,1,30)){
+            return $this->returnjson(false,'Propietario de la cuenta no es valido.');
+        }
         $user=$this->get('security.token_storage')->getToken()->getUser();
         try {
             $bank = new Bank();
             $bank->setIBAN($IBAN);
-            $bank->setSWIFT($SWIFT);
+            $bank->setBIC($BIC);
             $bank->setAccountHolder($account_holder);
             $bank->setCollege($user);
             $user->addBank($bank);

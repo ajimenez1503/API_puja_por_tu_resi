@@ -16,7 +16,7 @@ AppBundle\Entity\Bank:
             type: string
             length: 30
             unique: FALSE
-        count_holder:
+        account_holder:
             type: string
             length: 30
             unique: FALSE

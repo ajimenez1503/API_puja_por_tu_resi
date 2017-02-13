@@ -100,5 +100,7 @@ security:
     - { path: ^/Room/getAllCompanyName/ , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
     - { path: ^/Room/getSearchAll/ , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
     - { path: ^/Room/download/ , roles:  [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
+    #ROOM  CONTROLLER
+    - { path: ^/Bank/create/ , roles: ROLE_COLLEGE }
     #Rest of the request
     - { path: ^/, roles: [ROLE_STUDENT, ROLE_COLLEGE] }

@@ -26,7 +26,7 @@ class Bank
     /**
      * @var string
      */
-    private $count_holder;
+    private $account_holder;
 
     /**
      * @var boolean
@@ -39,6 +39,10 @@ class Bank
     private $college;
 
 
+    public function __construct()
+    {
+        $this->activate=false;
+    }
     /**
      * Get id
      *
@@ -104,9 +108,9 @@ class Bank
      *
      * @return Bank
      */
-    public function setCountHolder($countHolder)
+    public function setAccountHolder($accountHolder)
     {
-        $this->count_holder = $countHolder;
+        $this->account_holder = $accountHolder;
 
         return $this;
     }
@@ -116,9 +120,9 @@ class Bank
      *
      * @return string
      */
-    public function getCountHolder()
+    public function getAccountHolder()
     {
-        return $this->count_holder;
+        return $this->account_holder;
     }
 
     /**

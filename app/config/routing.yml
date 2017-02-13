@@ -353,3 +353,10 @@ roomVerifyUnsignedAgreement:
     path:  /Agreement/roomVerifyUnsigned/{room_id}
     defaults: { _controller: AppBundle:Agreement:roomVerifyUnsigned }
     methods:  [GET]
+##############################################################################
+# Bank controler
+##############################################################################
+createBank:
+    path:     /Bank/create/
+    defaults:  { _controller: AppBundle:Bank:create}
+    methods:  [POST]

@@ -76,3 +76,6 @@ AppBundle\Entity\College:
         banks:
             targetEntity: Bank
             mappedBy: college
+        responsible_persons:
+            targetEntity: Responsible_person
+            mappedBy: college

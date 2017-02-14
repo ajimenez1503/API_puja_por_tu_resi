@@ -31,6 +31,7 @@ class College implements AdvancedUserInterface, \Serializable
     private $study_room;
     private $heating;
     private $banks;
+    private $responsible_persons;
 
 
     public function __construct()
@@ -39,6 +40,7 @@ class College implements AdvancedUserInterface, \Serializable
         $this->messages = new ArrayCollection();
         $this->banks = new ArrayCollection();
         $this->rooms = new ArrayCollection();
+        $this->responsible_persons = new ArrayCollection();
         $this->wifi = false;
         $this->elevator = false;
         $this->canteen = false;
@@ -743,5 +745,39 @@ class College implements AdvancedUserInterface, \Serializable
     public function getBanks()
     {
         return $this->banks;
+    }
+
+    /**
+     * Add responsiblePerson
+     *
+     * @param \AppBundle\Entity\Responsible_person $responsiblePerson
+     *
+     * @return College
+     */
+    public function addResponsiblePerson(\AppBundle\Entity\Responsible_person $responsiblePerson)
+    {
+        $this->responsible_persons[] = $responsiblePerson;
+
+        return $this;
+    }
+
+    /**
+     * Remove responsiblePerson
+     *
+     * @param \AppBundle\Entity\Responsible_person $responsiblePerson
+     */
+    public function removeResponsiblePerson(\AppBundle\Entity\Responsible_person $responsiblePerson)
+    {
+        $this->responsible_persons->removeElement($responsiblePerson);
+    }
+
+    /**
+     * Get responsiblePersons
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getResponsiblePersons()
+    {
+        return $this->responsible_persons;
     }
 }

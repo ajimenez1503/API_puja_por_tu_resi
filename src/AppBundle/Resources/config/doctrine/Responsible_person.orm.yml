@@ -1,0 +1,33 @@
+# src/AppBundle/Resources/config/doctrine/Responsible_person.orm.yml
+AppBundle\Entity\Responsible_person:
+    type: entity
+    table: responsible_person
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+            unique: TRUE
+    fields:
+        DNI:
+            type: string
+            length: 10
+            unique: FALSE
+        email:
+            type: string
+            length: 30
+            unique: FALSE
+        name:
+            type: string
+            length: 30
+            unique: FALSE
+        job_position:
+            type: string
+            length: 30
+            unique: FALSE
+    manyToOne:
+        college:
+            targetEntity: College
+            inversedBy: responsible_persons
+            joinColumn:
+                name: college_username
+                referencedColumnName: username

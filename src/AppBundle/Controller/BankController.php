@@ -98,7 +98,7 @@ class BankController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="This method activate a bank account of the college. Can be called by user (College/ADMIN).",
+     *  description="This method activate a bank account of the college. Can be called by user (College).",
      *  requirements={
      *      {
      *          "name"="id",
@@ -149,5 +149,66 @@ class BankController extends Controller
             }
         }
     }
+
+
+    /**
+     * @ApiDoc(
+     *  description="This method remove a bank account of the college. Can be called by user (College/ADMIN).",
+     *  requirements={
+     *      {
+     *          "name"="id",
+     *          "dataType"="Integer",
+     *          "description"="ID of the bank account"
+     *      },
+     *  },
+     * )
+     */
+    public function removeAction($id)
+    {
+        $bank = $this->getDoctrine()->getRepository('AppBundle:Bank')->find($id);
+        if (!$bank){
+            return $this->returnjson(False,'La cuenta bancaria con id '.$id.' no existe.');
+        }else{
+            $user=$this->get('security.token_storage')->getToken()->getUser();
+            if($user==$bank->getCollege()){
+                try {
+                    if (!$bank->getActivate()){
+                        $em = $this->getDoctrine()->getManager();
+                        $em->remove($bank);
+                        $em->flush();
+                    }else{
+                        return $this->returnjson(false,'La cuenta bancaria no se puede eliminar si esta activada.');
+
+                    }
+
+                } catch (\Exception $pdo_ex) {
+                    return $this->returnjson(false,'SQL exception.');
+                }
+                return $this->returnjson(true,'La cuenta bancaria se ha eliminado correctamente.');
+
+            }else{
+                return $this->returnjson(false,'La cuenta bancaria no es de la residencia.');
+
+            }
+        }
+    }
+
+
+    /**
+     * @ApiDoc(
+     *  description="Get list of banks of a user (College). Format JSON. Can be called by user (College).",
+     * )
+     */
+    public function getAction(Request $request)
+    {
+        $user=$this->get('security.token_storage')->getToken()->getUser();
+        $list_banks=$user->getBanks();
+        $output=array();
+        for ($i = 0; $i < count($list_banks); $i++) {
+            array_unshift($output,$list_banks[$i]->getJSON());
+        }
+        return $this->returnjson(true,'Lista de cuentas bancarias.',$output);
+    }
+
 
 }

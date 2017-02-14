@@ -42,6 +42,25 @@ class Bank
     public function __construct()
     {
     }
+
+
+
+    /**
+    * @return JSON format of the message
+    */
+    public function getJSON()
+    {
+        $output=array(
+            'id'=>$this->getId(),
+            'IBAN' => $this->getIBAN(),
+            'BIC'=>$this->getBIC(),
+            'account_holder'=> $this->getAccountHolder(),
+            'activate'=> $this->getActivate(),
+        );
+        return $output;
+    }
+
+
     /**
      * Get id
      *

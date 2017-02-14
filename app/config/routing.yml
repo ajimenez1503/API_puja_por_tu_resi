@@ -365,3 +365,13 @@ activateBank:
     path:     /Bank/activate/{id}
     defaults:  { _controller: AppBundle:Bank:activate}
     methods:  [POST]
+
+removeBank:
+    path:     /Bank/remove/{id}
+    defaults:  { _controller: AppBundle:Bank:remove}
+    methods:  [POST]
+
+getBank:
+    path:     /Bank/get/
+    defaults:  { _controller: AppBundle:Bank:get}
+    methods:  [GET]

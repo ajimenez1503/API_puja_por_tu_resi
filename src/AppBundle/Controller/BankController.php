@@ -89,7 +89,7 @@ class BankController extends Controller
             //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
             $em->flush();
         } catch (\Exception $pdo_ex) {
-            return $this->returnjson(false,'SQL exception.'.$pdo_ex);
+            return $this->returnjson(false,'SQL exception.');
         }
         return $this->returnjson(true,'La cuenta bancaria se ha creado correctamente.');
     }

@@ -375,3 +375,10 @@ getBank:
     path:     /Bank/get/
     defaults:  { _controller: AppBundle:Bank:get}
     methods:  [GET]
+##############################################################################
+# ResponsiblePerson controler
+##############################################################################
+createResponsiblePerson:
+    path:     /ResponsiblePerson/create/
+    defaults:  { _controller: AppBundle:ResponsiblePerson:create}
+    methods:  [POST]

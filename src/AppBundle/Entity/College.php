@@ -754,7 +754,7 @@ class College implements AdvancedUserInterface, \Serializable
      *
      * @return College
      */
-    public function addResponsiblePerson(\AppBundle\Entity\Responsible_person $responsiblePerson)
+    public function addResponsiblePerson(\AppBundle\Entity\ResponsiblePerson $responsiblePerson)
     {
         $this->responsible_persons[] = $responsiblePerson;
 
@@ -766,7 +766,7 @@ class College implements AdvancedUserInterface, \Serializable
      *
      * @param \AppBundle\Entity\Responsible_person $responsiblePerson
      */
-    public function removeResponsiblePerson(\AppBundle\Entity\Responsible_person $responsiblePerson)
+    public function removeResponsiblePerson(\AppBundle\Entity\ResponsiblePerson $responsiblePerson)
     {
         $this->responsible_persons->removeElement($responsiblePerson);
     }

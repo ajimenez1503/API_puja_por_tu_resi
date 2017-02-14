@@ -102,5 +102,7 @@ security:
     - { path: ^/Room/download/ , roles:  [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
     #BANK  CONTROLLER
     - { path: ^/Bank/ , roles: ROLE_COLLEGE }
+    #ResponsiblePerson  CONTROLLER
+    - { path: ^/ResponsiblePerson/ , roles: ROLE_COLLEGE }
     #Rest of the request
     - { path: ^/, roles: [ROLE_STUDENT, ROLE_COLLEGE] }

@@ -94,7 +94,7 @@ class RentController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get list of rents of a user. Format JSON. Can be called by user (Student/College).",
+     *  description="Get list of rents of a user. Can be called by user (Student/College).",
      * )
      */
     public function getAction(Request $request)

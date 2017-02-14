@@ -9,11 +9,6 @@ class ResponsiblePerson
 {
 
     /**
-     * @var integer
-     */
-    private $id;
-
-    /**
      * @var string
      */
     private $DNI;
@@ -51,7 +46,6 @@ class ResponsiblePerson
     public function getJSON()
     {
         $output=array(
-            'id'=>$this->getId(),
             'DNI' => $this->getDNI(),
             'email'=>$this->getEmail(),
             'name'=> $this->getName(),
@@ -61,21 +55,11 @@ class ResponsiblePerson
     }
 
     /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set dNI
      *
      * @param string $dNI
      *
-     * @return Responsible_person
+     * @return ResponsiblePerson
      */
     public function setDNI($dNI)
     {
@@ -99,7 +83,7 @@ class ResponsiblePerson
      *
      * @param string $email
      *
-     * @return Responsible_person
+     * @return ResponsiblePerson
      */
     public function setEmail($email)
     {
@@ -123,7 +107,7 @@ class ResponsiblePerson
      *
      * @param string $name
      *
-     * @return Responsible_person
+     * @return ResponsiblePerson
      */
     public function setName($name)
     {
@@ -147,7 +131,7 @@ class ResponsiblePerson
      *
      * @param string $jobPosition
      *
-     * @return Responsible_person
+     * @return ResponsiblePerson
      */
     public function setJobPosition($jobPosition)
     {
@@ -171,7 +155,7 @@ class ResponsiblePerson
      *
      * @param \AppBundle\Entity\College $college
      *
-     * @return Responsible_person
+     * @return ResponsiblePerson
      */
     public function setCollege(\AppBundle\Entity\College $college = null)
     {

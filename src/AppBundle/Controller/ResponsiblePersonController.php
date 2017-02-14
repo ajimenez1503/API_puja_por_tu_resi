@@ -69,6 +69,10 @@ class ResponsiblePersonController extends Controller
         $job_position=$request->request->get('job_position');
         if ($DNI=="" || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$DNI,1,10)){
             return $this->returnjson(false,'DNI no es valido.');
+        }
+        $local_responsiblePerson = $this->getDoctrine()->getRepository('AppBundle:ResponsiblePerson')->find($DNI);
+        if ($local_responsiblePerson){
+            return $this->returnjson(False,'El responsable con DNI '.$DNI.' ya existe.');
         }if ($email=="" || !$this->get('app.validate')->validateEmail($this->get('validator'),$email)){
             return $this->returnjson(false,'email no es valido.');
         }if ($name=="" || !$this->get('app.validate')->validateLenghtInput($this->get('validator'),$name,1,30)){
@@ -97,6 +101,60 @@ class ResponsiblePersonController extends Controller
             return $this->returnjson(false,'SQL exception.'.$pdo_ex);
         }
         return $this->returnjson(true,'El responsable se ha creado correctamente.');
+    }
+
+
+
+    /**
+     * @ApiDoc(
+     *  description="This method remove a responsible person of the college. Can be called by user (College/ADMIN).",
+     *  requirements={
+     *      {
+     *          "name"="DNI",
+     *          "dataType"="String",
+     *          "description"="DNI of the responsible person"
+     *      },
+     *  },
+     * )
+     */
+    public function removeAction($DNI)
+    {
+        $responsiblePerson = $this->getDoctrine()->getRepository('AppBundle:ResponsiblePerson')->find($DNI);
+        if (!$responsiblePerson){
+            return $this->returnjson(False,'El responsable con DNI '.$DNI.' no existe.');
+        }else{
+            $user=$this->get('security.token_storage')->getToken()->getUser();
+            if($user==$responsiblePerson->getCollege()){
+                try {
+                    $em = $this->getDoctrine()->getManager();
+                    $em->remove($responsiblePerson);
+                    $em->flush();
+                } catch (\Exception $pdo_ex) {
+                    return $this->returnjson(false,'SQL exception.');
+                }
+                return $this->returnjson(true,'El responsable se ha eliminado correctamente.');
+
+            }else{
+                return $this->returnjson(false,'La responsable no es de la residencia.');
+            }
+        }
+    }
+
+
+    /**
+     * @ApiDoc(
+     *  description="Get list of responsiblePersons of a user (College). Can be called by user (College).",
+     * )
+     */
+    public function getAction(Request $request)
+    {
+        $user=$this->get('security.token_storage')->getToken()->getUser();
+        $list_responsiblePersons=$user->getResponsiblePersons();
+        $output=array();
+        for ($i = 0; $i < count($list_responsiblePersons); $i++) {
+            array_unshift($output,$list_responsiblePersons[$i]->getJSON());
+        }
+        return $this->returnjson(true,'Lista de responsables.',$output);
     }
 
 }

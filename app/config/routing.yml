@@ -382,3 +382,13 @@ createResponsiblePerson:
     path:     /ResponsiblePerson/create/
     defaults:  { _controller: AppBundle:ResponsiblePerson:create}
     methods:  [POST]
+
+ResponsiblePersonBank:
+    path:     /ResponsiblePerson/remove/{DNI}
+    defaults:  { _controller: AppBundle:ResponsiblePerson:remove}
+    methods:  [POST]
+
+getResponsiblePerson:
+    path:     /ResponsiblePerson/get/
+    defaults:  { _controller: AppBundle:ResponsiblePerson:get}
+    methods:  [GET]

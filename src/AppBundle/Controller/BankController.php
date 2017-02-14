@@ -196,7 +196,7 @@ class BankController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get list of banks of a user (College). Format JSON. Can be called by user (College).",
+     *  description="Get list of banks of a user (College). Can be called by user (College).",
      * )
      */
     public function getAction(Request $request)

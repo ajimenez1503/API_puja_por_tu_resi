@@ -3,15 +3,11 @@ AppBundle\Entity\ResponsiblePerson:
     type: entity
     table: responsiblePerson
     id:
-        id:
-            type: integer
-            generator: { strategy: AUTO }
-            unique: TRUE
-    fields:
         DNI:
             type: string
             length: 10
-            unique: FALSE
+            unique: True
+    fields:
         email:
             type: string
             length: 30

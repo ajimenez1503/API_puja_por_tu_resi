@@ -225,7 +225,7 @@ class RoomController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get list of rooms of a College. Format JSON. Can be called by user (College).",
+     *  description="Get list of rooms of a College. Can be called by user (College).",
      * )
      */
     public function getAllAction(Request $request)
@@ -241,7 +241,7 @@ class RoomController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get list of FREE rooms of a user (College). Format JSON. Can be called by user (College).",
+     *  description="Get list of FREE rooms of a user (College). Can be called by user (College).",
      * )
      */
     public function getFREEAction(Request $request)
@@ -264,7 +264,7 @@ class RoomController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get list of OFFERED rooms of a user (College). Format JSON. Can be called by user (College).",
+     *  description="Get list of OFFERED rooms of a user (College). Can be called by user (College).",
      * )
      */
     public function getOFFEREDAction(Request $request)
@@ -284,7 +284,7 @@ class RoomController extends Controller
 
     /**
      * @ApiDoc(
-     *  description="Get room of the id of a user (College). Format JSON. Can be called by user (College).",
+     *  description="Get room of the id of a user (College). Can be called by user (College).",
      * )
      */
     public function getAction($id)

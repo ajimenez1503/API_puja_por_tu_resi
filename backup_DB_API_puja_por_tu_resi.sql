@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 31-01-2017 a las 19:00:35
+-- Tiempo de generación: 14-02-2017 a las 19:25:50
 -- Versión del servidor: 5.5.44-0ubuntu0.14.04.1
 -- Versión de PHP: 5.5.9-1ubuntu4.11
 
@@ -39,7 +39,39 @@ CREATE TABLE IF NOT EXISTS `agreement` (
   PRIMARY KEY (`id`),
   KEY `IDX_2E655A244BD54AEC` (`student_username`),
   KEY `IDX_2E655A2454177093` (`room_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=18 ;
+
+--
+-- Volcado de datos para la tabla `agreement`
+--
+
+INSERT INTO `agreement` (`id`, `student_username`, `room_id`, `price`, `date_start_school`, `date_end_school`, `file_agreement`, `file_agreement_signed`, `date_signed`) VALUES
+(16, '12345678A', 16, 1800, '2017-09-01 00:00:00', '2018-06-30 00:00:00', 'fada024a97f6cf710f7fa7d345b4c4a5.pdf', '77087d519fdd34cf123b91655e2e9633.pdf', '2017-02-02 17:33:08'),
+(17, '87654321A', 17, 800, '2017-08-26 00:00:00', '2018-07-26 00:00:00', 'cf7dd4a104cf8a6c01471d7542699f82.pdf', '0f7f4e3faf9a2ac186a0a159d8b53f34.pdf', '2017-02-09 19:23:45');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `bank`
+--
+
+CREATE TABLE IF NOT EXISTS `bank` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `college_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `iban` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `bic` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `account_holder` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `activate` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_D860BF7A16A289D1` (`college_username`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=16 ;
+
+--
+-- Volcado de datos para la tabla `bank`
+--
+
+INSERT INTO `bank` (`id`, `college_username`, `iban`, `bic`, `account_holder`, `activate`) VALUES
+(14, 'B18756676', 'ES7620770024003102575766', 'DABAIE2D', 'a', 1);
 
 -- --------------------------------------------------------
 
@@ -55,21 +87,14 @@ CREATE TABLE IF NOT EXISTS `bid` (
   PRIMARY KEY (`id`),
   KEY `IDX_4AF2B3F34BD54AEC` (`student_username`),
   KEY `IDX_4AF2B3F354177093` (`room_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=31 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Volcado de datos para la tabla `bid`
 --
 
 INSERT INTO `bid` (`id`, `student_username`, `room_id`, `point`) VALUES
-(6, '12345678A', 19, 14),
-(21, '12345678A', 16, 14),
-(24, '12345678A', 21, 14),
-(25, '12345678A', 30, 15),
-(27, '12345678A', 16, 15),
-(28, '12345678A', 16, 1),
-(29, '12345678A', 16, 2),
-(30, '12345678A', 16, 20);
+(2, '12345678A', 27, 33);
 
 -- --------------------------------------------------------
 
@@ -104,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `colleges` (
 --
 
 INSERT INTO `colleges` (`username`, `password`, `email`, `is_active`, `company_name`, `address`, `latitude`, `longitude`, `telephone`, `url`, `wifi`, `elevator`, `canteen`, `hours24`, `laundry`, `gym`, `study_room`, `heating`) VALUES
-('B18756676', '$2y$13$tVR0M8lYWAfbKwJY5uLMuOepGiefq3PEy8uKFozbyfZefwtv6ow22', 'jm.94.antonio@gmail.com', 1, 'antonio', 'Calle de la Estacion, 1, 04850 Cantoria, Almería, España', 37.35106999999999, -2.192099999999982, '888888888', 'https://www.google.es/?gws_rd=ssl', 0, 1, 0, 1, 0, 1, 0, 1),
+('B18756676', '$2y$13$tVR0M8lYWAfbKwJY5uLMuOepGiefq3PEy8uKFozbyfZefwtv6ow22', 'aa@gmail.com', 1, 'antonio college', 'Calle Obispo Hurtado, 22, 18004 Granada, España', 37.1737848, -3.607294799999977, '345678987', 'http://www.w3schools.com/bootstrap/bootstrap_buttons.asp', 1, 0, 1, 0, 0, 1, 1, 0),
 ('college11', '$2y$13$CmOjG7rctQxhEqURfXm.9eEtwXRfjD8.9Iwz0ASntPy/GK9d2i9iu', 'email@gmail.com', 1, 'gdsga', 'address', 0, 0, '666666666', 'https://symfony.com/', 0, 0, 0, 0, 0, 0, 0, 0),
 ('college12', '$2y$13$WmHW2RCZ.l6GkkSEUIlguOVNRas6wKv2uSi44KEgp96X4ngRblCT.', 'email@gmail.com', 1, 'gdsga', 'address', 0, 0, '666666666', 'https://symfony.com/', 0, 0, 0, 0, 0, 0, 0, 0),
 ('college13', '$2y$13$gu9KvLTlqDoSkAk625sSTeZAuXciBkKXV1w5CEspAaxJAMz1Lhbnu', 'email@gmail.com', 1, 'gdsga', 'address', 0, 0, '666666666', 'https://symfony.com/', 1, 0, 1, 0, 0, 0, 1, 0),
@@ -133,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `incidence` (
 
 INSERT INTO `incidence` (`id`, `student_username`, `status`, `description`, `file_name`, `date`) VALUES
 (1, '12345678A', 'IN PROGRESS', 'la mesa esta rota ', '1aa2c0c121556de82865a9898058937a.jpg', '2017-01-10 18:34:45'),
-(2, '12345678A', 'OPEN', 'la puerta no se cierra. Ayuda ', 'c4d35eccf17df135b22c07d183a47e21.jpg', '2017-01-10 18:40:13');
+(2, '12345678A', 'DONE', 'la puerta no se cierra. Ayuda ', 'c4d35eccf17df135b22c07d183a47e21.jpg', '2017-01-10 18:40:13');
 
 -- --------------------------------------------------------
 
@@ -154,19 +179,25 @@ CREATE TABLE IF NOT EXISTS `message` (
   PRIMARY KEY (`id`),
   KEY `IDX_B6BD307F4BD54AEC` (`student_username`),
   KEY `IDX_B6BD307F16A289D1` (`college_username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=19 ;
 
 --
 -- Volcado de datos para la tabla `message`
 --
 
 INSERT INTO `message` (`id`, `student_username`, `college_username`, `read_by_student`, `read_by_college`, `message`, `file_attached`, `date`, `sender_type`) VALUES
-(1, '12345678A', NULL, 1, 0, 'hola que tal estas antonio?', NULL, '2017-01-10 18:35:06', 'ROLE_STUDENT'),
-(2, '12345678A', NULL, 1, 0, 'te escribo de nuevo para preguntar por la familia? ', 'ce074d239ca6644c8b78bc42728b3e98.jpg', '2017-01-10 18:35:38', 'ROLE_STUDENT'),
-(3, '12345678A', NULL, 1, 0, 'holaaaaaaa, yo muy bien y tu?', NULL, '2017-01-10 18:58:12', 'ROLE_COLLEGE'),
-(4, '12345678A', NULL, 1, 0, 'muy bien también. Gracias. ', NULL, '2017-01-10 19:25:57', 'ROLE_STUDENT'),
-(5, '12345678A', NULL, 1, 0, 'test', NULL, '2017-01-17 17:11:01', 'ROLE_STUDENT'),
-(6, '12345678A', NULL, 1, 0, 'test', '56447a1a43304b796f0c1d9c4b63c272.jpg', '2017-01-17 17:11:43', 'ROLE_STUDENT');
+(7, '12345678A', 'B18756676', 1, 1, 'test', 'c5248b92f71bf9c4c4bf57ce4ac23c33.pdf', '2017-02-03 17:56:46', 'ROLE_STUDENT'),
+(8, '12345678A', 'B18756676', 1, 1, 'test', '5eda11c58a4253090424adf579c53727.pdf', '2017-02-03 17:58:04', 'ROLE_STUDENT'),
+(9, '12345678A', 'B18756676', 1, 1, 'test', '8de6ebb97a18d313abf14b67c1e51077.pdf', '2017-02-03 18:12:51', 'ROLE_COLLEGE'),
+(10, '12345678A', 'B18756676', 1, 1, 'holaaaaaa', NULL, '2017-02-04 13:35:42', 'ROLE_STUDENT'),
+(11, '12345678A', 'B18756676', 1, 1, 'undefined', 'b9ace7fa97e6ae3c284c702069fedf9c.pdf', '2017-02-04 19:16:34', 'ROLE_COLLEGE'),
+(12, '12345678A', 'B18756676', 1, 1, 'undefined', NULL, '2017-02-04 19:19:27', 'ROLE_COLLEGE'),
+(13, '12345678A', 'B18756676', 1, 1, 'sdgsadgsadgsd', NULL, '2017-02-04 19:20:32', 'ROLE_COLLEGE'),
+(14, '12345678A', 'B18756676', 1, 1, 'holaaa test ', NULL, '2017-02-05 11:48:04', 'ROLE_COLLEGE'),
+(15, '12345678A', 'B18756676', 1, 1, 'hjhk', NULL, '2017-02-05 11:51:44', 'ROLE_COLLEGE'),
+(16, '87654321A', 'B18756676', 1, 1, 'holajefe ', NULL, '2017-02-09 19:33:08', 'ROLE_STUDENT'),
+(17, '12345678A', 'B18756676', 1, 1, 'safasdfdsafsa', NULL, '2017-02-10 17:58:45', 'ROLE_STUDENT'),
+(18, '12345678A', 'B18756676', 1, 1, 'agadgas', NULL, '2017-02-10 18:02:39', 'ROLE_STUDENT');
 
 -- --------------------------------------------------------
 
@@ -186,16 +217,47 @@ CREATE TABLE IF NOT EXISTS `rent` (
   `card_number` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_2784DCC4BD54AEC` (`student_username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=80 ;
 
 --
 -- Volcado de datos para la tabla `rent`
 --
 
 INSERT INTO `rent` (`id`, `student_username`, `status_paid`, `price`, `date`, `file_receipt`, `date_paid`, `card_holder`, `card_number`) VALUES
-(2, '12345678A', 1, 100, '2017-01-10 18:38:07', '81acf277523dcde69abaa61e60cfa993.pdf', '2017-01-10 19:26:33', 'juan', '4886171554372581'),
-(3, '12345678A', 1, 100, '2017-01-10 18:38:08', '16461ec3bd01a0d1db5d6dbf63d1f19c.pdf', '2017-01-10 18:59:47', 'antonio', '4009487096031929'),
-(4, '12345678A', 0, 100, '2017-01-12 20:49:33', NULL, NULL, NULL, NULL);
+(69, '87654321A', 1, 800, '2017-08-26 00:00:00', '292c55780838459d42f093ca9767cf6a.pdf', '2017-02-09 20:10:44', 'Antronio Jimenez', '4929542739248152'),
+(70, '87654321A', 0, 800, '2017-09-26 00:00:00', NULL, NULL, NULL, NULL),
+(71, '87654321A', 0, 800, '2017-10-26 00:00:00', NULL, NULL, NULL, NULL),
+(72, '87654321A', 0, 800, '2017-11-26 00:00:00', NULL, NULL, NULL, NULL),
+(73, '87654321A', 0, 800, '2017-12-26 00:00:00', NULL, NULL, NULL, NULL),
+(74, '87654321A', 0, 800, '2018-01-26 00:00:00', NULL, NULL, NULL, NULL),
+(75, '87654321A', 0, 800, '2018-02-26 00:00:00', NULL, NULL, NULL, NULL),
+(76, '87654321A', 0, 800, '2018-03-26 00:00:00', NULL, NULL, NULL, NULL),
+(77, '87654321A', 0, 800, '2018-04-26 00:00:00', NULL, NULL, NULL, NULL),
+(78, '87654321A', 0, 800, '2018-05-26 00:00:00', NULL, NULL, NULL, NULL),
+(79, '87654321A', 0, 800, '2018-06-26 00:00:00', NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `responsiblePerson`
+--
+
+CREATE TABLE IF NOT EXISTS `responsiblePerson` (
+  `dni` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `college_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `job_position` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`dni`),
+  KEY `IDX_CB0E5D4A16A289D1` (`college_username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `responsiblePerson`
+--
+
+INSERT INTO `responsiblePerson` (`dni`, `college_username`, `email`, `name`, `job_position`) VALUES
+('12345678B', 'B18756676', 'jm@gsdgsdsgamial.com', 'juan', 'nuevo');
 
 -- --------------------------------------------------------
 
@@ -230,8 +292,8 @@ CREATE TABLE IF NOT EXISTS `room` (
 --
 
 INSERT INTO `room` (`id`, `college_username`, `name`, `price`, `date_start_school`, `date_end_school`, `date_start_bid`, `date_end_bid`, `floor`, `size`, `picture1`, `picture2`, `picture3`, `tv`, `bath`, `desk`, `wardrove`) VALUES
-(16, 'B18756676', 'room5', 1800, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-18 00:00:00', '2017-02-15 00:00:00', 1, 20, '35cf01580edfdde1e494f95678836fd2.jpg', '3f1ee2b7772ac8710cd2e34391466a1b.jpg', 'b4b9a7c026ee06f336ff4a0a866d03b5.jpg', 1, 1, 0, 0),
-(17, 'B18756676', 'room6', 800, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-18 00:00:00', '2017-02-15 00:00:00', 1, 20, 'a6caa9570ce36f6960d91b036fc89c28.jpg', '89d73aaae334992c9ead57acc34ec75e.jpg', 'd69a1fdcc4a557b7f7e9f0906be37fd8.jpg', 1, 1, 0, 0),
+(16, 'B18756676', 'room5', 1800, '2017-09-01 00:00:00', '2018-06-30 00:00:00', '2017-01-18 00:00:00', '2017-02-02 00:00:00', 1, 20, '35cf01580edfdde1e494f95678836fd2.jpg', '3f1ee2b7772ac8710cd2e34391466a1b.jpg', 'b4b9a7c026ee06f336ff4a0a866d03b5.jpg', 1, 1, 0, 0),
+(17, 'B18756676', 'room6', 800, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-02-09 00:00:00', '2017-02-09 00:00:00', 1, 20, 'a6caa9570ce36f6960d91b036fc89c28.jpg', '89d73aaae334992c9ead57acc34ec75e.jpg', 'd69a1fdcc4a557b7f7e9f0906be37fd8.jpg', 1, 1, 0, 0),
 (18, 'B18756676', '7room', 500, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-18 00:00:00', '2017-02-15 00:00:00', 1, 20, '32257b38bea73960739c16fc8bbd132a.jpg', '45c872837ae1133117315ba459b6a887.jpg', '71e3ca6d50fd67fbe2d154201c287130.jpg', 1, 1, 0, 0),
 (19, 'B18756676', 'r8', 500, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-18 00:00:00', '2017-02-15 00:00:00', 1, 20, '92f21f32d96f64cc431b2b4066fd3d13.jpg', 'c5a920cf23f292afd072f86997943897.jpg', '0ba62d6ec07456ef0fc8586af446027c.jpg', 1, 1, 0, 0),
 (21, 'B18756676', 'room10', 500, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-18 00:00:00', '2017-02-15 00:00:00', 1, 20, '88821bd681b347d38738b8cf1b23d256.jpg', 'fb01924d0c22f6bb947651874804dc61.jpg', '131c94b66466b357c5cdda7e86575fdd.jpg', 1, 1, 0, 0),
@@ -241,7 +303,7 @@ INSERT INTO `room` (`id`, `college_username`, `name`, `price`, `date_start_schoo
 (25, 'B18756676', 'room33', 50, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-18 00:00:00', '2017-02-15 00:00:00', 1, 20, '4af5653fb57d641dfcce40218fdce5a9.jpg', '40b7574e8f09d7d90fd496c47948a504.jpg', '49cd8064b939bf328fe1a22540772dd0.jpg', 1, 1, 1, 0),
 (26, 'B18756676', 'room145', 500, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-18 00:00:00', '2017-02-15 00:00:00', 1, 20, '83286d1c2495564847abc2351ebcb2f0.jpg', '61ec83a540bf844c0155ef27bd7627ff.jpg', '9a3b54a8080fca7c9c35b2174210d46b.jpg', 1, 1, 1, 0),
 (27, 'B18756676', 'room1', 500, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-18 00:00:00', '2017-02-15 00:00:00', 1, 20, 'de9a724964786ee80293224cb1646b21.jpg', '9b64c65ad869402f2d1f05ee3d493b0f.jpg', '6f697af442926ebeaa4f193a155bde99.jpg', 1, 1, 1, 0),
-(28, 'B18756676', 'room155', 500, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-18 00:00:00', '2017-02-15 00:00:00', 1, 20, '3f8ee6adc50a0d6c03a74682e1509705.jpg', '6c28fa3fc8a375a63e557bc9ff9df3d8.jpg', 'db24c02f77ea9066019894a0cfada8f2.jpg', 1, 1, 1, 0),
+(28, 'B18756676', 'room155', 500, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-02-01 00:00:00', '2017-02-01 00:00:00', 1, 20, '3f8ee6adc50a0d6c03a74682e1509705.jpg', '6c28fa3fc8a375a63e557bc9ff9df3d8.jpg', 'db24c02f77ea9066019894a0cfada8f2.jpg', 1, 1, 1, 0),
 (29, 'B18756676', 'room[number]', 34, '2017-02-02 00:00:00', '2017-02-05 00:00:00', '2017-01-23 00:00:00', '2017-01-31 00:00:00', 1, 15, 'ed924939bff5f0920eddf3351b253c0d.jpg', 'ae59195fd335a0e3eed2b16836bedaed.jpg', 'ebf9c8bf8dbaa0e75b42f1e43c630690.jpg', 0, 1, 1, 0),
 (30, 'B18756676', 'room[number]', 34, '2017-02-02 00:00:00', '2017-02-05 00:00:00', '2017-01-23 00:00:00', '2017-01-31 00:00:00', 1, 15, '746b387a43f61dc0f821484dc6ac58ee.jpg', '5dab58fa6b7a409057d91a1b4e94c7f2.jpg', 'ec2e3feb10149454d6f6ced0b33c2953.jpg', 0, 1, 1, 0),
 (31, 'B18756676', 'room[number]', 34, '2017-02-02 00:00:00', '2017-02-05 00:00:00', '2017-01-23 00:00:00', '2017-01-31 00:00:00', 1, 15, 'cf34b09009a156c95e57eb76715c2ff4.jpg', '7816c1bde2197f9ed99b86a107f42b8b.jpg', 'd3426b97be84916b864bffad7cdd11c7.jpg', 1, 1, 1, 1);
@@ -267,7 +329,8 @@ CREATE TABLE IF NOT EXISTS `students` (
 --
 
 INSERT INTO `students` (`username`, `password`, `email`, `name`, `is_active`, `creation_date`) VALUES
-('12345678A', '$2y$13$xqavJniqKVrgXgISBRXt.Ow1ztY8UCgdBymCeRep40r4MdvheAIqe', 'ant1onio@gmail.com', 'antonio', 1, '2017-01-10 18:31:32');
+('12345678A', '$2y$13$xqavJniqKVrgXgISBRXt.Ow1ztY8UCgdBymCeRep40r4MdvheAIqe', 'ant1onio@gmail.com', 'antonio', 1, '2017-01-10 18:31:32'),
+('87654321A', '$2y$13$kHfdnRWdRaJVk0eP/Fc32.u61SPNR88/5O/33nOHrdqNd4bppXnVO', 'jma@gmail.com', 'antonio', 1, '2017-02-09 19:17:57');
 
 --
 -- Restricciones para tablas volcadas
@@ -279,6 +342,12 @@ INSERT INTO `students` (`username`, `password`, `email`, `name`, `is_active`, `c
 ALTER TABLE `agreement`
   ADD CONSTRAINT `FK_2E655A244BD54AEC` FOREIGN KEY (`student_username`) REFERENCES `students` (`username`),
   ADD CONSTRAINT `FK_2E655A2454177093` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`);
+
+--
+-- Filtros para la tabla `bank`
+--
+ALTER TABLE `bank`
+  ADD CONSTRAINT `FK_D860BF7A16A289D1` FOREIGN KEY (`college_username`) REFERENCES `colleges` (`username`);
 
 --
 -- Filtros para la tabla `bid`
@@ -305,6 +374,12 @@ ALTER TABLE `message`
 --
 ALTER TABLE `rent`
   ADD CONSTRAINT `FK_2784DCC4BD54AEC` FOREIGN KEY (`student_username`) REFERENCES `students` (`username`);
+
+--
+-- Filtros para la tabla `responsiblePerson`
+--
+ALTER TABLE `responsiblePerson`
+  ADD CONSTRAINT `FK_CB0E5D4A16A289D1` FOREIGN KEY (`college_username`) REFERENCES `colleges` (`username`);
 
 --
 -- Filtros para la tabla `room`

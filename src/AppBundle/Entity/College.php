@@ -31,7 +31,7 @@ class College implements AdvancedUserInterface, \Serializable
     private $study_room;
     private $heating;
     private $banks;
-    private $responsible_persons;
+    private $responsiblePersons;
 
 
     public function __construct()
@@ -40,7 +40,7 @@ class College implements AdvancedUserInterface, \Serializable
         $this->messages = new ArrayCollection();
         $this->banks = new ArrayCollection();
         $this->rooms = new ArrayCollection();
-        $this->responsible_persons = new ArrayCollection();
+        $this->responsiblePersons = new ArrayCollection();
         $this->wifi = false;
         $this->elevator = false;
         $this->canteen = false;

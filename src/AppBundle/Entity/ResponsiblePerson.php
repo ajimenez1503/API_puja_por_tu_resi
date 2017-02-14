@@ -1,11 +1,11 @@
 <?php
-// src/AppBundle/Entity/Responsible_person.php
+// src/AppBundle/Entity/ResponsiblePerson.php
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 
-class Responsible_person
+class ResponsiblePerson
 {
 
     /**

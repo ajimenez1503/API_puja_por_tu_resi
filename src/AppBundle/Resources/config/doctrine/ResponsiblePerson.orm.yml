@@ -1,7 +1,7 @@
-# src/AppBundle/Resources/config/doctrine/Responsible_person.orm.yml
-AppBundle\Entity\Responsible_person:
+# src/AppBundle/Resources/config/doctrine/ResponsiblePerson.orm.yml
+AppBundle\Entity\ResponsiblePerson:
     type: entity
-    table: responsible_person
+    table: responsiblePerson
     id:
         id:
             type: integer
@@ -27,7 +27,7 @@ AppBundle\Entity\Responsible_person:
     manyToOne:
         college:
             targetEntity: College
-            inversedBy: responsible_persons
+            inversedBy: responsiblePersons
             joinColumn:
                 name: college_username
                 referencedColumnName: username

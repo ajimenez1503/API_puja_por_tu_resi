@@ -94,4 +94,60 @@ class BankController extends Controller
         return $this->returnjson(true,'La cuenta bancaria se ha creado correctamente.');
     }
 
+
+
+    /**
+     * @ApiDoc(
+     *  description="This method activate a bank account of the college. Can be called by user (College/ADMIN).",
+     *  requirements={
+     *      {
+     *          "name"="id",
+     *          "dataType"="Integer",
+     *          "description"="ID of the bank account"
+     *      },
+     *  },
+     * )
+     */
+    public function activateAction($id)
+    {
+        $bank = $this->getDoctrine()->getRepository('AppBundle:Bank')->find($id);
+        if (!$bank){
+            return $this->returnjson(False,'La cuenta bancaria con id '.$id.' no existe.');
+        }else{
+            $user=$this->get('security.token_storage')->getToken()->getUser();
+            if($user==$bank->getCollege()){
+                try {
+                    $list_bank=$user->getBanks()->getValues();
+                    //desactivate all the account
+                    for($i=0;$i<count($list_bank);$i++){
+                        if($list_bank[$i]->getActivate()){
+                            $list_bank[$i]->setActivate(false);
+                            $em = $this->getDoctrine()->getManager();
+                            // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                            $em->persist($list_bank[$i]);
+
+                            //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                            $em->flush();
+                        }
+                    }
+
+                    $bank->setActivate(true);
+                    $em = $this->getDoctrine()->getManager();
+                    // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                    $em->persist($bank);
+
+                    //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                    $em->flush();
+                } catch (\Exception $pdo_ex) {
+                    return $this->returnjson(false,'SQL exception.');
+                }
+                return $this->returnjson(true,'La cuenta bancaria se ha activado correctamente.');
+
+            }else{
+                return $this->returnjson(false,'La cuenta bancaria no es de la residencia.');
+
+            }
+        }
+    }
+
 }

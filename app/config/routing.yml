@@ -360,3 +360,8 @@ createBank:
     path:     /Bank/create/
     defaults:  { _controller: AppBundle:Bank:create}
     methods:  [POST]
+
+activateBank:
+    path:     /Bank/activate/{id}
+    defaults:  { _controller: AppBundle:Bank:activate}
+    methods:  [POST]

@@ -41,7 +41,6 @@ class Bank
 
     public function __construct()
     {
-        $this->activate=false;
     }
     /**
      * Get id

@@ -74,6 +74,12 @@ class BankController extends Controller
             $bank->setBIC($BIC);
             $bank->setAccountHolder($account_holder);
             $bank->setCollege($user);
+            //check  it is the first bank account of the acllege.
+            if (count($user->getBanks()->getValues())==0){
+                $bank->setActivate(true);
+            }else{
+                $bank->setActivate(false);
+            }
             $user->addBank($bank);
             $em = $this->getDoctrine()->getManager();
             // tells Doctrine you want to (eventually) save the Product (no queries is done)

@@ -47,6 +47,7 @@ security:
     - { path: ^/api/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/Signin/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/lucky/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     #AGREEMENT CONTROLLER
     - { path: ^/Agreement/create/ , roles: ROLE_ADMIN }
     - { path: ^/Agreement/remove/ , roles: ROLE_STUDENT }
@@ -105,4 +106,4 @@ security:
     #ResponsiblePerson  CONTROLLER
     - { path: ^/ResponsiblePerson/ , roles: ROLE_COLLEGE }
     #Rest of the request
-    - { path: ^/, roles: [ROLE_STUDENT, ROLE_COLLEGE] }
+    - { path: ^/, roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }

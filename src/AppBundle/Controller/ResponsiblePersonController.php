@@ -152,7 +152,7 @@ class ResponsiblePersonController extends Controller
         $list_responsiblePersons=$user->getResponsiblePersons();
         $output=array();
         for ($i = 0; $i < count($list_responsiblePersons); $i++) {
-            array_unshift($output,$list_responsiblePersons[$i]->getJSON());
+            array_push($output,$list_responsiblePersons[$i]->getJSON());
         }
         return $this->returnjson(true,'Lista de responsables.',$output);
     }

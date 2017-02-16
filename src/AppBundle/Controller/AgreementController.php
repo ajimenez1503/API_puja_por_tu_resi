@@ -273,7 +273,7 @@ class AgreementController extends Controller
                 //check if the college has OFFERED rooms
                 $rooms=$colleges[$i]->getRooms();
                 for ($j = 0; $j < count($rooms); $j++) {
-                    if($rooms[$j]->getDateEndBid()->format('Y-m-d')==$today){
+                    if($rooms[$j]->getDateEndBid()->format('Y-m-d')==$today){//room with the end bid today
                         $bids=$rooms[$j]->getBids();
                         if (count($bids)>0){
                             $student=$bids[0]->getStudent();
@@ -283,16 +283,15 @@ class AgreementController extends Controller
                                 }
                             }
                             $agreement_student=$student->getCurrentAgreement();
-                            if(!$agreement_student){
+                            if(!$agreement_student){ //in the student has no agreement
                                 //$rooms[$j]  $student
                                 array_unshift($output,array(
                                     'room' => $rooms[$j]->getId(),
                                     'student_username' => $student->getUsername(),
-                                    'bid'=> $bids[0]->getId(),
                                     )
                                 );
 
-                                //create a agrrement between a room anda user (student)
+                                //create a agreement between a room and a user (student)
                                 $response = $this->forward('AppBundle:Agreement:create', array(
                                     'username'  =>  $student->getUsername(),
                                     'room_id' => $rooms[$j]->getId(),
@@ -305,13 +304,12 @@ class AgreementController extends Controller
                                     'username'  =>  $student->getUsername(),
                                 ));
 
-                                return $this->returnjson(true,'List de habitaciones asignadas.',$output );
                             }
                         }
                     }
                 }
             }
-            return $this->returnjson(true,'ouput.',$output);
+            return $this->returnjson(true,'List de habitaciones asignadas.',$output );
         }
     }
 

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 14-02-2017 a las 19:25:50
+-- Tiempo de generación: 22-02-2017 a las 13:43:44
 -- Versión del servidor: 5.5.44-0ubuntu0.14.04.1
 -- Versión de PHP: 5.5.9-1ubuntu4.11
 
@@ -64,14 +64,15 @@ CREATE TABLE IF NOT EXISTS `bank` (
   `activate` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_D860BF7A16A289D1` (`college_username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=18 ;
 
 --
 -- Volcado de datos para la tabla `bank`
 --
 
 INSERT INTO `bank` (`id`, `college_username`, `iban`, `bic`, `account_holder`, `activate`) VALUES
-(14, 'B18756676', 'ES7620770024003102575766', 'DABAIE2D', 'a', 1);
+(16, 'B18756676', 'ES7620770024003102575766', 'DABAIE2D', 'esg', 1),
+(17, 'B18756676', 'ES7620770024003102575766', 'DABAIE2D', 'test', 0);
 
 -- --------------------------------------------------------
 
@@ -129,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `colleges` (
 --
 
 INSERT INTO `colleges` (`username`, `password`, `email`, `is_active`, `company_name`, `address`, `latitude`, `longitude`, `telephone`, `url`, `wifi`, `elevator`, `canteen`, `hours24`, `laundry`, `gym`, `study_room`, `heating`) VALUES
-('B18756676', '$2y$13$tVR0M8lYWAfbKwJY5uLMuOepGiefq3PEy8uKFozbyfZefwtv6ow22', 'aa@gmail.com', 1, 'antonio college', 'Calle Obispo Hurtado, 22, 18004 Granada, España', 37.1737848, -3.607294799999977, '345678987', 'http://www.w3schools.com/bootstrap/bootstrap_buttons.asp', 1, 0, 1, 0, 0, 1, 1, 0),
+('B18756676', '$2y$13$tVR0M8lYWAfbKwJY5uLMuOepGiefq3PEy8uKFozbyfZefwtv6ow22', 'bb@gmai.com', 1, 'antonio college', 'Calle Obispo Hurtado, 21, 18002 Granada, España', 37.173724, -3.606465500000013, '444444444', 'http://www.w3schools.com/bootstrap/bootstrap_buttons.asp', 0, 1, 0, 0, 0, 1, 1, 0),
 ('college11', '$2y$13$CmOjG7rctQxhEqURfXm.9eEtwXRfjD8.9Iwz0ASntPy/GK9d2i9iu', 'email@gmail.com', 1, 'gdsga', 'address', 0, 0, '666666666', 'https://symfony.com/', 0, 0, 0, 0, 0, 0, 0, 0),
 ('college12', '$2y$13$WmHW2RCZ.l6GkkSEUIlguOVNRas6wKv2uSi44KEgp96X4ngRblCT.', 'email@gmail.com', 1, 'gdsga', 'address', 0, 0, '666666666', 'https://symfony.com/', 0, 0, 0, 0, 0, 0, 0, 0),
 ('college13', '$2y$13$gu9KvLTlqDoSkAk625sSTeZAuXciBkKXV1w5CEspAaxJAMz1Lhbnu', 'email@gmail.com', 1, 'gdsga', 'address', 0, 0, '666666666', 'https://symfony.com/', 1, 0, 1, 0, 0, 0, 1, 0),
@@ -150,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `incidence` (
   `date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_170604174BD54AEC` (`student_username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
 
 --
 -- Volcado de datos para la tabla `incidence`
@@ -158,7 +159,10 @@ CREATE TABLE IF NOT EXISTS `incidence` (
 
 INSERT INTO `incidence` (`id`, `student_username`, `status`, `description`, `file_name`, `date`) VALUES
 (1, '12345678A', 'IN PROGRESS', 'la mesa esta rota ', '1aa2c0c121556de82865a9898058937a.jpg', '2017-01-10 18:34:45'),
-(2, '12345678A', 'DONE', 'la puerta no se cierra. Ayuda ', 'c4d35eccf17df135b22c07d183a47e21.jpg', '2017-01-10 18:40:13');
+(2, '12345678A', 'DONE', 'la puerta no se cierra. Ayuda ', 'c4d35eccf17df135b22c07d183a47e21.jpg', '2017-01-10 18:40:13'),
+(3, '87654321A', 'OPEN', 'test', '010e00f6e19b777011c88403147b1e53.jpg', '2017-02-15 20:19:28'),
+(4, '87654321A', 'OPEN', 'test', 'ba96d281e518b61853012ef9050c20fc.jpg', '2017-02-15 20:19:28'),
+(5, '87654321A', 'OPEN', 'sdgsadgdas', '4e8c207f9e7c1f4a7b0b4a56ff0b6172.jpg', '2017-02-15 20:36:11');
 
 -- --------------------------------------------------------
 
@@ -179,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `message` (
   PRIMARY KEY (`id`),
   KEY `IDX_B6BD307F4BD54AEC` (`student_username`),
   KEY `IDX_B6BD307F16A289D1` (`college_username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=19 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=21 ;
 
 --
 -- Volcado de datos para la tabla `message`
@@ -197,7 +201,9 @@ INSERT INTO `message` (`id`, `student_username`, `college_username`, `read_by_st
 (15, '12345678A', 'B18756676', 1, 1, 'hjhk', NULL, '2017-02-05 11:51:44', 'ROLE_COLLEGE'),
 (16, '87654321A', 'B18756676', 1, 1, 'holajefe ', NULL, '2017-02-09 19:33:08', 'ROLE_STUDENT'),
 (17, '12345678A', 'B18756676', 1, 1, 'safasdfdsafsa', NULL, '2017-02-10 17:58:45', 'ROLE_STUDENT'),
-(18, '12345678A', 'B18756676', 1, 1, 'agadgas', NULL, '2017-02-10 18:02:39', 'ROLE_STUDENT');
+(18, '12345678A', 'B18756676', 1, 1, 'agadgas', NULL, '2017-02-10 18:02:39', 'ROLE_STUDENT'),
+(19, '12345678A', 'B18756676', 1, 1, 'hola como estas?', NULL, '2017-02-22 12:27:28', 'ROLE_COLLEGE'),
+(20, '87654321A', 'B18756676', 0, 1, 'hola como estas?', NULL, '2017-02-22 12:27:29', 'ROLE_COLLEGE');
 
 -- --------------------------------------------------------
 
@@ -257,7 +263,12 @@ CREATE TABLE IF NOT EXISTS `responsiblePerson` (
 --
 
 INSERT INTO `responsiblePerson` (`dni`, `college_username`, `email`, `name`, `job_position`) VALUES
-('12345678B', 'B18756676', 'jm@gsdgsdsgamial.com', 'juan', 'nuevo');
+('11111111M', 'B18756676', 'jm.94.antonio@gmail.com', 'test', 'test'),
+('12123456A', 'B18756676', 'jm.94.antonio@gmail.com', 'sdfasf', 'seee'),
+('12345678U', 'B18756676', 'jm.94.antonio@gmail.com', 'aasafa', 'asdfasf'),
+('123456w78B', 'B18756676', 'jm@gsdgsdsgamial.com', 'juan', 'nuevo'),
+('12412412', 'B18756676', 'jm@gsdgsdsgamial.com', 'juan', 'nuevo'),
+('87654321E', 'B18756676', 'jm.94.antonio@gmail.com', 'hollaaa', 'holaaa');
 
 -- --------------------------------------------------------
 
@@ -330,7 +341,7 @@ CREATE TABLE IF NOT EXISTS `students` (
 
 INSERT INTO `students` (`username`, `password`, `email`, `name`, `is_active`, `creation_date`) VALUES
 ('12345678A', '$2y$13$xqavJniqKVrgXgISBRXt.Ow1ztY8UCgdBymCeRep40r4MdvheAIqe', 'ant1onio@gmail.com', 'antonio', 1, '2017-01-10 18:31:32'),
-('87654321A', '$2y$13$kHfdnRWdRaJVk0eP/Fc32.u61SPNR88/5O/33nOHrdqNd4bppXnVO', 'jma@gmail.com', 'antonio', 1, '2017-02-09 19:17:57');
+('87654321A', '$2y$13$kHfdnRWdRaJVk0eP/Fc32.u61SPNR88/5O/33nOHrdqNd4bppXnVO', 'jm@sgs.com', 'antonio', 1, '2017-02-09 19:17:57');
 
 --
 -- Restricciones para tablas volcadas

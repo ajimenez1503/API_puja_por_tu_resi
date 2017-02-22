@@ -8,5 +8,7 @@
 
 2017-02-16 20:10:
 {"success":true,"message":"List de habitaciones asignadas.","data":[]}
+2017-02-21 23:00:
+{"success":true,"message":"List de habitaciones asignadas.","data":[]}
 
 

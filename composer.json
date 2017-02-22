@@ -1,5 +1,13 @@
 {
     "name": "jimenez/api_puja_por_tu_resi",
+    "authors": [
+        {
+            "name": "Antonio Jimenez",
+            "email": "94antoniojimenez@gmail.com",
+            "homepage": "https://github.com/softwarejimenez/",
+            "role": "Developer and owner"
+        }
+    ],
     "license": "proprietary",
     "type": "project",
     "autoload": {

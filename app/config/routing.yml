@@ -213,6 +213,11 @@ getRent:
     defaults:  { _controller: AppBundle:Rent:get}
     methods:  [GET]
 
+getReveiverBankAccountRent:
+    path:     /Rent/getReveiverBankAccount/
+    defaults:  { _controller: AppBundle:Rent:getReveiverBankAccount}
+    methods:  [GET]
+
 getStudentRent:
     path:     /Rent/getStudent/{username_student}
     defaults:  { _controller: AppBundle:Rent:getStudent}

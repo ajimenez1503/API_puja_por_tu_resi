@@ -33,6 +33,9 @@
         <p>CIF:{{ college.username }}</p>
         <p>Teléfono: {{ college.telephone }}</p>
         <p>EMail:{{ college.email }} </p>
+        <p>IBAN:{{ college_bank_account.IBAN }} </p>
+        <p>BIC:{{ college_bank_account.BIC }} </p>
+        <p>account_holder:{{ college_bank_account.account_holder }} </p>
     </div>
     <div class="right_student">
         <p>Nombre: {{ student.name }}</p>
@@ -43,9 +46,9 @@
       <tr>
         <th>Factura Id</th>
         <th>Fecha pago</th>
-        <th>numero de tarjeta</th>
+        <th>identificador transaccion TPV</th>
         <th>Propietario de tarjeta</th>
-        <th>Import</th>
+        <th>Importe</th>
 
       </tr>
       <tr>

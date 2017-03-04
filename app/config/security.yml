@@ -88,6 +88,7 @@ security:
     - { path: ^/Rent/get , roles:  [ROLE_STUDENT, ROLE_COLLEGE]  }
     - { path: ^/Rent/getStudent , roles: ROLE_COLLEGE }
     - { path: ^/Rent/getUnpaid , roles: ROLE_STUDENT }
+    - { path: ^/Rent/getReveiverBankAccount , roles: ROLE_STUDENT }
     - { path: ^/Rent/download , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
     #ROOM  CONTROLLER
     - { path: ^/Room/create/ , roles: ROLE_COLLEGE }

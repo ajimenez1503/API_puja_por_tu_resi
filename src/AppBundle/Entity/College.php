@@ -780,4 +780,19 @@ class College implements AdvancedUserInterface, \Serializable
     {
         return $this->responsiblePersons;
     }
+
+
+    /**
+     * Get the activate bank account
+     */
+    public function getActivateBankAccount()
+    {
+        $list_banks=$this->getBanks()->getValues();
+        for ($i = 0; $i < count($list_banks); $i++) {
+          if($list_banks[$i]->getActivate()){
+            return $list_banks[$i];
+          }
+        }
+        return null;
+    }
 }

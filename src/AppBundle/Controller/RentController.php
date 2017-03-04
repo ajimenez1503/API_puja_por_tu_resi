@@ -94,6 +94,31 @@ class RentController extends Controller
 
     /**
      * @ApiDoc(
+     *  description="Get the activate bank account of the college. Can be called by user (Student).",
+     * )
+     */
+    public function getReveiverBankAccountAction(Request $request)
+    {
+      $user=$this->get('security.token_storage')->getToken()->getUser();
+      $agreement=$user->getCurrentAgreement();
+      if($agreement){
+          if($agreement->verifyAgreementSigned()){
+              $college_data=$agreement->getRoom()->getCollege();
+              $college_bank_account=$college_data->getActivateBankAccount();
+              if(!$college_bank_account){
+                return $this->returnjson(false,'La residencia no tiene cuenta bancaria');
+              }
+              return $this->returnjson(true,'Cuenta bancaria residencia .',$college_bank_account->getJSON());
+          }else{
+            return $this->returnjson(False,'Estudiante no ha firmado el contrato.');
+          }
+      }else{
+        return $this->returnjson(False,'Estudiante no tiene contrato.');
+      }
+    }
+
+    /**
+     * @ApiDoc(
      *  description="Get list of rents of a user. Can be called by user (Student/College).",
      * )
      */
@@ -192,7 +217,7 @@ class RentController extends Controller
      * Using knp_snappy and twig to generate a pdf file.
      * The name of the user is random.
      */
-    public function create_receipt($college_data,$student_data,$rent_data)
+    public function create_receipt($college_data,$student_data,$rent_data,$college_bank_account)
     {
         $filename=md5(uniqid()).'.pdf';
         $this->get('knp_snappy.pdf')->generateFromHtml(
@@ -202,6 +227,7 @@ class RentController extends Controller
                     'rent'  => $rent_data->getJSON(),
                     'student' =>$student_data->getJSON(),
                     'college' =>$college_data->getJSON(),
+                    'college_bank_account' =>$college_bank_account->getJSON(),
                 )
             ),
             $this->container->getParameter('storageFiles')."/".$filename
@@ -244,14 +270,18 @@ class RentController extends Controller
             $agreement=$user->getCurrentAgreement();
             if($agreement){
                 if($agreement->verifyAgreementSigned()){
+                    $college_data=$agreement->getRoom()->getCollege();
+                    $college_bank_account=$college_data->getActivateBankAccount();
+                    if(!$college_bank_account){
+                      return $this->returnjson(false,'La residencia no tiene cuenta bancaria');
+                    }
                     try {
-                        //TODO get college by the agreement
+                        // get college by the agreement
                         $rent->setStatusPaid(true);
                         $rent->setIdTransaction($idTransaction);
                         $rent->setDatePaid(date_create('now'));
-                        $college_data=$agreement->getRoom()->getCollege();
-                        //TODO get iban of the college
-                        $file_name=$this->create_receipt($college_data,$user,$rent);
+
+                        $file_name=$this->create_receipt($college_data,$user,$rent,$college_bank_account);
                         $rent->setFileReceipt($file_name);
                         $em = $this->getDoctrine()->getManager();
                         // tells Doctrine you want to (eventually) save the Product (no queries is done)

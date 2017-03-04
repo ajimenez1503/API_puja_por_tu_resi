@@ -14,16 +14,14 @@ class Rent
     private $file_receipt;
     private $date_paid;
     private $student;
-    private $card_holder;
-    private $card_number;
+    private $idTransaction;
 
 
     public function __construct()
     {
         $this->status_paid = 0;
         $this->read_by_student = 0;
-        $this->card_holder = null;#Generate in the pay method
-        $this->card_number = null;#Generate in the pay method
+        $this->idTransaction = null;#Generate in the pay method
     }
     /**
      * Get id
@@ -99,8 +97,7 @@ class Rent
             'year'=>date_format($this->getDate(),"Y"),
             'file_receipt'=>$this->getFileReceipt(),
             'date_paid'=>$this->getDatePaid(),
-            'card_number'=>$this->getCardNumber(),
-            'card_holder'=>$this->getCardHolder(),
+            'idTransaction'=>$this->getIdTransaction(),
             'Student'=>$this->getStudent()->getUsername(),
 
         );
@@ -205,50 +202,26 @@ class Rent
     }
 
     /**
-     * Set cardHolder
+     * Set idTransaction
      *
-     * @param string $cardHolder
+     * @param string $idTransaction
      *
      * @return Rent
      */
-    public function setCardHolder($cardHolder)
+    public function setIdTransaction($idTransaction)
     {
-        $this->card_holder = $cardHolder;
+        $this->idTransaction = $idTransaction;
 
         return $this;
     }
 
     /**
-     * Get cardHolder
+     * Get idTransaction
      *
      * @return string
      */
-    public function getCardHolder()
+    public function getIdTransaction()
     {
-        return $this->card_holder;
-    }
-
-    /**
-     * Set cardNumber
-     *
-     * @param string $cardNumber
-     *
-     * @return Rent
-     */
-    public function setCardNumber($cardNumber)
-    {
-        $this->card_number = $cardNumber;
-
-        return $this;
-    }
-
-    /**
-     * Get cardNumber
-     *
-     * @return string
-     */
-    public function getCardNumber()
-    {
-        return $this->card_number;
+        return $this->idTransaction;
     }
 }

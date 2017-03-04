@@ -26,12 +26,7 @@ AppBundle\Entity\Rent:
             type: datetime
             unique: FALSE
             nullable: TRUE
-        card_holder:
-            type: string
-            length: 60
-            unique: FALSE
-            nullable: TRUE
-        card_number:
+        idTransaction:
             type: string
             length: 60
             unique: FALSE

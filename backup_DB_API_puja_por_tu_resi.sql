@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.10deb1
+-- version 4.5.4.1deb2ubuntu2
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 22-02-2017 a las 13:43:44
--- Versión del servidor: 5.5.44-0ubuntu0.14.04.1
--- Versión de PHP: 5.5.9-1ubuntu4.11
+-- Tiempo de generación: 04-03-2017 a las 13:46:18
+-- Versión del servidor: 5.7.17-0ubuntu0.16.04.1
+-- Versión de PHP: 7.0.15-0ubuntu0.16.04.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Base de datos: `API_puja_por_tu_resi`
@@ -26,8 +26,8 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `agreement`
 --
 
-CREATE TABLE IF NOT EXISTS `agreement` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `agreement` (
+  `id` int(11) NOT NULL,
   `student_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
   `room_id` int(11) DEFAULT NULL,
   `price` double NOT NULL,
@@ -35,11 +35,8 @@ CREATE TABLE IF NOT EXISTS `agreement` (
   `date_end_school` datetime NOT NULL,
   `file_agreement` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
   `file_agreement_signed` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `date_signed` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_2E655A244BD54AEC` (`student_username`),
-  KEY `IDX_2E655A2454177093` (`room_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=18 ;
+  `date_signed` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `agreement`
@@ -55,16 +52,14 @@ INSERT INTO `agreement` (`id`, `student_username`, `room_id`, `price`, `date_sta
 -- Estructura de tabla para la tabla `bank`
 --
 
-CREATE TABLE IF NOT EXISTS `bank` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `bank` (
+  `id` int(11) NOT NULL,
   `college_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
   `iban` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `bic` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `account_holder` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `activate` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_D860BF7A16A289D1` (`college_username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=18 ;
+  `activate` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `bank`
@@ -80,15 +75,12 @@ INSERT INTO `bank` (`id`, `college_username`, `iban`, `bic`, `account_holder`, `
 -- Estructura de tabla para la tabla `bid`
 --
 
-CREATE TABLE IF NOT EXISTS `bid` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `bid` (
+  `id` int(11) NOT NULL,
   `student_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
   `room_id` int(11) DEFAULT NULL,
-  `point` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_4AF2B3F34BD54AEC` (`student_username`),
-  KEY `IDX_4AF2B3F354177093` (`room_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+  `point` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `bid`
@@ -103,7 +95,7 @@ INSERT INTO `bid` (`id`, `student_username`, `room_id`, `point`) VALUES
 -- Estructura de tabla para la tabla `colleges`
 --
 
-CREATE TABLE IF NOT EXISTS `colleges` (
+CREATE TABLE `colleges` (
   `username` varchar(9) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
@@ -121,8 +113,7 @@ CREATE TABLE IF NOT EXISTS `colleges` (
   `laundry` tinyint(1) NOT NULL,
   `gym` tinyint(1) NOT NULL,
   `study_room` tinyint(1) NOT NULL,
-  `heating` tinyint(1) NOT NULL,
-  PRIMARY KEY (`username`)
+  `heating` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -130,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `colleges` (
 --
 
 INSERT INTO `colleges` (`username`, `password`, `email`, `is_active`, `company_name`, `address`, `latitude`, `longitude`, `telephone`, `url`, `wifi`, `elevator`, `canteen`, `hours24`, `laundry`, `gym`, `study_room`, `heating`) VALUES
-('B18756676', '$2y$13$tVR0M8lYWAfbKwJY5uLMuOepGiefq3PEy8uKFozbyfZefwtv6ow22', 'bb@gmai.com', 1, 'antonio college', 'Calle Obispo Hurtado, 21, 18002 Granada, España', 37.173724, -3.606465500000013, '444444444', 'http://www.w3schools.com/bootstrap/bootstrap_buttons.asp', 0, 1, 0, 0, 0, 1, 1, 0),
+('B18756676', '$2y$13$tVR0M8lYWAfbKwJY5uLMuOepGiefq3PEy8uKFozbyfZefwtv6ow22', 'ab@gmai.com', 1, 'antonio college', 'Calle Obispo Hurtado, 21, 18002 Granada, España', 37.173724, -3.606465500000013, '444444448', 'http://127.0.0.1:8000/ProfileCollege/updateProfile/', 0, 1, 1, 0, 0, 1, 1, 0),
 ('college11', '$2y$13$CmOjG7rctQxhEqURfXm.9eEtwXRfjD8.9Iwz0ASntPy/GK9d2i9iu', 'email@gmail.com', 1, 'gdsga', 'address', 0, 0, '666666666', 'https://symfony.com/', 0, 0, 0, 0, 0, 0, 0, 0),
 ('college12', '$2y$13$WmHW2RCZ.l6GkkSEUIlguOVNRas6wKv2uSi44KEgp96X4ngRblCT.', 'email@gmail.com', 1, 'gdsga', 'address', 0, 0, '666666666', 'https://symfony.com/', 0, 0, 0, 0, 0, 0, 0, 0),
 ('college13', '$2y$13$gu9KvLTlqDoSkAk625sSTeZAuXciBkKXV1w5CEspAaxJAMz1Lhbnu', 'email@gmail.com', 1, 'gdsga', 'address', 0, 0, '666666666', 'https://symfony.com/', 1, 0, 1, 0, 0, 0, 1, 0),
@@ -142,16 +133,14 @@ INSERT INTO `colleges` (`username`, `password`, `email`, `is_active`, `company_n
 -- Estructura de tabla para la tabla `incidence`
 --
 
-CREATE TABLE IF NOT EXISTS `incidence` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `incidence` (
+  `id` int(11) NOT NULL,
   `student_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
   `file_name` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `date` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_170604174BD54AEC` (`student_username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
+  `date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `incidence`
@@ -160,9 +149,10 @@ CREATE TABLE IF NOT EXISTS `incidence` (
 INSERT INTO `incidence` (`id`, `student_username`, `status`, `description`, `file_name`, `date`) VALUES
 (1, '12345678A', 'IN PROGRESS', 'la mesa esta rota ', '1aa2c0c121556de82865a9898058937a.jpg', '2017-01-10 18:34:45'),
 (2, '12345678A', 'DONE', 'la puerta no se cierra. Ayuda ', 'c4d35eccf17df135b22c07d183a47e21.jpg', '2017-01-10 18:40:13'),
-(3, '87654321A', 'OPEN', 'test', '010e00f6e19b777011c88403147b1e53.jpg', '2017-02-15 20:19:28'),
+(3, '87654321A', 'IN PROGRESS', 'test', '010e00f6e19b777011c88403147b1e53.jpg', '2017-02-15 20:19:28'),
 (4, '87654321A', 'OPEN', 'test', 'ba96d281e518b61853012ef9050c20fc.jpg', '2017-02-15 20:19:28'),
-(5, '87654321A', 'OPEN', 'sdgsadgdas', '4e8c207f9e7c1f4a7b0b4a56ff0b6172.jpg', '2017-02-15 20:36:11');
+(5, '87654321A', 'OPEN', 'sdgsadgdas', '4e8c207f9e7c1f4a7b0b4a56ff0b6172.jpg', '2017-02-15 20:36:11'),
+(6, '12345678A', 'DONE', 'holaaaa test ', '297677123c02644aac0de9cbb1b54328.jpg', '2017-03-01 20:02:52');
 
 -- --------------------------------------------------------
 
@@ -170,8 +160,8 @@ INSERT INTO `incidence` (`id`, `student_username`, `status`, `description`, `fil
 -- Estructura de tabla para la tabla `message`
 --
 
-CREATE TABLE IF NOT EXISTS `message` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `message` (
+  `id` int(11) NOT NULL,
   `student_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
   `college_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
   `read_by_student` tinyint(1) NOT NULL,
@@ -179,11 +169,8 @@ CREATE TABLE IF NOT EXISTS `message` (
   `message` varchar(5000) COLLATE utf8_unicode_ci NOT NULL,
   `file_attached` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
   `date` datetime NOT NULL,
-  `sender_type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_B6BD307F4BD54AEC` (`student_username`),
-  KEY `IDX_B6BD307F16A289D1` (`college_username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=21 ;
+  `sender_type` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `message`
@@ -203,7 +190,20 @@ INSERT INTO `message` (`id`, `student_username`, `college_username`, `read_by_st
 (17, '12345678A', 'B18756676', 1, 1, 'safasdfdsafsa', NULL, '2017-02-10 17:58:45', 'ROLE_STUDENT'),
 (18, '12345678A', 'B18756676', 1, 1, 'agadgas', NULL, '2017-02-10 18:02:39', 'ROLE_STUDENT'),
 (19, '12345678A', 'B18756676', 1, 1, 'hola como estas?', NULL, '2017-02-22 12:27:28', 'ROLE_COLLEGE'),
-(20, '87654321A', 'B18756676', 0, 1, 'hola como estas?', NULL, '2017-02-22 12:27:29', 'ROLE_COLLEGE');
+(20, '87654321A', 'B18756676', 1, 1, 'hola como estas?', NULL, '2017-02-22 12:27:29', 'ROLE_COLLEGE'),
+(21, '12345678A', 'B18756676', 1, 1, 'holaaa test 1', NULL, '2017-02-22 16:34:44', 'ROLE_COLLEGE'),
+(22, '87654321A', 'B18756676', 1, 1, 'holaaa test 1', NULL, '2017-02-22 16:34:44', 'ROLE_COLLEGE'),
+(23, '12345678A', 'B18756676', 1, 1, 'test2', 'f0f4d8995b19db5c9579c397a0e01327.jpg', '2017-02-22 16:35:25', 'ROLE_COLLEGE'),
+(24, '87654321A', 'B18756676', 1, 1, 'test2', '92f14bee872058e29c4ada6045767aab.jpg', '2017-02-22 16:35:25', 'ROLE_COLLEGE'),
+(25, '12345678A', 'B18756676', 1, 1, 'holaa%20asdgsad%20%3Csdg%3E%20ssd%20%3C/sdgs%3E', NULL, '2017-03-01 18:57:36', 'ROLE_COLLEGE'),
+(26, '12345678A', 'B18756676', 1, 1, 'hola%20que%20tal%20estas%20%3F.%20%3Cscript%3Efsdsd%3C/script%3E', NULL, '2017-03-01 18:58:09', 'ROLE_COLLEGE'),
+(27, '12345678A', 'B18756676', 1, 1, 'hola%20que%20tal%20estas%20%3F.%20%3Cscript%3Efsdsd%3C/script%3E', NULL, '2017-03-01 19:00:11', 'ROLE_COLLEGE'),
+(28, '12345678A', 'B18756676', 1, 1, 'sadg dsg', NULL, '2017-03-01 19:00:53', 'ROLE_COLLEGE'),
+(29, '12345678A', 'B18756676', 1, 1, 'hola que tal estas ?. &lt;script&gt;fsdsd&lt;/script&gt;', NULL, '2017-03-01 19:01:04', 'ROLE_COLLEGE'),
+(30, '12345678A', 'B18756676', 1, 1, 'saga', NULL, '2017-03-01 19:04:33', 'ROLE_COLLEGE'),
+(31, '12345678A', 'B18756676', 1, 1, 'hola que tal estas ?. &lt;script&gt;fsdsd&lt;/script&gt;', NULL, '2017-03-01 19:04:42', 'ROLE_COLLEGE'),
+(32, '12345678A', 'B18756676', 1, 0, 'dbsadb', NULL, '2017-03-01 19:06:09', 'ROLE_STUDENT'),
+(33, '12345678A', 'B18756676', 1, 0, 'sdgsdagasd', NULL, '2017-03-01 19:07:14', 'ROLE_STUDENT');
 
 -- --------------------------------------------------------
 
@@ -211,36 +211,33 @@ INSERT INTO `message` (`id`, `student_username`, `college_username`, `read_by_st
 -- Estructura de tabla para la tabla `rent`
 --
 
-CREATE TABLE IF NOT EXISTS `rent` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `rent` (
+  `id` int(11) NOT NULL,
   `student_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status_paid` tinyint(1) NOT NULL,
   `price` double NOT NULL,
   `date` datetime NOT NULL,
   `file_receipt` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
   `date_paid` datetime DEFAULT NULL,
-  `card_holder` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `card_number` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_2784DCC4BD54AEC` (`student_username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=80 ;
+  `id_transaction` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `rent`
 --
 
-INSERT INTO `rent` (`id`, `student_username`, `status_paid`, `price`, `date`, `file_receipt`, `date_paid`, `card_holder`, `card_number`) VALUES
-(69, '87654321A', 1, 800, '2017-08-26 00:00:00', '292c55780838459d42f093ca9767cf6a.pdf', '2017-02-09 20:10:44', 'Antronio Jimenez', '4929542739248152'),
-(70, '87654321A', 0, 800, '2017-09-26 00:00:00', NULL, NULL, NULL, NULL),
-(71, '87654321A', 0, 800, '2017-10-26 00:00:00', NULL, NULL, NULL, NULL),
-(72, '87654321A', 0, 800, '2017-11-26 00:00:00', NULL, NULL, NULL, NULL),
-(73, '87654321A', 0, 800, '2017-12-26 00:00:00', NULL, NULL, NULL, NULL),
-(74, '87654321A', 0, 800, '2018-01-26 00:00:00', NULL, NULL, NULL, NULL),
-(75, '87654321A', 0, 800, '2018-02-26 00:00:00', NULL, NULL, NULL, NULL),
-(76, '87654321A', 0, 800, '2018-03-26 00:00:00', NULL, NULL, NULL, NULL),
-(77, '87654321A', 0, 800, '2018-04-26 00:00:00', NULL, NULL, NULL, NULL),
-(78, '87654321A', 0, 800, '2018-05-26 00:00:00', NULL, NULL, NULL, NULL),
-(79, '87654321A', 0, 800, '2018-06-26 00:00:00', NULL, NULL, NULL, NULL);
+INSERT INTO `rent` (`id`, `student_username`, `status_paid`, `price`, `date`, `file_receipt`, `date_paid`, `id_transaction`) VALUES
+(69, '87654321A', 1, 800, '2017-08-26 00:00:00', '292c55780838459d42f093ca9767cf6a.pdf', '2017-02-09 20:10:44', NULL),
+(70, '87654321A', 1, 800, '2017-09-26 00:00:00', '2734b62087d6207c7425469cec8ec298.pdf', '2017-03-04 13:44:21', '3785'),
+(71, '87654321A', 0, 800, '2017-10-26 00:00:00', NULL, NULL, NULL),
+(72, '87654321A', 0, 800, '2017-11-26 00:00:00', NULL, NULL, NULL),
+(73, '87654321A', 0, 800, '2017-12-26 00:00:00', NULL, NULL, NULL),
+(74, '87654321A', 0, 800, '2018-01-26 00:00:00', NULL, NULL, NULL),
+(75, '87654321A', 0, 800, '2018-02-26 00:00:00', NULL, NULL, NULL),
+(76, '87654321A', 0, 800, '2018-03-26 00:00:00', NULL, NULL, NULL),
+(77, '87654321A', 0, 800, '2018-04-26 00:00:00', NULL, NULL, NULL),
+(78, '87654321A', 0, 800, '2018-05-26 00:00:00', NULL, NULL, NULL),
+(79, '87654321A', 0, 800, '2018-06-26 00:00:00', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -248,14 +245,12 @@ INSERT INTO `rent` (`id`, `student_username`, `status_paid`, `price`, `date`, `f
 -- Estructura de tabla para la tabla `responsiblePerson`
 --
 
-CREATE TABLE IF NOT EXISTS `responsiblePerson` (
+CREATE TABLE `responsiblePerson` (
   `dni` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `college_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
   `email` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `job_position` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`dni`),
-  KEY `IDX_CB0E5D4A16A289D1` (`college_username`)
+  `job_position` varchar(30) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -276,8 +271,8 @@ INSERT INTO `responsiblePerson` (`dni`, `college_username`, `email`, `name`, `jo
 -- Estructura de tabla para la tabla `room`
 --
 
-CREATE TABLE IF NOT EXISTS `room` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `room` (
+  `id` int(11) NOT NULL,
   `college_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `price` double NOT NULL,
@@ -293,10 +288,8 @@ CREATE TABLE IF NOT EXISTS `room` (
   `tv` tinyint(1) NOT NULL,
   `bath` tinyint(1) NOT NULL,
   `desk` tinyint(1) NOT NULL,
-  `wardrove` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_729F519B16A289D1` (`college_username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=32 ;
+  `wardrove` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `room`
@@ -325,14 +318,13 @@ INSERT INTO `room` (`id`, `college_username`, `name`, `price`, `date_start_schoo
 -- Estructura de tabla para la tabla `students`
 --
 
-CREATE TABLE IF NOT EXISTS `students` (
+CREATE TABLE `students` (
   `username` varchar(9) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `is_active` tinyint(1) NOT NULL,
-  `creation_date` datetime NOT NULL,
-  PRIMARY KEY (`username`)
+  `creation_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -340,9 +332,123 @@ CREATE TABLE IF NOT EXISTS `students` (
 --
 
 INSERT INTO `students` (`username`, `password`, `email`, `name`, `is_active`, `creation_date`) VALUES
-('12345678A', '$2y$13$xqavJniqKVrgXgISBRXt.Ow1ztY8UCgdBymCeRep40r4MdvheAIqe', 'ant1onio@gmail.com', 'antonio', 1, '2017-01-10 18:31:32'),
+('12345678A', '$2y$13$xqavJniqKVrgXgISBRXt.Ow1ztY8UCgdBymCeRep40r4MdvheAIqe', 'antoniou@gmail.com', 'antonio', 1, '2017-01-10 18:31:32'),
 ('87654321A', '$2y$13$kHfdnRWdRaJVk0eP/Fc32.u61SPNR88/5O/33nOHrdqNd4bppXnVO', 'jm@sgs.com', 'antonio', 1, '2017-02-09 19:17:57');
 
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `agreement`
+--
+ALTER TABLE `agreement`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_2E655A244BD54AEC` (`student_username`),
+  ADD KEY `IDX_2E655A2454177093` (`room_id`);
+
+--
+-- Indices de la tabla `bank`
+--
+ALTER TABLE `bank`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_D860BF7A16A289D1` (`college_username`);
+
+--
+-- Indices de la tabla `bid`
+--
+ALTER TABLE `bid`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_4AF2B3F34BD54AEC` (`student_username`),
+  ADD KEY `IDX_4AF2B3F354177093` (`room_id`);
+
+--
+-- Indices de la tabla `colleges`
+--
+ALTER TABLE `colleges`
+  ADD PRIMARY KEY (`username`);
+
+--
+-- Indices de la tabla `incidence`
+--
+ALTER TABLE `incidence`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_170604174BD54AEC` (`student_username`);
+
+--
+-- Indices de la tabla `message`
+--
+ALTER TABLE `message`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_B6BD307F4BD54AEC` (`student_username`),
+  ADD KEY `IDX_B6BD307F16A289D1` (`college_username`);
+
+--
+-- Indices de la tabla `rent`
+--
+ALTER TABLE `rent`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_2784DCC4BD54AEC` (`student_username`);
+
+--
+-- Indices de la tabla `responsiblePerson`
+--
+ALTER TABLE `responsiblePerson`
+  ADD PRIMARY KEY (`dni`),
+  ADD KEY `IDX_CB0E5D4A16A289D1` (`college_username`);
+
+--
+-- Indices de la tabla `room`
+--
+ALTER TABLE `room`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_729F519B16A289D1` (`college_username`);
+
+--
+-- Indices de la tabla `students`
+--
+ALTER TABLE `students`
+  ADD PRIMARY KEY (`username`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `agreement`
+--
+ALTER TABLE `agreement`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+--
+-- AUTO_INCREMENT de la tabla `bank`
+--
+ALTER TABLE `bank`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+--
+-- AUTO_INCREMENT de la tabla `bid`
+--
+ALTER TABLE `bid`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT de la tabla `incidence`
+--
+ALTER TABLE `incidence`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT de la tabla `message`
+--
+ALTER TABLE `message`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+--
+-- AUTO_INCREMENT de la tabla `rent`
+--
+ALTER TABLE `rent`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+--
+-- AUTO_INCREMENT de la tabla `room`
+--
+ALTER TABLE `room`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 --
 -- Restricciones para tablas volcadas
 --

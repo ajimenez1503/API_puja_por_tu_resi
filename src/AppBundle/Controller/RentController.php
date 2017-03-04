@@ -218,32 +218,12 @@ class RentController extends Controller
      *      {
      *          "name"="id",
      *          "dataType"="integer",
-     *          "description"="ID of the message"
+     *          "description"="ID of the rent"
      *      },
      *      {
-     *          "name"="cardNumber",
+     *          "name"="idTransaction",
      *          "dataType"="string",
-     *          "description"="Number of the card of the paid"
-     *      },
-     *      {
-     *          "name"="cardHolder",
-     *          "dataType"="string",
-     *          "description"="Name of the holder of the card of the paid"
-     *      },
-     *      {
-     *          "name"="cvv",
-     *          "dataType"="string",
-     *          "description"="Security number of the card of the paid"
-     *      },
-     *      {
-     *          "name"="expiry_year",
-     *          "dataType"="string",
-     *          "description"="4 digit of the year"
-     *      },
-     *      {
-     *          "name"="cvv",
-     *          "dataType"="expiry_month",
-     *          "description"="2 digit of the month."
+     *          "description"="idTransaction of the simulator TPV"
      *      },
      *  },
      * )
@@ -251,21 +231,10 @@ class RentController extends Controller
     public function payAction(Request $request)
     {
         $id=$request->request->get('id');
-        $cardHolder=$request->request->get('cardHolder');
-        $cvv=$request->request->get('cvv');
-        $expiry_year=$request->request->get('expiry_year');
-        $expiry_month=$request->request->get('expiry_month');
-        $cardNumber=$request->request->get('cardNumber');
-        $cardNumber=preg_replace("/\D/", "", $cardNumber);//Delete everthing that is not a digit
+        $idTransaction=$request->request->get('idTransaction');
 
-        if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$cardHolder,1,30)){
-            return $this->returnjson(false,'Propietario de la tarjeta no es valido.');
-        }if (!$this->get('app.validate')->validateLuhnCardNumber($this->get('validator'),$cardNumber)){
-            return $this->returnjson(false,'Numero de tarjeta no es valido.');
-        }if (!$this->get('app.validate')->validateCVV($cardNumber,$cvv)){
-            return $this->returnjson(false,'CVV no es valido.');
-        }if (!$this->get('app.validate')->validateExpiryDate($expiry_month,$expiry_year)){
-            return $this->returnjson(false,'Fecha expiracion erronea.');
+        if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$idTransaction,1,60)){
+            return $this->returnjson(false,'idTransaction no es correcta .');
         }
         $rent = $this->getDoctrine()->getRepository('AppBundle:Rent')->find($id);
         if(!$rent){
@@ -278,10 +247,10 @@ class RentController extends Controller
                     try {
                         //TODO get college by the agreement
                         $rent->setStatusPaid(true);
-                        $rent->setCardHolder($cardHolder);
-                        $rent->setCardNumber($cardNumber);
+                        $rent->setIdTransaction($idTransaction);
                         $rent->setDatePaid(date_create('now'));
                         $college_data=$agreement->getRoom()->getCollege();
+                        //TODO get iban of the college
                         $file_name=$this->create_receipt($college_data,$user,$rent);
                         $rent->setFileReceipt($file_name);
                         $em = $this->getDoctrine()->getManager();

@@ -98,9 +98,9 @@ security:
     - { path: ^/Room/getFREE/ , roles: ROLE_COLLEGE }
     - { path: ^/Room/get/ , roles: ROLE_COLLEGE }
     - { path: ^/Room/remove/ , roles: ROLE_COLLEGE }
-    - { path: ^/Room/getSearch/ , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
-    - { path: ^/Room/getAllCompanyName/ , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
-    - { path: ^/Room/getSearchAll/ , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
+    - { path: ^/Room/getSearch/ , roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/Room/getAllCompanyName/ , roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/Room/getSearchAll/ , roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/Room/download/ , roles:  [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
     #BANK  CONTROLLER
     - { path: ^/Bank/ , roles: ROLE_COLLEGE }

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 27-03-2017 a las 19:14:20
+-- Tiempo de generación: 04-04-2017 a las 13:16:08
 -- Versión del servidor: 5.7.17-0ubuntu0.16.04.1
 -- Versión de PHP: 7.0.15-0ubuntu0.16.04.4
 
@@ -44,7 +44,8 @@ CREATE TABLE `agreement` (
 
 INSERT INTO `agreement` (`id`, `student_username`, `room_id`, `price`, `date_start_school`, `date_end_school`, `file_agreement`, `file_agreement_signed`, `date_signed`) VALUES
 (16, '12345678A', 16, 1800, '2017-09-01 00:00:00', '2018-06-30 00:00:00', 'fada024a97f6cf710f7fa7d345b4c4a5.pdf', '77087d519fdd34cf123b91655e2e9633.pdf', '2017-02-02 17:33:08'),
-(17, '87654321A', 17, 800, '2017-08-26 00:00:00', '2018-07-26 00:00:00', 'cf7dd4a104cf8a6c01471d7542699f82.pdf', '0f7f4e3faf9a2ac186a0a159d8b53f34.pdf', '2017-02-09 19:23:45');
+(17, '87654321A', 17, 800, '2017-08-26 00:00:00', '2018-07-26 00:00:00', 'cf7dd4a104cf8a6c01471d7542699f82.pdf', '0f7f4e3faf9a2ac186a0a159d8b53f34.pdf', '2017-02-09 19:23:45'),
+(18, '15426661A', 19, 500, '2017-07-01 00:00:00', '2017-08-31 00:00:00', '9c7029693cbf128989f60091769e1817.pdf', NULL, '2017-04-04 13:09:31');
 
 -- --------------------------------------------------------
 
@@ -79,15 +80,9 @@ CREATE TABLE `bid` (
   `id` int(11) NOT NULL,
   `student_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
   `room_id` int(11) DEFAULT NULL,
-  `point` int(11) NOT NULL
+  `date_start_school` datetime NOT NULL,
+  `date_end_school` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Volcado de datos para la tabla `bid`
---
-
-INSERT INTO `bid` (`id`, `student_username`, `room_id`, `point`) VALUES
-(2, '12345678A', 27, 33);
 
 -- --------------------------------------------------------
 
@@ -276,10 +271,6 @@ CREATE TABLE `room` (
   `college_username` varchar(9) COLLATE utf8_unicode_ci DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `price` double NOT NULL,
-  `date_start_school` datetime NOT NULL,
-  `date_end_school` datetime NOT NULL,
-  `date_start_bid` datetime NOT NULL,
-  `date_end_bid` datetime NOT NULL,
   `floor` int(11) NOT NULL,
   `size` int(11) NOT NULL,
   `picture1` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -295,22 +286,22 @@ CREATE TABLE `room` (
 -- Volcado de datos para la tabla `room`
 --
 
-INSERT INTO `room` (`id`, `college_username`, `name`, `price`, `date_start_school`, `date_end_school`, `date_start_bid`, `date_end_bid`, `floor`, `size`, `picture1`, `picture2`, `picture3`, `tv`, `bath`, `desk`, `wardrove`) VALUES
-(16, 'B18756676', 'room5', 1800, '2017-09-01 00:00:00', '2018-06-30 00:00:00', '2017-01-18 00:00:00', '2017-02-02 00:00:00', 1, 20, '35cf01580edfdde1e494f95678836fd2.jpg', '3f1ee2b7772ac8710cd2e34391466a1b.jpg', 'b4b9a7c026ee06f336ff4a0a866d03b5.jpg', 1, 1, 0, 0),
-(17, 'B18756676', 'room6', 800, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-02-09 00:00:00', '2017-02-09 00:00:00', 1, 20, 'a6caa9570ce36f6960d91b036fc89c28.jpg', '89d73aaae334992c9ead57acc34ec75e.jpg', 'd69a1fdcc4a557b7f7e9f0906be37fd8.jpg', 1, 1, 0, 0),
-(18, 'B18756676', '7room', 500, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-18 00:00:00', '2017-02-15 00:00:00', 1, 20, '32257b38bea73960739c16fc8bbd132a.jpg', '45c872837ae1133117315ba459b6a887.jpg', '71e3ca6d50fd67fbe2d154201c287130.jpg', 1, 1, 0, 0),
-(19, 'B18756676', 'r8', 500, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-18 00:00:00', '2017-02-15 00:00:00', 1, 20, '92f21f32d96f64cc431b2b4066fd3d13.jpg', 'c5a920cf23f292afd072f86997943897.jpg', '0ba62d6ec07456ef0fc8586af446027c.jpg', 1, 1, 0, 0),
-(21, 'B18756676', 'room10', 500, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-18 00:00:00', '2017-02-15 00:00:00', 1, 20, '88821bd681b347d38738b8cf1b23d256.jpg', 'fb01924d0c22f6bb947651874804dc61.jpg', '131c94b66466b357c5cdda7e86575fdd.jpg', 1, 1, 0, 0),
-(22, 'B18756676', 'room18', 500, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-18 00:00:00', '2017-02-15 00:00:00', 1, 20, 'f0fa3a5c5738e3591cb8823d4c9b71f3.jpg', '5d7607fd220b8ed6583cdd3b2f00e332.jpg', 'e6b99a1ddb2b95def9e50fb416799579.jpg', 1, 1, 0, 0),
-(23, 'B18756676', 'room11', 500, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-18 00:00:00', '2017-02-15 00:00:00', 1, 20, 'c707128c80c13e3d373f187a477f7b56.jpg', '', '6015cf47e1cb6993511423d544e00a9e.jpg', 1, 1, 0, 0),
-(24, 'B18756676', 'room1', 1600, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-18 00:00:00', '2017-02-15 00:00:00', 1, 20, '58c72081eb6f858be0f0b12e9a59e3a4.jpg', '6e3574b33436ca67af3cbda9fbe01593.jpg', 'e2ffb26cde795312c015f2274452db83.jpg', 1, 1, 1, 0),
-(25, 'B18756676', 'room33', 50, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-18 00:00:00', '2017-02-15 00:00:00', 1, 20, '4af5653fb57d641dfcce40218fdce5a9.jpg', '40b7574e8f09d7d90fd496c47948a504.jpg', '49cd8064b939bf328fe1a22540772dd0.jpg', 1, 1, 1, 0),
-(26, 'B18756676', 'room145', 500, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-18 00:00:00', '2017-02-15 00:00:00', 1, 20, '83286d1c2495564847abc2351ebcb2f0.jpg', '61ec83a540bf844c0155ef27bd7627ff.jpg', '9a3b54a8080fca7c9c35b2174210d46b.jpg', 1, 1, 1, 0),
-(27, 'B18756676', 'room1', 500, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-01-18 00:00:00', '2017-02-15 00:00:00', 1, 20, 'de9a724964786ee80293224cb1646b21.jpg', '9b64c65ad869402f2d1f05ee3d493b0f.jpg', '6f697af442926ebeaa4f193a155bde99.jpg', 1, 1, 1, 0),
-(28, 'B18756676', 'room155', 500, '2017-08-26 00:00:00', '2018-07-26 00:00:00', '2017-02-01 00:00:00', '2017-02-01 00:00:00', 1, 20, '3f8ee6adc50a0d6c03a74682e1509705.jpg', '6c28fa3fc8a375a63e557bc9ff9df3d8.jpg', 'db24c02f77ea9066019894a0cfada8f2.jpg', 1, 1, 1, 0),
-(29, 'B18756676', 'room[number]', 34, '2017-02-02 00:00:00', '2017-02-05 00:00:00', '2017-01-23 00:00:00', '2017-01-31 00:00:00', 1, 15, 'ed924939bff5f0920eddf3351b253c0d.jpg', 'ae59195fd335a0e3eed2b16836bedaed.jpg', 'ebf9c8bf8dbaa0e75b42f1e43c630690.jpg', 0, 1, 1, 0),
-(30, 'B18756676', 'room[number]', 34, '2017-02-02 00:00:00', '2017-02-05 00:00:00', '2017-01-23 00:00:00', '2017-01-31 00:00:00', 1, 15, '746b387a43f61dc0f821484dc6ac58ee.jpg', '5dab58fa6b7a409057d91a1b4e94c7f2.jpg', 'ec2e3feb10149454d6f6ced0b33c2953.jpg', 0, 1, 1, 0),
-(31, 'B18756676', 'room[number]', 34, '2017-02-02 00:00:00', '2017-02-05 00:00:00', '2017-01-23 00:00:00', '2017-01-31 00:00:00', 1, 15, 'cf34b09009a156c95e57eb76715c2ff4.jpg', '7816c1bde2197f9ed99b86a107f42b8b.jpg', 'd3426b97be84916b864bffad7cdd11c7.jpg', 1, 1, 1, 1);
+INSERT INTO `room` (`id`, `college_username`, `name`, `price`, `floor`, `size`, `picture1`, `picture2`, `picture3`, `tv`, `bath`, `desk`, `wardrove`) VALUES
+(16, 'B18756676', 'room5', 1800, 1, 20, '35cf01580edfdde1e494f95678836fd2.jpg', '3f1ee2b7772ac8710cd2e34391466a1b.jpg', 'b4b9a7c026ee06f336ff4a0a866d03b5.jpg', 1, 1, 0, 0),
+(17, 'B18756676', 'room6', 800, 1, 20, 'a6caa9570ce36f6960d91b036fc89c28.jpg', '89d73aaae334992c9ead57acc34ec75e.jpg', 'd69a1fdcc4a557b7f7e9f0906be37fd8.jpg', 1, 1, 0, 0),
+(18, 'B18756676', '7room', 500, 1, 20, '32257b38bea73960739c16fc8bbd132a.jpg', '45c872837ae1133117315ba459b6a887.jpg', '71e3ca6d50fd67fbe2d154201c287130.jpg', 1, 1, 0, 0),
+(19, 'B18756676', 'r8', 500, 1, 20, '92f21f32d96f64cc431b2b4066fd3d13.jpg', 'c5a920cf23f292afd072f86997943897.jpg', '0ba62d6ec07456ef0fc8586af446027c.jpg', 1, 1, 0, 0),
+(21, 'B18756676', 'room10', 500, 1, 20, '88821bd681b347d38738b8cf1b23d256.jpg', 'fb01924d0c22f6bb947651874804dc61.jpg', '131c94b66466b357c5cdda7e86575fdd.jpg', 1, 1, 0, 0),
+(22, 'B18756676', 'room18', 500, 1, 20, 'f0fa3a5c5738e3591cb8823d4c9b71f3.jpg', '5d7607fd220b8ed6583cdd3b2f00e332.jpg', 'e6b99a1ddb2b95def9e50fb416799579.jpg', 1, 1, 0, 0),
+(23, 'B18756676', 'room11', 500, 1, 20, 'c707128c80c13e3d373f187a477f7b56.jpg', '', '6015cf47e1cb6993511423d544e00a9e.jpg', 1, 1, 0, 0),
+(24, 'B18756676', 'room1', 1600, 1, 20, '58c72081eb6f858be0f0b12e9a59e3a4.jpg', '6e3574b33436ca67af3cbda9fbe01593.jpg', 'e2ffb26cde795312c015f2274452db83.jpg', 1, 1, 1, 0),
+(25, 'B18756676', 'room33', 50, 1, 20, '4af5653fb57d641dfcce40218fdce5a9.jpg', '40b7574e8f09d7d90fd496c47948a504.jpg', '49cd8064b939bf328fe1a22540772dd0.jpg', 1, 1, 1, 0),
+(26, 'B18756676', 'room145', 500, 1, 20, '83286d1c2495564847abc2351ebcb2f0.jpg', '61ec83a540bf844c0155ef27bd7627ff.jpg', '9a3b54a8080fca7c9c35b2174210d46b.jpg', 1, 1, 1, 0),
+(27, 'B18756676', 'room1', 500, 1, 20, 'de9a724964786ee80293224cb1646b21.jpg', '9b64c65ad869402f2d1f05ee3d493b0f.jpg', '6f697af442926ebeaa4f193a155bde99.jpg', 1, 1, 1, 0),
+(28, 'B18756676', 'room155', 500, 1, 20, '3f8ee6adc50a0d6c03a74682e1509705.jpg', '6c28fa3fc8a375a63e557bc9ff9df3d8.jpg', 'db24c02f77ea9066019894a0cfada8f2.jpg', 1, 1, 1, 0),
+(29, 'B18756676', 'room[number]', 34, 1, 15, 'ed924939bff5f0920eddf3351b253c0d.jpg', 'ae59195fd335a0e3eed2b16836bedaed.jpg', 'ebf9c8bf8dbaa0e75b42f1e43c630690.jpg', 0, 1, 1, 0),
+(30, 'B18756676', 'room[number]', 34, 1, 15, '746b387a43f61dc0f821484dc6ac58ee.jpg', '5dab58fa6b7a409057d91a1b4e94c7f2.jpg', 'ec2e3feb10149454d6f6ced0b33c2953.jpg', 0, 1, 1, 0),
+(31, 'B18756676', 'room[number]', 34, 1, 15, 'cf34b09009a156c95e57eb76715c2ff4.jpg', '7816c1bde2197f9ed99b86a107f42b8b.jpg', 'd3426b97be84916b864bffad7cdd11c7.jpg', 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -333,6 +324,7 @@ CREATE TABLE `students` (
 
 INSERT INTO `students` (`username`, `password`, `email`, `name`, `is_active`, `creation_date`) VALUES
 ('12345678A', '$2y$13$xqavJniqKVrgXgISBRXt.Ow1ztY8UCgdBymCeRep40r4MdvheAIqe', 'antoniou@gmail.com', 'antonio', 1, '2017-01-10 18:31:32'),
+('15426661A', '$2y$13$NgLeoeM1D/oklFoDmTg1G.FL30Gs9zwn.Tk.rfbU7fcBLYNSwKU.S', 'mariaasencioperez@gmail.com', 'aaaaa', 1, '2017-04-04 13:01:15'),
 ('87654321A', '$2y$13$kHfdnRWdRaJVk0eP/Fc32.u61SPNR88/5O/33nOHrdqNd4bppXnVO', 'jm@sgs.com', 'antonio', 1, '2017-02-09 19:17:57');
 
 --
@@ -418,7 +410,7 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT de la tabla `agreement`
 --
 ALTER TABLE `agreement`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 --
 -- AUTO_INCREMENT de la tabla `bank`
 --
@@ -428,7 +420,7 @@ ALTER TABLE `bank`
 -- AUTO_INCREMENT de la tabla `bid`
 --
 ALTER TABLE `bid`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT de la tabla `incidence`
 --

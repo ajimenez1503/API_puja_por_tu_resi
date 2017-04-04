@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Bid
 {
     private $id;
-    private $point;
     private $room;
     private $student;
     /**
@@ -67,38 +66,13 @@ class Bid
     {
         $output=array(
             'id'=>$this->getId(),
-            'point' => $this->getPoint(),
+            'point' => $this->getStudent()->getPoint(),
             'room_id'=>$this->getRoom()->getId(),
             'student_username'=> $this->getStudent()->getUsername(),
             'date_start_school'=>$this->getDateStartSchool(),
             'date_end_school'=>$this->getDateEndSchool(),
         );
         return $output;
-    }
-
-
-    /**
-     * Set point
-     *
-     * @param integer $point
-     *
-     * @return Bid
-     */
-    public function setPoint($point)
-    {
-        $this->point = $point;
-
-        return $this;
-    }
-
-    /**
-     * Get point
-     *
-     * @return integer
-     */
-    public function getPoint()
-    {
-        return $this->point;
     }
 
     /**

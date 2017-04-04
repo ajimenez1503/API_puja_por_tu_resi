@@ -8,9 +8,6 @@ AppBundle\Entity\Bid:
             generator: { strategy: AUTO }
             unique: TRUE
     fields:
-        point:
-            type: integer
-            unique: FALSE
         date_start_school:
             type: datetime
             unique: FALSE

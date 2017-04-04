@@ -88,7 +88,6 @@ class BidController extends Controller
                         $bid = new Bid();
                         $bid->setStudent($user);
                         $bid->setRoom($room);
-                        $bid->setPoint($user->get_point());
                         $bid->setDateStartSchool($date_start_school);
                         $bid->setDateEndSchool($date_end_school);
                         $user->addBid($bid);

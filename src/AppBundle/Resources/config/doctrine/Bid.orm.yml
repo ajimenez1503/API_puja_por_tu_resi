@@ -11,6 +11,12 @@ AppBundle\Entity\Bid:
         point:
             type: integer
             unique: FALSE
+        date_start_school:
+            type: datetime
+            unique: FALSE
+        date_end_school:
+            type: datetime
+            unique: FALSE
 
     manyToOne:
         student:

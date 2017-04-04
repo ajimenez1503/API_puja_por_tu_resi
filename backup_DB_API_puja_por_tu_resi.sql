@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 04-03-2017 a las 13:46:18
+-- Tiempo de generación: 27-03-2017 a las 19:14:20
 -- Versión del servidor: 5.7.17-0ubuntu0.16.04.1
 -- Versión de PHP: 7.0.15-0ubuntu0.16.04.4
 
@@ -229,7 +229,7 @@ CREATE TABLE `rent` (
 INSERT INTO `rent` (`id`, `student_username`, `status_paid`, `price`, `date`, `file_receipt`, `date_paid`, `id_transaction`) VALUES
 (69, '87654321A', 1, 800, '2017-08-26 00:00:00', '292c55780838459d42f093ca9767cf6a.pdf', '2017-02-09 20:10:44', NULL),
 (70, '87654321A', 1, 800, '2017-09-26 00:00:00', '2734b62087d6207c7425469cec8ec298.pdf', '2017-03-04 13:44:21', '3785'),
-(71, '87654321A', 0, 800, '2017-10-26 00:00:00', NULL, NULL, NULL),
+(71, '87654321A', 1, 800, '2017-10-26 00:00:00', '189d9fe58587b3b10b55edb7bf71c692.pdf', '2017-03-04 14:13:43', '7561'),
 (72, '87654321A', 0, 800, '2017-11-26 00:00:00', NULL, NULL, NULL),
 (73, '87654321A', 0, 800, '2017-12-26 00:00:00', NULL, NULL, NULL),
 (74, '87654321A', 0, 800, '2018-01-26 00:00:00', NULL, NULL, NULL),

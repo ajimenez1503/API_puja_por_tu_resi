@@ -11,6 +11,15 @@ class Bid
     private $point;
     private $room;
     private $student;
+    /**
+     * @var \DateTime
+     */
+    private $date_start_school;
+
+    /**
+     * @var \DateTime
+     */
+    private $date_end_school;
 
     public function __construct()
     {
@@ -61,6 +70,8 @@ class Bid
             'point' => $this->getPoint(),
             'room_id'=>$this->getRoom()->getId(),
             'student_username'=> $this->getStudent()->getUsername(),
+            'date_start_school'=>$this->getDateStartSchool(),
+            'date_end_school'=>$this->getDateEndSchool(),
         );
         return $output;
     }
@@ -112,5 +123,54 @@ class Bid
     public function getRoom()
     {
         return $this->room;
+    }
+
+
+    /**
+     * Set dateStartSchool
+     *
+     * @param \DateTime $dateStartSchool
+     *
+     * @return Bid
+     */
+    public function setDateStartSchool($dateStartSchool)
+    {
+        $this->date_start_school = $dateStartSchool;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStartSchool
+     *
+     * @return \DateTime
+     */
+    public function getDateStartSchool()
+    {
+        return $this->date_start_school;
+    }
+
+    /**
+     * Set dateEndSchool
+     *
+     * @param \DateTime $dateEndSchool
+     *
+     * @return Bid
+     */
+    public function setDateEndSchool($dateEndSchool)
+    {
+        $this->date_end_school = $dateEndSchool;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEndSchool
+     *
+     * @return \DateTime
+     */
+    public function getDateEndSchool()
+    {
+        return $this->date_end_school;
     }
 }

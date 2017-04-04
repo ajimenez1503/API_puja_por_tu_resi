@@ -42,6 +42,16 @@ class BidController extends Controller
      *          "dataType"="Integer",
      *          "description"="Id of the room ."
      *      },
+     *      {
+     *          "name"="date_start_school",
+     *          "dataType"="datetime",
+     *          "description"="Date when the user (Student) starts to live and pay."
+     *      },
+     *      {
+     *          "name"="date_end_school",
+     *          "dataType"="datetime",
+     *          "description"="Date when the user (Student) stops to live and pay."
+     *      },
      *  }
      * )
      */
@@ -49,38 +59,55 @@ class BidController extends Controller
     {
         $room_id=$request->request->get('room');
         $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($room_id);
+        $date_start_school=$request->request->get('date_start_school');
+        $date_end_school=$request->request->get('date_end_school');
+        if(is_null($date_start_school) || is_null($date_end_school) ){
+            return $this->returnjson(false,'Deben introducirse la Fecha de estacia académica.');
+        }
+        $date_start_school=date_create($date_start_school);
+        $date_end_school=date_create($date_end_school);
+        if (!$this->get('app.validate')->validateDate($date_start_school,$date_end_school)){
+            return $this->returnjson(false,'Fecha de estacia academica no es correcta.');
+        }
         if (!$room) {
             return $this->returnjson(False,'Habitacion con id '.$room_id.' no existe.');
         }else {
             $user=$this->get('security.token_storage')->getToken()->getUser();
-            //Check that the user has not more that 5 bid already.
-            $list_bids=$user->getBids();
-            if (count($list_bids)<5){
-                //check if the user already have bid for that room_id
-                for ($i = 0; $i < count($list_bids); $i++) {
-                    if ($list_bids[$i]->getRoom()==$room){
-                        return $this->returnjson(False,'El usuario ya ha pujada por esta habitacion.');
+            //check thaat the user has not a current agreement
+            if($user->getCurrentAgreement()!=null){
+                //Check that the user has not more that 5 bid already.
+                $list_bids=$user->getBids();
+                if (count($list_bids)<5){
+                    //check if the user already have bid for that room_id
+                    for ($i = 0; $i < count($list_bids); $i++) {
+                        if ($list_bids[$i]->getRoom()==$room){
+                            return $this->returnjson(False,'El usuario ya ha pujada por esta habitacion.');
+                        }
                     }
-                }
-                try {
-                    $bid = new Bid();
-                    $bid->setStudent($user);
-                    $bid->setRoom($room);
-                    $bid->setPoint($user->get_point());
-                    $user->addBid($bid);
-                    $em = $this->getDoctrine()->getManager();
-                    // tells Doctrine you want to (eventually) save the Product (no queries is done)
-                    $em->persist($bid);
-                    $em->persist($user);
+                    try {
+                        $bid = new Bid();
+                        $bid->setStudent($user);
+                        $bid->setRoom($room);
+                        $bid->setPoint($user->get_point());
+                        $bid->setDateStartSchool($date_start_school);
+                        $bid->setDateEndSchool($date_end_school);
+                        $user->addBid($bid);
+                        $em = $this->getDoctrine()->getManager();
+                        // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                        $em->persist($bid);
+                        $em->persist($user);
 
-                    //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
-                    $em->flush();
-                } catch (\Exception $pdo_ex) {
-                    return $this->returnjson(false,'SQL exception.');
+                        //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                        $em->flush();
+                    } catch (\Exception $pdo_ex) {
+                        return $this->returnjson(false,'SQL exception.');
+                    }
+                    return $this->returnjson(true,'La apuesta se ha creado correctamente.');
+                }else{
+                    return $this->returnjson(False,'El usuario ya ha pujada por 5 habitaciones.');
                 }
-                return $this->returnjson(true,'La apuesta se ha creado correctamente.');
             }else{
-                return $this->returnjson(False,'El usuario ya ha pujada por 5 habitaciones.');
+                return $this->returnjson(False,'El usuario ya tiene un contrato.');
             }
         }
     }

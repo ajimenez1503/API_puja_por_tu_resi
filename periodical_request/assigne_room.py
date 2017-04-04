@@ -3,7 +3,7 @@
 #list job: crontab -l
 #remove jobs: crontab -r
 #create job: crontab -e
-#job: 0 23 * * *  python3.5 /home/jimenez/Escritorio/API_puja_por_tu_resi/periodical_request/assigne_room.py >> /home/jimenez/Escritorio/API_puja_por_tu_resi/periodical_request/output_log.txt
+#job: 0 0 * * FRI  python3.5 /home/jimenez/Escritorio/API_puja_por_tu_resi/periodical_request/assigne_room.py >> /home/jimenez/Escritorio/API_puja_por_tu_resi/periodical_request/output_log.txt
 #that job will be run every day at 23:00
 #run: python3.5 assigne_room.py >> output_log.txt
 

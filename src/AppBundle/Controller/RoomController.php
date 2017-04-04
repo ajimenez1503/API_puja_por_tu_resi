@@ -47,26 +47,6 @@ class RoomController extends Controller
      *          "description"="Price of the room per month."
      *      },
      *      {
-     *          "name"="date_start_school",
-     *          "dataType"="datetime",
-     *          "description"="Date when the user (Student) starts to live and pay."
-     *      },
-     *      {
-     *          "name"="date_end_school",
-     *          "dataType"="datetime",
-     *          "description"="Date when the user (Student) stops to live and pay."
-     *      },
-     *      {
-     *          "name"="date_start_bid",
-     *          "dataType"="datetime",
-     *          "description"="Date when the user (Student) can start to bid."
-     *      },
-     *      {
-     *          "name"="date_end_bid",
-     *          "dataType"="datetime",
-     *          "description"="Date when the user (Student) can not bid anymore."
-     *      },
-     *      {
      *          "name"="floor",
      *          "dataType"="integer",
      *          "description"="floor of the room."
@@ -118,10 +98,6 @@ class RoomController extends Controller
     {
         $name=$request->request->get('name');
         $price=$request->request->get('price');
-        $date_start_school=date_create($request->request->get('date_start_school'));
-        $date_end_school=date_create($request->request->get('date_end_school'));
-        $date_start_bid=date_create($request->request->get('date_start_bid'));
-        $date_end_bid=date_create($request->request->get('date_end_bid'));
         $floor=$request->request->get('floor');
         $size=$request->request->get('size');
         $picture1=$request->files->get('picture1');
@@ -138,15 +114,6 @@ class RoomController extends Controller
         }
         if (!$this->get('app.validate')->validateInt($price,$mix=1,$max=2000)){
             return $this->returnjson(false,'Precio no es valido (size).');
-        }
-        if (!$this->get('app.validate')->validateDate($date_start_school,$date_end_school)){
-            return $this->returnjson(false,'Fecha de estacia academica no es correcta.');
-        }
-        if (!$this->get('app.validate')->validateDate($date_start_bid,$date_end_bid)){
-            return $this->returnjson(false,'Fecha de las puja no es correcta.');
-        }
-        if (!$this->get('app.validate')->validateDate($date_end_bid,$date_start_school)){
-            return $this->returnjson(false,'Fecha de las puja debe ser menor que la academica.');
         }
         if (!$this->get('app.validate')->validateImageFile($this->get('validator'),$picture1)){
             return $this->returnjson(false,'Archivo1 no es valido (Image format).');
@@ -189,10 +156,6 @@ class RoomController extends Controller
                 $room->setCollege($user);
                 $room->setName($name);
                 $room->setPrice($price);
-                $room->setDateStartSchool($date_start_school);
-                $room->setDateEndSchool($date_end_school);
-                $room->setDateStartBid($date_start_bid);
-                $room->setDateEndBid($date_end_bid);
                 $room->setFloor($floor);
                 $room->setSize($size);
                 $room->setPicture1($filename1);
@@ -237,48 +200,6 @@ class RoomController extends Controller
             array_unshift($output,$rooms[$i]->getJSON());
         }
         return $this->returnjson(true,'Lista de habitaciones.',$output);
-    }
-
-    /**
-     * @ApiDoc(
-     *  description="Get list of FREE rooms of a user (College). Can be called by user (College).",
-     * )
-     */
-    public function getFREEAction(Request $request)
-    {
-        $user=$this->get('security.token_storage')->getToken()->getUser();
-        $rooms=$user->getRooms()->getValues();
-        $today=date_create('now')->format('Y-m-d');
-        $output=array();
-        for ($i = 0; $i < count($rooms); $i++) {
-            if(
-                ($rooms[$i]->getDateStartSchool()->format('Y-m-d')>$today && $rooms[$i]->getDateEndBid()->format('Y-m-d')<$today) ||//between bid and school
-                ($rooms[$i]->getDateStartSchool()->format('Y-m-d')>$today && $rooms[$i]->getDateStartBid()->format('Y-m-d')>$today)||//before bid and before school
-                ($rooms[$i]->getDateEndBid()->format('Y-m-d')<$today && $rooms[$i]->getDateEndSchool()->format('Y-m-d')<$today)  //after bid and after school
-            ){
-                array_unshift($output,$rooms[$i]->getJSON());
-            }
-        }
-        return $this->returnjson(true,'Lista de habitaciones sin usar (libres).',$output);
-    }
-
-    /**
-     * @ApiDoc(
-     *  description="Get list of OFFERED rooms of a user (College). Can be called by user (College).",
-     * )
-     */
-    public function getOFFEREDAction(Request $request)
-    {
-        $user=$this->get('security.token_storage')->getToken()->getUser();
-        $rooms=$user->getRooms()->getValues();
-        $today=date_create('now')->format('Y-m-d');//year month and day (not hour and minute)
-        $output=array();
-        for ($i = 0; $i < count($rooms); $i++) {
-            if($rooms[$i]->getDateStartBid()->format('Y-m-d')<=$today && $rooms[$i]->getDateEndBid()->format('Y-m-d')>=$today){
-                array_unshift($output,$rooms[$i]->getJSON());
-            }
-        }
-        return $this->returnjson(true,'Lista de habitaciones para pujar.',$output);
     }
 
 
@@ -351,103 +272,6 @@ class RoomController extends Controller
 
         $response->setContent($content);
         return $response;
-    }
-
-
-    /**
-     * @ApiDoc(
-     *  description="This method update the date bid/school of a room. Can be called by user (College).",
-     *  requirements={
-     *      {
-     *          "name"="id",
-     *          "dataType"="integer",
-     *          "description"="ID of the room"
-     *      },
-     *      {
-     *          "name"="date_start_school",
-     *          "dataType"="datetime",
-     *          "description"="Date when the user (Student) starts to live and pay. (OPTIONAL)"
-     *      },
-     *      {
-     *          "name"="date_end_school",
-     *          "dataType"="datetime",
-     *          "description"="Date when the user (Student) stops to live and pay. (OPTIONAL)"
-     *      },
-     *      {
-     *          "name"="date_start_bid",
-     *          "dataType"="datetime",
-     *          "description"="Date when the user (Student) can start to bid. (OPTIONAL)"
-     *      },
-     *      {
-     *          "name"="date_end_bid",
-     *          "dataType"="datetime",
-     *          "description"="Date when the user (Student) can not bid anymore. (OPTIONAL)"
-     *      },
-     *  },
-     * )
-     */
-    public function updateDateAction(Request $request)
-    {
-        $id=$request->request->get('id');
-
-        if (!is_null($request->request->get('date_start_school'))) {
-            $date_start_school=date_create($request->request->get('date_start_school'));
-        }else{
-            $date_start_school=NULL;
-        }
-        if (!is_null($request->request->get('date_end_school')))  {
-            $date_end_school=date_create($request->request->get('date_end_school'));
-        }else{
-            $date_end_school=NULL;
-        }
-
-        if (!is_null($request->request->get('date_start_bid')))  {
-            $date_start_bid=date_create($request->request->get('date_start_bid'));
-        }else{
-            $date_start_bid=NULL;
-        }
-
-        if (!is_null($request->request->get('date_end_bid')))  {
-            $date_end_bid=date_create($request->request->get('date_end_bid'));
-        }else{
-            $date_end_bid=NULL;
-        }
-
-        if (!is_null($date_start_school) && !is_null($date_end_school)){
-            if (!$this->get('app.validate')->validateDate($date_start_school,$date_end_school)){
-                return $this->returnjson(false,'Fecha de estacia academica no es correcta.');
-            }
-        }
-        if (!is_null($date_start_bid) && !is_null($date_end_bid)){
-            if (!$this->get('app.validate')->validateDate($date_start_bid,$date_end_bid)){
-                return $this->returnjson(false,'Fecha de las puja no es correcta.');
-            }
-        }
-        if (!is_null($date_start_school) && !is_null($date_end_school) && !is_null($date_start_bid) && !is_null($date_end_bid)){
-            if (!$this->get('app.validate')->validateDate($date_end_bid,$date_start_school)){
-                return $this->returnjson(false,'Fecha de las puja debe ser menor que la academica.');
-            }
-        }
-        try {
-            $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($id);
-            if (!is_null($date_start_school) && !is_null($date_end_school)){
-                $room->setDateStartSchool($date_start_school);
-                $room->setDateEndSchool($date_end_school);
-            }
-            if (!is_null($date_start_bid) && !is_null($date_end_bid)){
-                $room->setDateStartBid($date_start_bid);
-                $room->setDateEndBid($date_end_bid);
-            }
-            $em = $this->getDoctrine()->getManager();
-            // tells Doctrine you want to (eventually) save the Product (no queries is done)
-            $em->persist($room);
-
-            //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
-            $em->flush();
-        } catch (\Exception $pdo_ex) {
-            return $this->returnjson(false,'SQL exception.');
-        }
-        return $this->returnjson(true,'La habitacion se ha actualizado correctamente con las nuevas fechas.');
     }
 
 
@@ -557,6 +381,16 @@ class RoomController extends Controller
      *          "dataType"="boolean",
      *          "description"="True if the college has heating."
      *      },
+     *      {
+     *          "name"="date_start_school",
+     *          "dataType"="datetime",
+     *          "description"="Date when the user (Student) starts to live and pay."
+     *      },
+     *      {
+     *          "name"="date_end_school",
+     *          "dataType"="datetime",
+     *          "description"="Date when the user (Student) stops to live and pay."
+     *      },
      *  },
      * )
      */
@@ -577,7 +411,16 @@ class RoomController extends Controller
         $restrictions_bath=$request->query->get('bath',$default ='0');
         $restrictions_desk=$request->query->get('desk',$default ='0');
         $restrictions_wardrove=$request->query->get('wardrove',$default ='0');
-
+        $date_start_school=$request->request->get('date_start_school');
+        $date_end_school=$request->request->get('date_end_school');
+        if(is_null($date_start_school) || is_null($date_end_school) ){
+            return $this->returnjson(false,'Deben introducirse la Fecha de estacia académica.');
+        }
+        $date_start_school=date_create($date_start_school);
+        $date_end_school=date_create($date_end_school);
+        if (!$this->get('app.validate')->validateDate($date_start_school,$date_end_school)){
+            return $this->returnjson(false,'Fecha de estacia academica no es correcta.');
+        }
 
         if (!$this->get('app.validate')->validateLenghtInput($this->get('validator'),$restrictions_companyName)){
                 return $this->returnjson(false,'Nombre residencia no es valido (size).');
@@ -617,7 +460,10 @@ class RoomController extends Controller
                                     ($restrictions_desk=="0" || $rooms[$j]['desk']) &&
                                     ($restrictions_wardrove=="0" || $rooms[$j]['wardrove'])
                                 ){
-                                    array_unshift($new_rooms,$rooms[$j]);
+                                    //check availability
+                                    if ($rooms[$j]->checkAvailability($date_start_school,$date_end_school)){
+                                        array_unshift($new_rooms,$rooms[$j]);
+                                    }
                                 }
                             }
                         }

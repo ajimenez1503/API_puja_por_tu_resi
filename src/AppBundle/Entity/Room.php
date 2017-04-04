@@ -10,10 +10,6 @@ class Room
     private $id;
     private $name;
     private $price;
-    private $date_start_school;
-    private $date_end_school;
-    private $date_start_bid;
-    private $date_end_bid;
     private $floor;
     private $size;
     private $picture1;
@@ -52,10 +48,6 @@ class Room
             'id'=>$this->getId(),
             'name' => $this->getName(),
             'price'=>$this->getPrice(),
-            'date_start_school'=>$this->getDateStartSchool(),
-            'date_end_school'=>$this->getDateEndSchool(),
-            'date_start_bid'=>$this->getDateStartBid(),
-            'date_end_bid'=>$this->getDateEndBid(),
             'floor'=>$this->getFloor(),
             'size' => $this->getSize(),
             'picture1'=>$this->getPicture1(),
@@ -140,102 +132,6 @@ class Room
     public function getPrice()
     {
         return $this->price;
-    }
-
-    /**
-     * Set dateStartSchool
-     *
-     * @param \DateTime $dateStartSchool
-     *
-     * @return Room
-     */
-    public function setDateStartSchool($dateStartSchool)
-    {
-        $this->date_start_school = $dateStartSchool;
-
-        return $this;
-    }
-
-    /**
-     * Get dateStartSchool
-     *
-     * @return \DateTime
-     */
-    public function getDateStartSchool()
-    {
-        return $this->date_start_school;
-    }
-
-    /**
-     * Set dateEndSchool
-     *
-     * @param \DateTime $dateEndSchool
-     *
-     * @return Room
-     */
-    public function setDateEndSchool($dateEndSchool)
-    {
-        $this->date_end_school = $dateEndSchool;
-
-        return $this;
-    }
-
-    /**
-     * Get dateEndSchool
-     *
-     * @return \DateTime
-     */
-    public function getDateEndSchool()
-    {
-        return $this->date_end_school;
-    }
-
-    /**
-     * Set dateStartBid
-     *
-     * @param \DateTime $dateStartBid
-     *
-     * @return Room
-     */
-    public function setDateStartBid($dateStartBid)
-    {
-        $this->date_start_bid = $dateStartBid;
-
-        return $this;
-    }
-
-    /**
-     * Get dateStartBid
-     *
-     * @return \DateTime
-     */
-    public function getDateStartBid()
-    {
-        return $this->date_start_bid;
-    }
-
-    /**
-     * Set dateEndBid
-     *
-     * @param \DateTime $dateEndBid
-     *
-     * @return Room
-     */
-    public function setDateEndBid($dateEndBid)
-    {
-        $this->date_end_bid = $dateEndBid;
-
-        return $this;
-    }
-
-    /**
-     * Get dateEndBid
-     *
-     * @return \DateTime
-     */
-    public function getDateEndBid()
-    {
-        return $this->date_end_bid;
     }
 
     /**
@@ -526,7 +422,7 @@ class Room
 
 
     /**
-     * Get agreements
+     * Get the currenct agreemtn  agreements
      *
      * @return \AppBundle\Entity\Agreement $agreement or null
      */
@@ -540,5 +436,23 @@ class Room
             }
         }
         return null;
+    }
+
+    /**
+     * check if the room has a contract between 2 dates.
+     *
+     * @return boolean
+     */
+    public function checkAvailability($date_start_school,$date_end_school)
+    {
+        $list_agreement=$this->getAgreements()->getValues();
+        for ($i = 0; $i < count($list_agreement); $i++) {
+            if (($list_agreement[$i]->getDateStartSchool()>= $date_start_school && $list_agreement[$i]->getDateStartSchool()<= $date_end_school)
+                || ($list_agreement[$i]->getDateEndSchool()>= $date_start_school && $list_agreement[$i]->getDateEndSchool()<= $date_end_school)
+            ){//the current date is ina contract
+                return FALSE;
+            }
+        }
+        return TRUE;
     }
 }

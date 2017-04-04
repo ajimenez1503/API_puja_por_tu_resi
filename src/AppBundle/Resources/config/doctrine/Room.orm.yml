@@ -14,18 +14,6 @@ AppBundle\Entity\Room:
         price:
             type: float
             unique: FALSE
-        date_start_school:
-            type: datetime
-            unique: FALSE
-        date_end_school:
-            type: datetime
-            unique: FALSE
-        date_start_bid:
-            type: datetime
-            unique: FALSE
-        date_end_bid:
-            type: datetime
-            unique: FALSE
         floor:
             type: integer
             unique: FALSE

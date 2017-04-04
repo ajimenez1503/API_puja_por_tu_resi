@@ -94,8 +94,6 @@ security:
     - { path: ^/Room/create/ , roles: ROLE_COLLEGE }
     - { path: ^/Room/updateDate/ , roles: ROLE_COLLEGE }
     - { path: ^/Room/getAll/ , roles: ROLE_COLLEGE }
-    - { path: ^/Room/getOFFERED/ , roles: ROLE_COLLEGE }
-    - { path: ^/Room/getFREE/ , roles: ROLE_COLLEGE }
     - { path: ^/Room/get/ , roles: ROLE_COLLEGE }
     - { path: ^/Room/remove/ , roles: ROLE_COLLEGE }
     - { path: ^/Room/getSearch/ , roles: IS_AUTHENTICATED_ANONYMOUSLY }

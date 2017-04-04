@@ -250,16 +250,6 @@ getAllRoom:
     defaults:  { _controller: AppBundle:Room:getAll}
     methods:  [GET]
 
-getOFFEREDRoom:
-    path:     /Room/getOFFERED/
-    defaults:  { _controller: AppBundle:Room:getOFFERED}
-    methods:  [GET]
-
-getFREERoom:
-    path:     /Room/getFREE/
-    defaults:  { _controller: AppBundle:Room:getFREE}
-    methods:  [GET]
-
 downloadRoom:
     path:  /Room/download/{filename}
     defaults: { _controller: AppBundle:Room:download }

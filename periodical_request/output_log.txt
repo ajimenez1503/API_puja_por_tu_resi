@@ -12,3 +12,7 @@
 {"success":true,"message":"List de habitaciones asignadas.","data":[]}
 
 
+2017-04-04 13:09:
+{"success":true,"message":"List de habitaciones asignadas.","data":[{"room":19,"student_username":"15426661A"}]}
+
+

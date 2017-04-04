@@ -74,7 +74,7 @@ class BidController extends Controller
         }else {
             $user=$this->get('security.token_storage')->getToken()->getUser();
             //check thaat the user has not a current agreement
-            if($user->getCurrentAgreement()!=null){
+            if(!$user->getCurrentAgreement()){
                 //Check that the user has not more that 5 bid already.
                 $list_bids=$user->getBids();
                 if (count($list_bids)<5){

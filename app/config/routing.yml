@@ -320,7 +320,7 @@ removeBidRoomStudentBid:
 # Agreement controler
 ##############################################################################
 createAgreement:
-    path:     /Agreement/create/{room_id}/{username}
+    path:     /Agreement/create/{room_id}/{username}/{bid_id}
     defaults:  { _controller: AppBundle:Agreement:create}
     methods:  [POST]
 

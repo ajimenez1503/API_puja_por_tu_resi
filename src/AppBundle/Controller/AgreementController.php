@@ -71,19 +71,21 @@ class AgreementController extends Controller
       *          "dataType"="String",
       *          "description"="Username of a student"
       *      },
+      *      {
+      *          "name"="bid_id",
+      *          "dataType"="String",
+      *          "description"="bid_id with the date_start_school and date_end_school"
+      *      },
       *  },
       * )
       */
-    public function createAction($room_id,$username)
+    public function createAction($room_id,$username,$bid_id)
     {
         $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($room_id);
         if (!$room) {
             return $this->returnjson(False,'Habitacion con id '.$room_id.' no existe.');
         }
 
-        if($room->getCurrentAgreement()){
-            return $this->returnjson(False,'Habitacion con id '.$room_id.' ya tiene un contrato.');
-        }
         $student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username);
         if (!$student) {
             return $this->returnjson(False,'Estudiente con username '.$username.' no existe.');
@@ -91,11 +93,15 @@ class AgreementController extends Controller
         if($student->getCurrentAgreement()){
             return $this->returnjson(False,'Estudiente '.$username.' ya tiene un contrato.');
         }
+        $bid = $this->getDoctrine()->getRepository('AppBundle:Bid')->find($bid_id);
+        if (!$bid) {
+            return $this->returnjson(False,'Apuesta con id '.$bid_id.' no existe.');
+        }
         if ($student->getRoles()[0]=="ROLE_STUDENT"){
             try {
                 $agreement = new Agreement();
-                $agreement->setDateStartSchool($room->getDateStartSchool());
-                $agreement->setDateEndSchool($room->getDateEndSchool());
+                $agreement->setDateStartSchool($bid->getDateStartSchool());
+                $agreement->setDateEndSchool($bid->getDateEndSchool());
                 $agreement->setPrice($room->getPrice());
                 $agreement->setStudent($student);
                 $agreement->setRoom($room);
@@ -254,15 +260,19 @@ class AgreementController extends Controller
 
     /**
     * @ApiDoc(
-    *  description="This method assigned offered room to a student (with more point) the last day bid. Can be called by user (ADMIN) automatically.",
+    *  description="This method assigned offered room to a student (with more point) the day of the bid. Can be called by user (ADMIN) automatically.",
     * )
     */
     public function assignedRoomsAction(Request $request)
     {
-        //get the list of offeredrooms
-        //get the list of bid of every Room
-        //verify if the  student ( which more point) has already a signed currect contract or not.
-        //when assigned a student a room, remove all the bid of a student.
+        //get the list of colleges
+        //get the list of room
+        //get the list of bids of every Room
+            //get the student with more point:
+                //in the case the the student has not a agreement and the dates of the school are availability
+                    //create the contract and assigned the room during the specific time.
+                    //when assigned a student a room, remove all the bid of a student
+                //else remove the bid
         $colleges = $this->getDoctrine()->getRepository('AppBundle:College')->findAll();
         if (!$colleges) {
             return $this->returnjson(false,'No hay ninguna residencia.');
@@ -273,15 +283,18 @@ class AgreementController extends Controller
                 //check if the college has OFFERED rooms
                 $rooms=$colleges[$i]->getRooms();
                 for ($j = 0; $j < count($rooms); $j++) {
-                    if($rooms[$j]->getDateEndBid()->format('Y-m-d')==$today){//room with the end bid today
-                        $bids=$rooms[$j]->getBids();
-                        if (count($bids)>0){
-                            $student=$bids[0]->getStudent();
-                            for($c=1; $c < count($bids); $c++) {//get the student with more point bid in a room
-                                if($bids[$c]->getStudent()->getPoint()>$student->getPoint()){
-                                    $student=$bids[$c]->getStudent();
-                                }
+                    //get list of bids of the room.
+                    $bids=$rooms[$j]->getBids();
+                    while (count($bids)>0){//while there are bids
+                        $student=$bids[0]->getStudent();
+                        $bid=$bids[0];
+                        for($c=1; $c < count($bids); $c++) {//get the student with more point bid in a room
+                            if($bids[$c]->getStudent()->getPoint()>$student->getPoint()){
+                                $student=$bids[$c]->getStudent();
+                                $bid=$bids[$c];
                             }
+                        }
+                        if ($rooms[$j]->checkAvailability($bid->getDateStartSchool(),$bid->getDateEndSchool())){
                             $agreement_student=$student->getCurrentAgreement();
                             if(!$agreement_student){ //in the student has no agreement
                                 //$rooms[$j]  $student
@@ -295,17 +308,24 @@ class AgreementController extends Controller
                                 $response = $this->forward('AppBundle:Agreement:create', array(
                                     'username'  =>  $student->getUsername(),
                                     'room_id' => $rooms[$j]->getId(),
+                                    'bid_id' => $bid->getId(),
                                 ));
                                 if (!json_decode($response->getContent(),true)['success']){
                                     return $response;
                                 }
-                                //remove all the bid of a student
+                                //remove all the bids of a student
                                 $response = $this->forward('AppBundle:Bid:removeBidsStudent', array(
                                     'username'  =>  $student->getUsername(),
                                 ));
+                                continue;
 
                             }
                         }
+                        //remove the bid of the student
+                        $response = $this->forward('AppBundle:Bid:remove', array(
+                            'id'  =>  $bid->getId(),
+                        ));
+                        $bids=$rooms[$j]->getBids();
                     }
                 }
             }

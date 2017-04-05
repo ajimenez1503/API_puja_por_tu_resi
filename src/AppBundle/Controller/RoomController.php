@@ -289,10 +289,14 @@ class RoomController extends Controller
             $output=array();
             for ($i = 0; $i < count($colleges); $i++) {
                 //check if the college has OFFERED rooms
-                $rooms=$colleges[$i]->getOFFEREDroom();
-                if ($rooms){
+                $rooms=$colleges[$i]->getRooms()->getValues();
+                if(count($rooms)>0){
+                    $output_room=array();
+                    for ($j = 0; $j < count($rooms); $j++) {
+                        array_unshift($output_room,$rooms[$j]->getJSON());
+                    }
                     array_unshift($output,array_merge(
-                        $colleges[$i]->getJSON(),array('rooms'=>$rooms))
+                        $colleges[$i]->getJSON(),array('rooms'=>$output_room))
                     );
                 }
             }
@@ -411,9 +415,9 @@ class RoomController extends Controller
         $restrictions_bath=$request->query->get('bath',$default ='0');
         $restrictions_desk=$request->query->get('desk',$default ='0');
         $restrictions_wardrove=$request->query->get('wardrove',$default ='0');
-        $date_start_school=$request->request->get('date_start_school');
-        $date_end_school=$request->request->get('date_end_school');
-        if(is_null($date_start_school) || is_null($date_end_school) ){
+        $date_start_school=$request->query->get('date_start_school');
+        $date_end_school=$request->query->get('date_end_school');
+        if(is_null($date_start_school) || is_null($date_end_school)  || $date_start_school=="" || $date_end_school=="" ){
             return $this->returnjson(false,'Deben introducirse la Fecha de estacia académica.');
         }
         $date_start_school=date_create($date_start_school);
@@ -449,20 +453,20 @@ class RoomController extends Controller
                         ($restrictions_study_room=="0" || $colleges[$i]->getStudyRoom()) &&
                         ($restrictions_heating=="0" || $colleges[$i]->getHeating())
                     ){
-                        $rooms=$colleges[$i]->getOFFEREDroom();
+                        $rooms=$colleges[$i]->getRooms()->getValues();
                         //analyze all the rooms and get the rooms, which pass the restrictions, in a new array
                         $new_rooms=array();
                         for ($j = 0; $j < count($rooms); $j++) {
-                            if ($rooms[$j]['price']>=$restrictions_price_min && $rooms[$j]['price']<=$restrictions_price_max){
+                            if ($rooms[$j]->getPrice()>=$restrictions_price_min && $rooms[$j]->getPrice()<=$restrictions_price_max){
                                 if(
-                                    ($restrictions_tv=="0" || $rooms[$j]['tv']) &&
-                                    ($restrictions_bath=="0" || $rooms[$j]['bath']) &&
-                                    ($restrictions_desk=="0" || $rooms[$j]['desk']) &&
-                                    ($restrictions_wardrove=="0" || $rooms[$j]['wardrove'])
+                                    ($restrictions_tv=="0" || $rooms[$j]->getTv()) &&
+                                    ($restrictions_bath=="0" || $rooms[$j]->getBath()) &&
+                                    ($restrictions_desk=="0" || $rooms[$j]->getDesk()) &&
+                                    ($restrictions_wardrove=="0" || $rooms[$j]->getWardrove())
                                 ){
-                                    //check availability
+                                    //check availability dates
                                     if ($rooms[$j]->checkAvailability($date_start_school,$date_end_school)){
-                                        array_unshift($new_rooms,$rooms[$j]);
+                                        array_unshift($new_rooms,$rooms[$j]->getJSON());
                                     }
                                 }
                             }

@@ -447,8 +447,8 @@ class Room
     {
         $list_agreement=$this->getAgreements()->getValues();
         for ($i = 0; $i < count($list_agreement); $i++) {
-            if (($list_agreement[$i]->getDateStartSchool()>= $date_start_school && $list_agreement[$i]->getDateStartSchool()<= $date_end_school)
-                || ($list_agreement[$i]->getDateEndSchool()>= $date_start_school && $list_agreement[$i]->getDateEndSchool()<= $date_end_school)
+            if (($list_agreement[$i]->getDateStartSchool()->format('Y-m-d')>= $date_start_school->format('Y-m-d') && $list_agreement[$i]->getDateStartSchool()->format('Y-m-d')<= $date_end_school->format('Y-m-d'))
+                || ($list_agreement[$i]->getDateEndSchool()->format('Y-m-d')>= $date_start_school->format('Y-m-d') && $list_agreement[$i]->getDateEndSchool()->format('Y-m-d')<= $date_end_school->format('Y-m-d'))
             ){//the current date is ina contract
                 return FALSE;
             }

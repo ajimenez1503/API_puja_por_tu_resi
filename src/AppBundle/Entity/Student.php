@@ -454,11 +454,11 @@ class Student implements AdvancedUserInterface, \Serializable
      */
     public function getCurrentAgreement()
     {
-        $list_agreement=$this->getAgreements()->getValues();
-        $today=date_create('now');
+        $list_agreement=$this->getAgreements()->getValues();    
+        $today=date_create('now')->format('Y-m-d');//year month and day (not hour and minute)
         for ($i = 0; $i < count($list_agreement); $i++) {
-            if (($list_agreement[$i]->getDateStartSchool()<= $today && $list_agreement[$i]->getDateEndSchool()>= $today)
-                || ($list_agreement[$i]->getDateStartSchool()>= $today && $list_agreement[$i]->getDateEndSchool()>= $today)
+            if (($list_agreement[$i]->getDateStartSchool()->format('Y-m-d')<= $today && $list_agreement[$i]->getDateEndSchool()->format('Y-m-d')>= $today)
+                || ($list_agreement[$i]->getDateStartSchool()->format('Y-m-d')>= $today && $list_agreement[$i]->getDateEndSchool()->format('Y-m-d')>= $today)
             ){//the current date is ina contract
                 return $list_agreement[$i];
             }

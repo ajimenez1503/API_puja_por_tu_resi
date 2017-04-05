@@ -493,9 +493,10 @@ class College implements AdvancedUserInterface, \Serializable
         $rooms=$this->getRooms()->getValues();
         $output=array();
         for ($i = 0; $i < count($rooms); $i++) {
-            if($rooms[$i]->getCurrentAgreement()){
-                if($rooms[$i]->getCurrentAgreement()->verifyAgreementSigned()){
-                    array_unshift($output,$rooms[$i]->getCurrentAgreement()->getStudent());
+            $list_agreement=$rooms[$i]->getAgreements()->getValues();
+            for ($j = 0; $j < count($list_agreement); $j++) {
+                if ($list_agreement[$j]->verifyAgreementSigned()){
+                    array_unshift($output,$list_agreement[$j]->getStudent());
                 }
             }
         }

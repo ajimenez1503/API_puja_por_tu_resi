@@ -148,17 +148,10 @@ class AgreementController extends Controller
        if (!$room) {
            return $this->returnjson(False,'Habitacion con id '.$room_id.' no existe.');
        }
-       $agreement_room=$room->getCurrentAgreement();
-       if(!$agreement_room){
-           return $this->returnjson(False,'Habitacion con id '.$room_id.' no tiene un contrato.');
-       }
        $student=$this->get('security.token_storage')->getToken()->getUser();
        $agreement_student=$student->getCurrentAgreement();
        if(!$agreement_student){
            return $this->returnjson(False,'Estudiente '.$username.' no tiene un contrato.');
-       }
-       if($agreement_student!=$agreement_room){
-            return $this->returnjson(False,'Estudiente '.$username.'  y habitacion con id '.$room_id.' tienen distinto contrato.');
        }
        try {
            $student->removeAgreement($agreement_student);
@@ -202,10 +195,6 @@ class AgreementController extends Controller
       if (!$room) {
           return $this->returnjson(False,'Habitacion con id '.$room_id.' no existe.');
       }
-      $agreement_room=$room->getCurrentAgreement();
-      if(!$agreement_room){
-          return $this->returnjson(False,'Habitacion con id '.$room_id.' no tiene un contrato.');
-      }
       $student=$this->get('security.token_storage')->getToken()->getUser();
       if(!$student->getCurrentAgreement()){
           return $this->returnjson(False,'Estudiente '.$username.' ya tiene un contrato.');
@@ -213,9 +202,6 @@ class AgreementController extends Controller
       $agreement_student=$student->getCurrentAgreement();
       if(!$agreement_student){
           return $this->returnjson(False,'Estudiente '.$username.' no tiene un contrato.');
-      }
-      if($agreement_student!=$agreement_room){
-           return $this->returnjson(False,'Estudiente '.$username.'  y habitacion con id '.$room_id.' tienen distinto contrato.');
       }
       if($agreement_student->verifyAgreementSigned()){
           return $this->returnjson(false,'El contrato con id '.$agreement_student->getId().' ya esta firmado con fecha: '.$agreement_student->getDateSigned()->format('Y-m-d H:i'));
@@ -387,7 +373,7 @@ class AgreementController extends Controller
 
    /**
     * @ApiDoc(
-    *  description="Verify is a room has a agreement without signed. Return the agreemnt. Can be called by user (College).",
+    *  description="Verify if a room has a agreement without signed. Return the agreemnt. Can be called by user (College).",
     * )
     */
     public function roomVerifyUnsignedAction($room_id)

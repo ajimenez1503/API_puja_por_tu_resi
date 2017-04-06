@@ -61,7 +61,7 @@ class BidController extends Controller
         $room = $this->getDoctrine()->getRepository('AppBundle:Room')->find($room_id);
         $date_start_school=$request->request->get('date_start_school');
         $date_end_school=$request->request->get('date_end_school');
-        if(is_null($date_start_school) || is_null($date_end_school) ){
+        if(is_null($date_start_school) || is_null($date_end_school)  || $date_start_school=="" || $date_end_school=="" ){
             return $this->returnjson(false,'Deben introducirse la Fecha de estacia académica.');
         }
         $date_start_school=date_create($date_start_school);
@@ -115,6 +115,13 @@ class BidController extends Controller
     /**
      * @ApiDoc(
      *  description="Get all the bid of a room by its id. Can be called by user (College/Student/ADMIN).",
+     *  requirements={
+     *      {
+     *          "name"="room_id",
+     *          "dataType"="Integer",
+     *          "description"="Id of the room ."
+     *      },
+     *  }
      * )
      */
     public function getBidsRoomAction($id)
@@ -126,7 +133,6 @@ class BidController extends Controller
             $list_bids=$room->getBids();
             $output=array();
             for ($i = 0; $i < count($list_bids); $i++) {
-                //TODO sort the list of bigger to smaller
                 array_unshift($output,$list_bids[$i]->getJSON());
             }
             $this->sort_array_of_array($output, 'point');//sort the array by point
@@ -152,6 +158,13 @@ class BidController extends Controller
     /**
      * @ApiDoc(
      *  description="Get data of a bid. Can be called by user (College/Student/ADMIN).",
+     *  requirements={
+     *      {
+     *          "name"="bid_id",
+     *          "dataType"="Integer",
+     *          "description"="Id of the bid ."
+     *      },
+     *  }
      * )
      */
     public function getAction($id)
@@ -168,6 +181,13 @@ class BidController extends Controller
     /**
      * @ApiDoc(
      *  description="Remove a bid. Can be called by user (College/Student/ADMIN).",
+     *  requirements={
+     *      {
+     *          "name"="bid_id",
+     *          "dataType"="Integer",
+     *          "description"="Id of the bid ."
+     *      },
+     *  }
      * )
      */
     public function removeAction($id)
@@ -187,6 +207,13 @@ class BidController extends Controller
     /**
      * @ApiDoc(
      *  description="Remove all the bids of a room by its id. Can be called by user (College/ADMIN).",
+     *  requirements={
+     *      {
+     *          "name"="room_id",
+     *          "dataType"="String",
+     *          "description"="Id of the room ."
+     *      },
+     *  }
      * )
      */
     public function removeBidsRoomAction($id)
@@ -210,6 +237,13 @@ class BidController extends Controller
     /**
      * @ApiDoc(
      *  description="Remove all the bids of a student by username. Can be called by user (ADMIN) automatically.",
+     *  requirements={
+     *      {
+     *          "name"="username",
+     *          "dataType"="String",
+     *          "description"="username of the student ."
+     *      },
+     *  }
      * )
      */
     public function removeBidsStudentAction($username)

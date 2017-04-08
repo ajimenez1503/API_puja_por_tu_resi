@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints\File as FileValidatorConstraint;
 use Symfony\Component\Validator\Constraints\Luhn as LuhnValidatorConstraint;
 use Symfony\Component\Validator\Constraints\Iban as IbanConstraint;
 use Symfony\Component\Validator\Constraints\Bic as BicConstraint;
-
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword as UserPasswordConstraint;
 
 
 

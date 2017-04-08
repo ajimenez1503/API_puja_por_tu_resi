@@ -33,6 +33,11 @@ login:
     defaults: { _controller: AppBundle:Security:login }
     methods:  [GET,POST]
 
+remmemberPassword:
+    path:     /remmemberPassword
+    defaults: { _controller: AppBundle:Security:remmemberPassword }
+    methods:  [GET,POST]
+
 checkSesionSecurity:
     path:     /Security/checkSesion/
     defaults: { _controller: AppBundle:Security:checkSesion }
@@ -328,6 +333,7 @@ removeAgreement:
     path:     /Agreement/remove/
     defaults:  { _controller: AppBundle:Agreement:remove}
     methods:  [POST]
+
 
 acceptAgreement:
     path:     /Agreement/accept/

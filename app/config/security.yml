@@ -46,6 +46,7 @@ security:
     access_control:
     - { path: ^/api/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/Signin/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/remmemberPassword, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/lucky/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     #AGREEMENT CONTROLLER

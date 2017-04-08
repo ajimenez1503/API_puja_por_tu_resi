@@ -14,6 +14,20 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 class SecurityController extends Controller
 {
 
+    public function returnjson($success,$message,$data=null)
+    {
+        $response = new JsonResponse();
+        if (is_null($data)){
+            $data=array();
+        }
+        $response->setData(array(
+            'success' => $success,
+            'message' => $message,
+            'data'=> $data,
+        ));
+        return $response;
+    }
+
     /**
      * @ApiDoc(
      *  description="This method allow to a user to login the systme. Can be called by user (College/Student).",
@@ -63,6 +77,60 @@ class SecurityController extends Controller
             ));
         }
         return $response;
+    }
+
+    private function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    /**
+     * @ApiDoc(
+     *  description="This method allow to a user to remmeber the password the systme. Can be called by user (College/Student).",
+     *  requirements={
+     *      {
+     *          "name"="_username",
+     *          "dataType"="String",
+     *          "description"="Username of the user (DNI/CIF)"
+     *      },
+     *  },
+     * )
+     */
+    public function remmemberPasswordAction(Request $request)
+    {
+        $username=$request->request->get('_username');
+        $sizePassword=$this->container->getParameter('sizePassword');
+        $new_password = $this->generateRandomString($sizePassword);//generate a random password of sizePassword
+
+        //check username
+        $user = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username);
+        if (!$user) {
+            $user = $this->getDoctrine()->getRepository('AppBundle:College')->find($username);
+            if (!$user) {
+                return $this->returnjson(False,'Usuario no existe.');
+            }
+        }
+        // send new password to the email
+        $text= "Tu nueva contraseña de acceso es ".$new_password."\n Puedes acceder al sistema con tu nueva contraseña.\n Te recomendamos que, una vez autenticado, cambies tu contraseña en el apartado 'Perfil'. \n Si sigues sin poder acceder a tu área personal, no dudes en contactar con nosotros escribiendo un email a: pujaporturesi@gmail.com";
+        $this->get('app.Email')->send($this->get('mailer'),$this->container->getParameter('mailer_user'),$user->getEmail(),"update password",$text);
+        try {
+            $encoder = $this->container->get('security.password_encoder');
+            $new_passwor_encoded = $encoder->encodePassword($user, $new_password);
+            $user->setPassword($new_passwor_encoded);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+
+            //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+            $em->flush();
+        } catch (\Exception $pdo_ex) {
+            return $this->returnjson(false,'SQL exception.');
+        }
+        return $this->returnjson(true,'La contraseña se ha enviado a tu correo correctamente.');
     }
 
 

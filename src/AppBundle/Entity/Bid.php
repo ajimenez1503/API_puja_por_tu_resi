@@ -66,7 +66,7 @@ class Bid
     {
         $output=array(
             'id'=>$this->getId(),
-            'point' => $this->getStudent()->getPoint(),
+            'point' => $this->getStudent()->get_point(),
             'room_id'=>$this->getRoom()->getId(),
             'student_username'=> $this->getStudent()->getUsername(),
             'date_start_school'=>$this->getDateStartSchool(),

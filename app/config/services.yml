@@ -15,3 +15,5 @@ services:
             - { name: kernel.event_listener, event: kernel.response }
     app.validate:
         class: AppBundle\Validate
+    app.Email:
+        class: AppBundle\Email

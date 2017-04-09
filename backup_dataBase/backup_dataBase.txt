@@ -1,0 +1,6 @@
+#!/usr/bin/env python
+#crontab:
+#list job: crontab -l
+#remove jobs: crontab -r
+#create job: crontab -e
+#job: 0 0 * * FRI  php bin/console dizda:backup:start >> /home/jimenez/Escritorio/API_puja_por_tu_resi/backup_dataBase/output_log.txt

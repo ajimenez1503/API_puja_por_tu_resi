@@ -15,5 +15,6 @@ parameters:
 
     secret:            ThisTokenIsNotSoSecretChangeIt
     storageFiles: path where the files are save in the upload
+    backup_dataBase_folder: path where database is backup
 
     sizePassword: 8

@@ -394,4 +394,46 @@ class AgreementController extends Controller
             return $this->returnjson(False,'Room '.$room_id.' no tiene contrato .');
         }
     }
+
+
+    /**
+     * @ApiDoc(
+     *  description="This method remove a Agreement which is not signed for one week. Can be called by user (ADMIN).",
+     * )
+     */
+    public function removeUnsignedAction(Request $request)
+    {
+        $output=array();
+        $today=date_create('now');
+        $agreements = $this->getDoctrine()->getRepository('AppBundle:Agreement')->findAll();
+        for ($i = 0; $i < count($agreements); $i++) {
+            if(!$agreements[$i]->verifyAgreementSigned()){
+                $interval=date_diff($agreements[$i]->getDateSigned(),$today);
+                if ($interval->y >= 1 || $interval->m >= 1 || $interval->d >= 7){
+                    $student=$agreements[$i]->getStudent();
+                    $room=$agreements[$i]->getRoom();
+                    array_unshift($output,array(
+                        'room_id'=>$room->getId(),
+                        'student_username'=> $student->getUsername(),
+                        )
+                    );
+                    try {
+                        $student->removeAgreement($agreements[$i]);
+                        $room->removeAgreement($agreements[$i]);
+                        $em = $this->getDoctrine()->getManager();
+                        // tells Doctrine you want to (eventually) save the Product (no queries is done)
+                        $em->remove($agreements[$i]);
+                        $em->persist($student);
+                        $em->persist($room);
+
+                        //Doctrine looks through all of the objects that it's managing to see if they need to be persisted to the database.
+                        $em->flush();
+                    } catch (\Exception $pdo_ex) {
+                        return $this->returnjson(false,'SQL exception.');
+                    }
+                }
+            }
+        }
+        return $this->returnjson(true,'Los contrato se ha eliminado correctamente.',$output);
+    }
 }

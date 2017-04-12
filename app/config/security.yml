@@ -57,6 +57,8 @@ security:
     - { path: ^/Agreement/download/ , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
     - { path: ^/Agreement/verifyUnsigned/ , roles: ROLE_STUDENT }
     - { path: ^/Agreement/roomVerifyUnsigned/ , roles: ROLE_COLLEGE }
+    - { path: ^/Agreement/removeUnsigned/ , roles: ROLE_ADMIN }
+
     #BID CONTROLLER
     - { path: ^/Bid/create/ , roles: ROLE_STUDENT }
     - { path: ^/Bid/getBidsRoom/ , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
@@ -100,7 +102,7 @@ security:
     - { path: ^/Room/getSearch/ , roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/Room/getAllCompanyName/ , roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/Room/getSearchAll/ , roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/Room/download/ , roles:  [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
+    - { path: ^/Room/download/ , roles:  IS_AUTHENTICATED_ANONYMOUSLY }
     #BANK  CONTROLLER
     - { path: ^/Bank/ , roles: ROLE_COLLEGE }
     #ResponsiblePerson  CONTROLLER

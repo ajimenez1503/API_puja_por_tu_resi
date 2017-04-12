@@ -359,6 +359,11 @@ roomVerifyUnsignedAgreement:
     path:  /Agreement/roomVerifyUnsigned/{room_id}
     defaults: { _controller: AppBundle:Agreement:roomVerifyUnsigned }
     methods:  [GET]
+
+removeUnsignedAgreement:
+    path:  /Agreement/removeUnsigned/
+    defaults: { _controller: AppBundle:Agreement:removeUnsigned }
+    methods:  [POST]
 ##############################################################################
 # Bank controler
 ##############################################################################

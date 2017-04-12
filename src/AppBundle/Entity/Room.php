@@ -422,7 +422,7 @@ class Room
 
 
     /**
-     * Get the currenct agreemtn  agreements
+     * Get the currenct agreement
      *
      * @return \AppBundle\Entity\Agreement $agreement or null
      */
@@ -431,7 +431,7 @@ class Room
         $list_agreement=$this->getAgreements()->getValues();
         $today=date_create('now')->format('Y-m-d');//year month and day (not hour and minute)
         for ($i = 0; $i < count($list_agreement); $i++) {
-            if ($list_agreement[$i]->getDateSigned()->format('Y-m-d')<= $today && $list_agreement[$i]->getDateStartSchool()->format('Y-m-d')>= $today){//the current date is ina contract
+            if ($list_agreement[$i]->getDateSigned()->format('Y-m-d')<= $today && $list_agreement[$i]->getDateEndSchool()->format('Y-m-d')>= $today){//the current date is ina contract
                 return $list_agreement[$i];
             }
         }

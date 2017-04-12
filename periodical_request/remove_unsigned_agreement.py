@@ -3,9 +3,9 @@
 #list job: crontab -l
 #remove jobs: crontab -r
 #create job: crontab -e
-#job: 0 0 * * FRI  python3.5 /home/jimenez/Escritorio/API_puja_por_tu_resi/periodical_request/assigne_room.py >> /home/jimenez/Escritorio/API_puja_por_tu_resi/periodical_request/output_log.txt
+#job: 0 0 * * FRI  python3.5 /home/jimenez/Escritorio/API_puja_por_tu_resi/periodical_request/remove_unsigned_agreement.py >> /home/jimenez/Escritorio/API_puja_por_tu_resi/periodical_request/output_log.txt
 #that job will be run every day at 23:00
-#run: python3.5 assigne_room.py >> output_log.txt
+#run: python3.5 remove_unsigned_agreement.py >> output_log.txt
 
 import requests
 import time
@@ -29,7 +29,7 @@ response = s.post("http://localhost:8000/login",  data = form_data, headers = he
 response = s.get("http://localhost:8000/login",  headers = headers,cookies = s.cookies)
 
 #API request /Agreement/assignedRooms/
-print("assigne room\n")
-response = s.post( "http://localhost:8000/Agreement/assignedRooms/", headers = headers,cookies = s.cookies)
+print("remove_unsigned_agreement\n")
+response = s.post( "http://localhost:8000/Agreement/removeUnsigned/", headers = headers,cookies = s.cookies)
 print(response.text)
 print("\n")

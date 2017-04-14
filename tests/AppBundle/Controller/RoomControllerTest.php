@@ -1,5 +1,5 @@
 <?php
-// tests/AppBundle/Controller/IncidenceControllerTest.php
+// tests/AppBundle/Controller/RoomControllerTest.php
 namespace Tests\AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -8,10 +8,11 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Doctrine\Common\Collections\ArrayCollection;
 
-class IncidenceControllerTest extends WebTestCase
+class RoomControllerTest extends WebTestCase
 {
-    public $description = 'algo no funciona';
+    public $name_room = 'test123';
     public function returnjson($success,$message,$data=null)
     {
         $response = new JsonResponse();
@@ -27,7 +28,7 @@ class IncidenceControllerTest extends WebTestCase
     }
 
     /**
-     * Test create a Incidence from student to college, which has a agreement
+     * Test create a room from college
      */
     public function testcreate()
     {
@@ -36,7 +37,7 @@ class IncidenceControllerTest extends WebTestCase
         $session = $client->getContainer()->get('session');
         $firewall = 'main';
         $em = $client->getContainer()->get('doctrine')->getManager();
-        $user = $em->getRepository('AppBundle:Student')->findOneByUsername('test');
+        $user = $em->getRepository('AppBundle:College')->findOneByUsername('test');
 
         $token = new UsernamePasswordToken($user, $user->getPassword(), 'main', $user->getRoles());
         self::$kernel->getContainer()->get('security.token_storage')->setToken($token);
@@ -46,11 +47,28 @@ class IncidenceControllerTest extends WebTestCase
         $cookie = new Cookie($session->getName(), $session->getId());
         $client->getCookieJar()->set($cookie);
 
-        $file = tempnam(sys_get_temp_dir(), 'upl'); // create file
-        imagepng(imagecreatetruecolor(10, 10), $file); // create and write image/png to it
-        $image = new UploadedFile(
-            $file,
-            'new_image.png',
+
+        $file1 = tempnam(sys_get_temp_dir(), 'upl1'); // create file
+        imagepng(imagecreatetruecolor(10, 10), $file1); // create and write image/png to it
+        $image1 = new UploadedFile(
+            $file1,
+            'new_image1.png',
+            'image/jpeg'
+        );
+
+        $file2 = tempnam(sys_get_temp_dir(), 'upl2'); // create file
+        imagepng(imagecreatetruecolor(10, 10), $file2); // create and write image/png to it
+        $image2 = new UploadedFile(
+            $file2,
+            'new_image2.png',
+            'image/jpeg'
+        );
+
+        $file3 = tempnam(sys_get_temp_dir(), 'upl3'); // create file
+        imagepng(imagecreatetruecolor(10, 10), $file3); // create and write image/png to it
+        $image3 = new UploadedFile(
+            $file3,
+            'new_image3.png',
             'image/jpeg'
         );
 
@@ -59,14 +77,27 @@ class IncidenceControllerTest extends WebTestCase
 
         $client->request(
             'POST',
-            '/Incidence/create/',
-            array('description' => $this->description),
-            array('file_name' => $image)
+            '/Room/create/',
+            array(
+                'name' => $this->name_room,
+                'price' => 100,
+                'floor' =>1,
+                'size'=> 1,
+                'tv'=>1,
+                'bath'=>1,
+                'desk'=>1,
+                'wardrove'=>1
+            ),
+            array(
+                'picture1' => $image1,
+                'picture2' => $image2,
+                'picture3' => $image3
+            )
         );
 
         $response = $client->getResponse()->getContent();
         $this->assertEquals(
-            $this->returnjson(true,'La incidencia se ha creado correctamente.')->getContent(),
+            $this->returnjson(true,'La habitacion se ha creado correctamente.')->getContent(),
             $response
         );
     }
@@ -74,7 +105,7 @@ class IncidenceControllerTest extends WebTestCase
     /**
      * Test update a inicidence  from college to student, which has a agreement
      */
-    public function testupdate()
+    public function testremove()
     {
         $client = static::createClient();
 
@@ -93,23 +124,19 @@ class IncidenceControllerTest extends WebTestCase
 
 
         //TEST UPDATE STATE
-        $new_status="IN PROGRESS";
         $em = $client->getContainer()->get('doctrine')->getManager();
-        $incidence = $em->getRepository('AppBundle:Incidence')->findOneBy(
-            array('description' => $this->description, 'status' => "OPEN", "student"=>$user->getUsername())
+        $room = $em->getRepository('AppBundle:Room')->findOneBy(
+            array('name' => $this->name_room)
         );
+        $id=$room->getId();
         $client->request(
             'POST',
-            '/Incidence/updateState/',
-            array(
-                'id' => $incidence->getId(),
-                'status' => $new_status
-            )
+            '/Room/remove/'.$id
         );
 
         $response = $client->getResponse()->getContent();
         $this->assertEquals(
-            $this->returnjson(true,'La incidencia se ha actualizado correctamente con el nuevo estado '.$new_status.'.')->getContent(),
+            $this->returnjson(true,'Habitacion with id '.$id.' se ha eleminado.')->getContent(),
             $response
         );
     }

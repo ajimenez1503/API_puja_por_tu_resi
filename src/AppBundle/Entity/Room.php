@@ -3,7 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Doctrine\Common\Collections\ArrayCollection;
 
 class Room
 {
@@ -436,6 +436,27 @@ class Room
             }
         }
         return null;
+    }
+
+    /**
+     * check if the room has or will have a agreement
+     *
+     * @return boolean
+     */
+    public function checkAgreements()
+    {
+        $list_agreement=$this->getAgreements()->getValues();
+        $today=date_create('now')->format('Y-m-d');//year month and day (not hour and minute)
+        for ($i = 0; $i < count($list_agreement); $i++) {
+            if (
+                ($list_agreement[$i]->getDateSigned()->format('Y-m-d')<= $today && $list_agreement[$i]->getDateEndSchool()->format('Y-m-d')>= $today)
+                ||
+                ($list_agreement[$i]->getDateStartSchool()->format('Y-m-d')>= $today)
+            ){//the current date is ina contract
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

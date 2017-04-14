@@ -13,6 +13,7 @@ use AppBundle\Entity\Student;
 use AppBundle\Entity\Room;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class RoomController extends Controller
 {
@@ -231,11 +232,7 @@ class RoomController extends Controller
             return $this->returnjson(False,'Habitacion with id '.$id.' doesnt exists.');
         }else {
             $today=date_create('now')->format('Y-m-d');//year month and day (not hour and minute)
-            if(
-                ($room->getDateStartSchool()->format('Y-m-d')>$today && $room->getDateEndBid()->format('Y-m-d')<$today) ||//between bid and school
-                ($room->getDateStartSchool()->format('Y-m-d')>$today && $room->getDateStartBid()->format('Y-m-d')>$today)||//before bid and before school
-                ($room->getDateEndBid()->format('Y-m-d')<$today && $room->getDateEndSchool()->format('Y-m-d')<$today)  //after bid and after school
-            ){
+            if(!$room->checkAgreements()){
                 $em = $this->getDoctrine()->getManager();
                 $em->remove($room);
                 $em->flush();

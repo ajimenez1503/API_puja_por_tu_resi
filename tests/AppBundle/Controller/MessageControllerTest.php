@@ -1,5 +1,5 @@
 <?php
-// tests/AppBundle/Controller/IncidenceControllerTest.php
+// tests/AppBundle/Controller/MessageControllerTest.php
 namespace Tests\AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -9,9 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class IncidenceControllerTest extends WebTestCase
+class MessageControllerTest extends WebTestCase
 {
-    public $description = 'algo no funciona';
+    public $message = 'message';
+    public $username_student = 'test';
     public function returnjson($success,$message,$data=null)
     {
         $response = new JsonResponse();
@@ -26,8 +27,10 @@ class IncidenceControllerTest extends WebTestCase
         return $response;
     }
 
-
-    public function testcreate()
+    /**
+     * Test create a message from student to college, which has a agreement
+     */
+    public function testcreateStudent()
     {
         $client = static::createClient();
 
@@ -53,23 +56,26 @@ class IncidenceControllerTest extends WebTestCase
         );
 
 
-        //TEST CREATE
-
+        //TEST CREATE a message from student to college, which has a agreement
         $client->request(
             'POST',
-            '/Incidence/create/',
-            array('description' => $this->description),
-            array('file_name' => $image)
+            '/Message/create/',
+            array('message' => $this->message),
+            array('file_attached' => $image)
         );
 
         $response = $client->getResponse()->getContent();
         $this->assertEquals(
-            $this->returnjson(true,'La incidencia se ha creado correctamente.')->getContent(),
+            $this->returnjson(true,'El mensaje se ha creado correctamente.')->getContent(),
             $response
         );
     }
 
-    public function testupdate()
+    /**
+     * Test create a message from college to student, which has a agreement
+     * Test is not a valid DNI, so it is success false.
+     */
+    public function testcreateCollege()
     {
         $client = static::createClient();
 
@@ -86,26 +92,26 @@ class IncidenceControllerTest extends WebTestCase
         $cookie = new Cookie($session->getName(), $session->getId());
         $client->getCookieJar()->set($cookie);
 
-
-        //TEST UPDATE STATE
-        $new_status="IN PROGRESS";
-        $em = $client->getContainer()->get('doctrine')->getManager();
-        $incidence = $em->getRepository('AppBundle:Incidence')->findOneBy(
-            array('description' => $this->description, 'status' => "OPEN", "student"=>$user->getUsername())
+        $file = tempnam(sys_get_temp_dir(), 'upl'); // create file
+        imagepng(imagecreatetruecolor(10, 10), $file); // create and write image/png to it
+        $image = new UploadedFile(
+            $file,
+            'new_image.png',
+            'image/jpeg'
         );
-        echo $incidence->getId();
+
+
+        //TEST CREATE a message from student to college, which has a agreement
         $client->request(
             'POST',
-            '/Incidence/updateState/',
-            array(
-                'id' => $incidence->getId(),
-                'status' => $new_status
-            )
+            '/Message/create/',
+            array('message' => $this->message, 'username_student'=>$this->username_student),
+            array('file_attached' => $image)
         );
 
         $response = $client->getResponse()->getContent();
         $this->assertEquals(
-            $this->returnjson(true,'La incidencia se ha actualizado correctamente con el nuevo estado '.$new_status.'.')->getContent(),
+            $this->returnjson(False,'Username '.$this->username_student.' no es valido.')->getContent(),
             $response
         );
     }

@@ -26,7 +26,9 @@ class IncidenceControllerTest extends WebTestCase
         return $response;
     }
 
-
+    /**
+     * Test create a Incidence from student to college, which has a agreement
+     */
     public function testcreate()
     {
         $client = static::createClient();
@@ -69,6 +71,9 @@ class IncidenceControllerTest extends WebTestCase
         );
     }
 
+    /**
+     * Test update a inicidence  from college to student, which has a agreement
+     */
     public function testupdate()
     {
         $client = static::createClient();

@@ -69,6 +69,11 @@ class IncidenceControllerTest extends WebTestCase
             $this->returnjson(true,'La incidencia se ha creado correctamente.')->getContent(),
             $response
         );
+        // Assert a specific 200 status code
+        $this->assertEquals(
+            200, // or Symfony\Component\HttpFoundation\Response::HTTP_OK
+            $client->getResponse()->getStatusCode()
+        );
     }
 
     /**
@@ -111,6 +116,11 @@ class IncidenceControllerTest extends WebTestCase
         $this->assertEquals(
             $this->returnjson(true,'La incidencia se ha actualizado correctamente con el nuevo estado '.$new_status.'.')->getContent(),
             $response
+        );
+        // Assert a specific 200 status code
+        $this->assertEquals(
+            200, // or Symfony\Component\HttpFoundation\Response::HTTP_OK
+            $client->getResponse()->getStatusCode()
         );
     }
 }

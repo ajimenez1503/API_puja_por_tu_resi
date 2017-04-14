@@ -66,6 +66,11 @@ class BidControllerTest extends WebTestCase
             $this->returnjson(False,'El usuario ya tiene un contrato.')->getContent(),
             $response
         );
+        // Assert a specific 200 status code
+        $this->assertEquals(
+            200, // or Symfony\Component\HttpFoundation\Response::HTTP_OK
+            $client->getResponse()->getStatusCode()
+        );
     }
 
 }

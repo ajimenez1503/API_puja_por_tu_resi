@@ -56,6 +56,11 @@ class ProfileCollegeControllerTest extends WebTestCase
             $this->returnjson(true,'El email se ha cambiado correctamente.')->getContent(),
             $response
         );
+        // Assert a specific 200 status code
+        $this->assertEquals(
+            200, // or Symfony\Component\HttpFoundation\Response::HTTP_OK
+            $client->getResponse()->getStatusCode()
+        );
     }
 
 }

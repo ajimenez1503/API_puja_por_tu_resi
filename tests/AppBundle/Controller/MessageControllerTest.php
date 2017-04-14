@@ -69,6 +69,11 @@ class MessageControllerTest extends WebTestCase
             $this->returnjson(true,'El mensaje se ha creado correctamente.')->getContent(),
             $response
         );
+        // Assert a specific 200 status code
+        $this->assertEquals(
+            200, // or Symfony\Component\HttpFoundation\Response::HTTP_OK
+            $client->getResponse()->getStatusCode()
+        );
     }
 
     /**
@@ -113,6 +118,11 @@ class MessageControllerTest extends WebTestCase
         $this->assertEquals(
             $this->returnjson(False,'Username '.$this->username_student.' no es valido.')->getContent(),
             $response
+        );
+        // Assert a specific 200 status code
+        $this->assertEquals(
+            200, // or Symfony\Component\HttpFoundation\Response::HTTP_OK
+            $client->getResponse()->getStatusCode()
         );
     }
 }

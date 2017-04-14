@@ -65,6 +65,11 @@ class AgreementControllerTest extends WebTestCase
             $this->returnjson(True,'Room '.$room->getId().' tiene un contrato.',$output)->getContent(),
             $response
         );
+        // Assert a specific 200 status code
+        $this->assertEquals(
+            200, // or Symfony\Component\HttpFoundation\Response::HTTP_OK
+            $client->getResponse()->getStatusCode()
+        );
     }
 
 

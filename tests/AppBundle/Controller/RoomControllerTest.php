@@ -100,6 +100,11 @@ class RoomControllerTest extends WebTestCase
             $this->returnjson(true,'La habitacion se ha creado correctamente.')->getContent(),
             $response
         );
+        // Assert a specific 200 status code
+        $this->assertEquals(
+            200, // or Symfony\Component\HttpFoundation\Response::HTTP_OK
+            $client->getResponse()->getStatusCode()
+        );
     }
 
     /**
@@ -138,6 +143,11 @@ class RoomControllerTest extends WebTestCase
         $this->assertEquals(
             $this->returnjson(true,'Habitacion with id '.$id.' se ha eleminado.')->getContent(),
             $response
+        );
+        // Assert a specific 200 status code
+        $this->assertEquals(
+            200, // or Symfony\Component\HttpFoundation\Response::HTTP_OK
+            $client->getResponse()->getStatusCode()
         );
     }
 }

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 09-04-2017 a las 17:56:50
+-- Tiempo de generación: 15-04-2017 a las 12:50:58
 -- Versión del servidor: 5.7.17-0ubuntu0.16.04.1
 -- Versión de PHP: 7.0.15-0ubuntu0.16.04.4
 
@@ -45,7 +45,8 @@ CREATE TABLE `agreement` (
 INSERT INTO `agreement` (`id`, `student_username`, `room_id`, `price`, `date_start_school`, `date_end_school`, `file_agreement`, `file_agreement_signed`, `date_signed`) VALUES
 (16, '12345678A', 16, 1800, '2017-09-01 00:00:00', '2018-06-30 00:00:00', 'fada024a97f6cf710f7fa7d345b4c4a5.pdf', '77087d519fdd34cf123b91655e2e9633.pdf', '2017-02-02 17:33:08'),
 (17, '87654321A', 17, 800, '2017-08-26 00:00:00', '2018-07-26 00:00:00', 'cf7dd4a104cf8a6c01471d7542699f82.pdf', '0f7f4e3faf9a2ac186a0a159d8b53f34.pdf', '2017-02-09 19:23:45'),
-(18, '15426661A', 19, 500, '2017-07-01 00:00:00', '2017-08-31 00:00:00', '9c7029693cbf128989f60091769e1817.pdf', 'f6b09be962b65ff1f8d8596c3e70db78.pdf', '2017-04-05 19:45:46');
+(18, '15426661A', 19, 500, '2017-07-01 00:00:00', '2017-08-31 00:00:00', '9c7029693cbf128989f60091769e1817.pdf', 'f6b09be962b65ff1f8d8596c3e70db78.pdf', '2017-04-05 19:45:46'),
+(19, 'test', 30, 100, '2017-04-14 00:00:00', '2018-08-31 00:00:00', 'file.pdf', 'file.pdf', '2017-04-14 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -67,8 +68,8 @@ CREATE TABLE `bank` (
 --
 
 INSERT INTO `bank` (`id`, `college_username`, `iban`, `bic`, `account_holder`, `activate`) VALUES
-(16, 'B18756676', 'ES7620770024003102575766', 'DABAIE2D', 'esg', 1),
-(17, 'B18756676', 'ES7620770024003102575766', 'DABAIE2D', 'test', 0);
+(16, 'B18756676', 'ES7620770024003102575766', 'DABAIE2D', 'Residencia XD', 1),
+(17, 'B18756676', 'ES7620770024003102575766', 'DABAIE2D', 'Residencia XD', 0);
 
 -- --------------------------------------------------------
 
@@ -89,7 +90,8 @@ CREATE TABLE `bid` (
 --
 
 INSERT INTO `bid` (`id`, `student_username`, `room_id`, `date_start_school`, `date_end_school`) VALUES
-(7, '15426661B', 28, '2017-04-26 00:00:00', '2017-04-27 00:00:00');
+(7, '15426661B', 28, '2017-04-26 00:00:00', '2017-04-27 00:00:00'),
+(8, 'test', 30, '2017-04-26 00:00:00', '2017-04-27 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -123,11 +125,9 @@ CREATE TABLE `colleges` (
 --
 
 INSERT INTO `colleges` (`username`, `password`, `email`, `is_active`, `company_name`, `address`, `latitude`, `longitude`, `telephone`, `url`, `wifi`, `elevator`, `canteen`, `hours24`, `laundry`, `gym`, `study_room`, `heating`) VALUES
-('B18756676', '$2y$13$tVR0M8lYWAfbKwJY5uLMuOepGiefq3PEy8uKFozbyfZefwtv6ow22', 'ab@gmai.com', 1, 'antonio college', 'Calle Obispo Hurtado, 21, 18002 Granada, España', 37.173724, -3.606465500000013, '444444448', 'http://127.0.0.1:8000/ProfileCollege/updateProfile/', 0, 1, 1, 0, 0, 1, 1, 0),
-('college11', '$2y$13$CmOjG7rctQxhEqURfXm.9eEtwXRfjD8.9Iwz0ASntPy/GK9d2i9iu', 'email@gmail.com', 1, 'gdsga', 'address', 0, 0, '666666666', 'https://symfony.com/', 0, 0, 0, 0, 0, 0, 0, 0),
-('college12', '$2y$13$WmHW2RCZ.l6GkkSEUIlguOVNRas6wKv2uSi44KEgp96X4ngRblCT.', 'email@gmail.com', 1, 'gdsga', 'address', 0, 0, '666666666', 'https://symfony.com/', 0, 0, 0, 0, 0, 0, 0, 0),
-('college13', '$2y$13$gu9KvLTlqDoSkAk625sSTeZAuXciBkKXV1w5CEspAaxJAMz1Lhbnu', 'email@gmail.com', 1, 'gdsga', 'address', 0, 0, '666666666', 'https://symfony.com/', 1, 0, 1, 0, 0, 0, 1, 0),
-('F95161196', '$2y$13$GGhMVySkCPzhCCQKw/FBweYCRCG8thhSVzKseF96jH2U0Co38Offm', 'jm.94.antonio@gmail.com', 1, 'ISABEL JIMÉNEZ', 'Calle Estación, 1, 50500 Valverde, Zaragoza, España', 41.9786272, -1.8613904000000048, '123456789', 'https://github.com/softwarejimenez/web_puja_por_tu_resi', 1, 0, 0, 0, 0, 0, 1, 0);
+('B18756676', '$2y$13$tVR0M8lYWAfbKwJY5uLMuOepGiefq3PEy8uKFozbyfZefwtv6ow22', 'residenciaxd@gmai.com', 1, 'Residencia XD', 'Calle Obispo Hurtado, 12, 18002 Granada, España', 37.17401, -3.6066789999999855, '697268644', 'http://127.0.0.1:8000/ProfileCollege/updateProfile/', 1, 1, 1, 0, 0, 1, 1, 0),
+('F95161196', '$2y$13$GGhMVySkCPzhCCQKw/FBweYCRCG8thhSVzKseF96jH2U0Co38Offm', 'jm.94.antonio@gmail.com', 1, 'ISABEL JIMÉNEZ', 'Calle Estación, 1, 50500 Valverde, Zaragoza, España', 41.9786272, -1.8613904000000048, '123456789', 'https://github.com/softwarejimenez/web_puja_por_tu_resi', 1, 0, 0, 0, 0, 0, 1, 0),
+('test', '$2y$13$tVR0M8lYWAfbKwJY5uLMuOepGiefq3PEy8uKFozbyfZefwtv6ow22', 'new_test_email@gmail.com', 1, 'test', 'test', 0, 0, 'test', 'http://test', 1, 1, 1, 1, 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -151,10 +151,16 @@ CREATE TABLE `incidence` (
 INSERT INTO `incidence` (`id`, `student_username`, `status`, `description`, `file_name`, `date`) VALUES
 (1, '12345678A', 'IN PROGRESS', 'la mesa esta rota ', '1aa2c0c121556de82865a9898058937a.jpg', '2017-01-10 18:34:45'),
 (2, '12345678A', 'DONE', 'la puerta no se cierra. Ayuda ', 'c4d35eccf17df135b22c07d183a47e21.jpg', '2017-01-10 18:40:13'),
-(3, '87654321A', 'IN PROGRESS', 'test', '010e00f6e19b777011c88403147b1e53.jpg', '2017-02-15 20:19:28'),
-(4, '87654321A', 'OPEN', 'test', 'ba96d281e518b61853012ef9050c20fc.jpg', '2017-02-15 20:19:28'),
-(5, '87654321A', 'OPEN', 'sdgsadgdas', '4e8c207f9e7c1f4a7b0b4a56ff0b6172.jpg', '2017-02-15 20:36:11'),
-(6, '12345678A', 'DONE', 'holaaaa test ', '297677123c02644aac0de9cbb1b54328.jpg', '2017-03-01 20:02:52');
+(3, '87654321A', 'IN PROGRESS', 'El baño huele mal', '010e00f6e19b777011c88403147b1e53.jpg', '2017-02-15 20:19:28'),
+(4, '87654321A', 'OPEN', 'Necesito una silla nueva. La mia no funciona.', 'ba96d281e518b61853012ef9050c20fc.jpg', '2017-02-15 20:19:28'),
+(5, '87654321A', 'OPEN', 'No se ve la tv correctamente.', '4e8c207f9e7c1f4a7b0b4a56ff0b6172.jpg', '2017-02-15 20:36:11'),
+(6, '12345678A', 'DONE', 'La puerta se queda entre abierta.', '297677123c02644aac0de9cbb1b54328.jpg', '2017-03-01 20:02:52'),
+(7, '87654321A', 'OPEN', 'la ventana  esta rota ', '43f9d4a5e26321821889b8004afb0e79.jpg', '2017-04-13 10:00:35'),
+(8, '12345678A', 'OPEN', 'algo no funciona', '4d20db5edb83207b07e85e79c3d1fefa.jpg', '2017-04-14 07:53:07'),
+(9, '12345678A', 'OPEN', 'algo no funciona', 'd2a83dba597e4b83778e594c1053f13c.jpg', '2017-04-14 07:58:52'),
+(10, '12345678A', 'OPEN', 'algo no funciona', '456f00c1653e979066a23460b66a909f.jpg', '2017-04-14 08:00:22'),
+(28, 'test', 'IN PROGRESS', 'algo no funciona', 'bc552c4f91e00b68ec30a4be251bcf5a.png', '2017-04-14 11:09:35'),
+(29, 'test', 'IN PROGRESS', 'algo no funciona', '7d61d4f3e1f7c336c4d07843432e6f84.png', '2017-04-14 12:17:31');
 
 -- --------------------------------------------------------
 
@@ -179,33 +185,20 @@ CREATE TABLE `message` (
 --
 
 INSERT INTO `message` (`id`, `student_username`, `college_username`, `read_by_student`, `read_by_college`, `message`, `file_attached`, `date`, `sender_type`) VALUES
-(7, '12345678A', 'B18756676', 1, 1, 'test', 'c5248b92f71bf9c4c4bf57ce4ac23c33.pdf', '2017-02-03 17:56:46', 'ROLE_STUDENT'),
-(8, '12345678A', 'B18756676', 1, 1, 'test', '5eda11c58a4253090424adf579c53727.pdf', '2017-02-03 17:58:04', 'ROLE_STUDENT'),
-(9, '12345678A', 'B18756676', 1, 1, 'test', '8de6ebb97a18d313abf14b67c1e51077.pdf', '2017-02-03 18:12:51', 'ROLE_COLLEGE'),
-(10, '12345678A', 'B18756676', 1, 1, 'holaaaaaa', NULL, '2017-02-04 13:35:42', 'ROLE_STUDENT'),
-(11, '12345678A', 'B18756676', 1, 1, 'undefined', 'b9ace7fa97e6ae3c284c702069fedf9c.pdf', '2017-02-04 19:16:34', 'ROLE_COLLEGE'),
-(12, '12345678A', 'B18756676', 1, 1, 'undefined', NULL, '2017-02-04 19:19:27', 'ROLE_COLLEGE'),
-(13, '12345678A', 'B18756676', 1, 1, 'sdgsadgsadgsd', NULL, '2017-02-04 19:20:32', 'ROLE_COLLEGE'),
-(14, '12345678A', 'B18756676', 1, 1, 'holaaa test ', NULL, '2017-02-05 11:48:04', 'ROLE_COLLEGE'),
-(15, '12345678A', 'B18756676', 1, 1, 'hjhk', NULL, '2017-02-05 11:51:44', 'ROLE_COLLEGE'),
-(16, '87654321A', 'B18756676', 1, 1, 'holajefe ', NULL, '2017-02-09 19:33:08', 'ROLE_STUDENT'),
-(17, '12345678A', 'B18756676', 1, 1, 'safasdfdsafsa', NULL, '2017-02-10 17:58:45', 'ROLE_STUDENT'),
-(18, '12345678A', 'B18756676', 1, 1, 'agadgas', NULL, '2017-02-10 18:02:39', 'ROLE_STUDENT'),
-(19, '12345678A', 'B18756676', 1, 1, 'hola como estas?', NULL, '2017-02-22 12:27:28', 'ROLE_COLLEGE'),
-(20, '87654321A', 'B18756676', 1, 1, 'hola como estas?', NULL, '2017-02-22 12:27:29', 'ROLE_COLLEGE'),
-(21, '12345678A', 'B18756676', 1, 1, 'holaaa test 1', NULL, '2017-02-22 16:34:44', 'ROLE_COLLEGE'),
-(22, '87654321A', 'B18756676', 1, 1, 'holaaa test 1', NULL, '2017-02-22 16:34:44', 'ROLE_COLLEGE'),
-(23, '12345678A', 'B18756676', 1, 1, 'test2', 'f0f4d8995b19db5c9579c397a0e01327.jpg', '2017-02-22 16:35:25', 'ROLE_COLLEGE'),
-(24, '87654321A', 'B18756676', 1, 1, 'test2', '92f14bee872058e29c4ada6045767aab.jpg', '2017-02-22 16:35:25', 'ROLE_COLLEGE'),
-(25, '12345678A', 'B18756676', 1, 1, 'holaa%20asdgsad%20%3Csdg%3E%20ssd%20%3C/sdgs%3E', NULL, '2017-03-01 18:57:36', 'ROLE_COLLEGE'),
-(26, '12345678A', 'B18756676', 1, 1, 'hola%20que%20tal%20estas%20%3F.%20%3Cscript%3Efsdsd%3C/script%3E', NULL, '2017-03-01 18:58:09', 'ROLE_COLLEGE'),
-(27, '12345678A', 'B18756676', 1, 1, 'hola%20que%20tal%20estas%20%3F.%20%3Cscript%3Efsdsd%3C/script%3E', NULL, '2017-03-01 19:00:11', 'ROLE_COLLEGE'),
-(28, '12345678A', 'B18756676', 1, 1, 'sadg dsg', NULL, '2017-03-01 19:00:53', 'ROLE_COLLEGE'),
-(29, '12345678A', 'B18756676', 1, 1, 'hola que tal estas ?. &lt;script&gt;fsdsd&lt;/script&gt;', NULL, '2017-03-01 19:01:04', 'ROLE_COLLEGE'),
-(30, '12345678A', 'B18756676', 1, 1, 'saga', NULL, '2017-03-01 19:04:33', 'ROLE_COLLEGE'),
-(31, '12345678A', 'B18756676', 1, 1, 'hola que tal estas ?. &lt;script&gt;fsdsd&lt;/script&gt;', NULL, '2017-03-01 19:04:42', 'ROLE_COLLEGE'),
-(32, '12345678A', 'B18756676', 1, 1, 'dbsadb', NULL, '2017-03-01 19:06:09', 'ROLE_STUDENT'),
-(33, '12345678A', 'B18756676', 1, 1, 'sdgsdagasd', NULL, '2017-03-01 19:07:14', 'ROLE_STUDENT');
+(36, '12345678A', 'B18756676', 0, 1, 'Os damos la bienvenida a nuestra residencia XD, espero que disfruteis vuestro curso academico junto a nosotros y os convirtais en unos verdaderos veteranos. \r\nUn saludo a todos. ', NULL, '2017-04-13 10:26:03', 'ROLE_COLLEGE'),
+(37, '87654321A', 'B18756676', 1, 1, 'Os damos la bienvenida a nuestra residencia XD, espero que disfruteis vuestro curso academico junto a nosotros y os convirtais en unos verdaderos veteranos. \r\nUn saludo a todos. ', NULL, '2017-04-13 10:26:03', 'ROLE_COLLEGE'),
+(38, '15426661A', 'B18756676', 0, 1, 'Os damos la bienvenida a nuestra residencia XD, espero que disfruteis vuestro curso academico junto a nosotros y os convirtais en unos verdaderos veteranos. \r\nUn saludo a todos. ', NULL, '2017-04-13 10:26:03', 'ROLE_COLLEGE'),
+(39, '87654321A', 'B18756676', 1, 1, 'Muchas gracias por todo. Yo tambien espero estar muy feliz aqui. ', NULL, '2017-04-13 10:26:58', 'ROLE_STUDENT'),
+(40, '87654321A', 'B18756676', 1, 1, 'Me gustaría preguntarle de como puedo poner la lavadora y cual es la clave del WIFI. Un saludo', NULL, '2017-04-13 10:29:07', 'ROLE_STUDENT'),
+(41, '87654321A', 'B18756676', 0, 1, 'Para la lavadora, unicamente tiene que acercarte a la puerta y registrarte. Y la contraseña del wifi es "RESIDENCIAXD" Si tienes algun problema puedes pasarte por la recepcón.', NULL, '2017-04-13 10:33:52', 'ROLE_COLLEGE'),
+(42, 'test', 'test', 1, 0, 'message', 'e66268ae6478c1107a77bbdafa68168e.png', '2017-04-14 09:25:40', 'ROLE_STUDENT'),
+(43, 'test', 'test', 1, 0, 'message', '0e8e0e26911aa1486732a338207e7132.png', '2017-04-14 09:28:52', 'ROLE_STUDENT'),
+(44, 'test', 'test', 1, 0, 'message', '7b20965e95c310b6000a5cda1d927408.png', '2017-04-14 09:29:21', 'ROLE_STUDENT'),
+(45, 'test', 'test', 1, 0, 'message', 'b35e7cbf1842761bbb4f09ae738cf7de.png', '2017-04-14 09:29:43', 'ROLE_STUDENT'),
+(46, 'test', 'test', 1, 0, 'message', 'a17b31656b529be2dd5fe4eaf65251d5.png', '2017-04-14 09:29:57', 'ROLE_STUDENT'),
+(47, 'test', 'test', 1, 0, 'message', '808d7498539a9b8c6b273a0802d0deed.png', '2017-04-14 09:34:33', 'ROLE_STUDENT'),
+(48, 'test', 'test', 1, 0, 'message', '9f5fbe8a4face5b67790d07f35a01f87.png', '2017-04-14 11:09:35', 'ROLE_STUDENT'),
+(49, 'test', 'test', 1, 0, 'message', 'f4afaed15f4686b569975f8fe1151020.png', '2017-04-14 12:17:31', 'ROLE_STUDENT');
 
 -- --------------------------------------------------------
 
@@ -262,12 +255,12 @@ CREATE TABLE `responsiblePerson` (
 --
 
 INSERT INTO `responsiblePerson` (`dni`, `college_username`, `email`, `name`, `job_position`) VALUES
-('11111111M', 'B18756676', 'jm.94.antonio@gmail.com', 'test', 'test'),
-('12123456A', 'B18756676', 'jm.94.antonio@gmail.com', 'sdfasf', 'seee'),
-('12345678U', 'B18756676', 'jm.94.antonio@gmail.com', 'aasafa', 'asdfasf'),
-('123456w78B', 'B18756676', 'jm@gsdgsdsgamial.com', 'juan', 'nuevo'),
-('12412412', 'B18756676', 'jm@gsdgsdsgamial.com', 'juan', 'nuevo'),
-('87654321E', 'B18756676', 'jm.94.antonio@gmail.com', 'hollaaa', 'holaaa');
+('11111111M', 'B18756676', 'jm.94.antonio@gmail.com', 'Luis', 'Cocinero'),
+('12123456A', 'B18756676', 'jm.94.antonio@gmail.com', 'Marcos', 'Recepcionista'),
+('12345678U', 'B18756676', 'jm.94.antonio@gmail.com', 'Carlos', 'Secretario'),
+('123456w78B', 'B18756676', 'jm@gsdgsdsgamial.com', 'Pedro', 'Manager'),
+('12412412', 'B18756676', 'jm@gsdgsdsgamial.com', 'Luisa', 'Limpiadora'),
+('87654321E', 'B18756676', 'jm.94.antonio@gmail.com', 'David', 'Mantenimiento');
 
 -- --------------------------------------------------------
 
@@ -296,19 +289,20 @@ CREATE TABLE `room` (
 --
 
 INSERT INTO `room` (`id`, `college_username`, `name`, `price`, `floor`, `size`, `picture1`, `picture2`, `picture3`, `tv`, `bath`, `desk`, `wardrove`) VALUES
-(16, 'B18756676', 'room5', 1800, 1, 20, '35cf01580edfdde1e494f95678836fd2.jpg', '3f1ee2b7772ac8710cd2e34391466a1b.jpg', 'b4b9a7c026ee06f336ff4a0a866d03b5.jpg', 1, 1, 0, 0),
-(17, 'B18756676', 'room6', 800, 1, 20, 'a6caa9570ce36f6960d91b036fc89c28.jpg', '89d73aaae334992c9ead57acc34ec75e.jpg', 'd69a1fdcc4a557b7f7e9f0906be37fd8.jpg', 1, 1, 0, 0),
-(18, 'B18756676', '7room', 500, 1, 20, '32257b38bea73960739c16fc8bbd132a.jpg', '45c872837ae1133117315ba459b6a887.jpg', '71e3ca6d50fd67fbe2d154201c287130.jpg', 1, 1, 0, 0),
-(19, 'B18756676', 'r8', 500, 1, 20, '92f21f32d96f64cc431b2b4066fd3d13.jpg', 'c5a920cf23f292afd072f86997943897.jpg', '0ba62d6ec07456ef0fc8586af446027c.jpg', 1, 1, 0, 0),
-(21, 'B18756676', 'room10', 500, 1, 20, '88821bd681b347d38738b8cf1b23d256.jpg', 'fb01924d0c22f6bb947651874804dc61.jpg', '131c94b66466b357c5cdda7e86575fdd.jpg', 1, 1, 0, 0),
-(22, 'B18756676', 'room18', 500, 1, 20, 'f0fa3a5c5738e3591cb8823d4c9b71f3.jpg', '5d7607fd220b8ed6583cdd3b2f00e332.jpg', 'e6b99a1ddb2b95def9e50fb416799579.jpg', 1, 1, 0, 0),
-(23, 'B18756676', 'room11', 500, 1, 20, 'c707128c80c13e3d373f187a477f7b56.jpg', '', '6015cf47e1cb6993511423d544e00a9e.jpg', 1, 1, 0, 0),
-(24, 'B18756676', 'room1', 1600, 1, 20, '58c72081eb6f858be0f0b12e9a59e3a4.jpg', '6e3574b33436ca67af3cbda9fbe01593.jpg', 'e2ffb26cde795312c015f2274452db83.jpg', 1, 1, 1, 0),
-(25, 'B18756676', 'room33', 50, 1, 20, '4af5653fb57d641dfcce40218fdce5a9.jpg', '40b7574e8f09d7d90fd496c47948a504.jpg', '49cd8064b939bf328fe1a22540772dd0.jpg', 1, 1, 1, 0),
-(26, 'B18756676', 'room145', 500, 1, 20, '83286d1c2495564847abc2351ebcb2f0.jpg', '61ec83a540bf844c0155ef27bd7627ff.jpg', '9a3b54a8080fca7c9c35b2174210d46b.jpg', 1, 1, 1, 0),
-(27, 'B18756676', 'room1', 500, 1, 20, 'de9a724964786ee80293224cb1646b21.jpg', '9b64c65ad869402f2d1f05ee3d493b0f.jpg', '6f697af442926ebeaa4f193a155bde99.jpg', 1, 1, 1, 0),
-(28, 'B18756676', 'room155', 500, 1, 20, '3f8ee6adc50a0d6c03a74682e1509705.jpg', '6c28fa3fc8a375a63e557bc9ff9df3d8.jpg', 'db24c02f77ea9066019894a0cfada8f2.jpg', 1, 1, 1, 0),
-(29, 'B18756676', 'room[number]', 34, 1, 15, 'ed924939bff5f0920eddf3351b253c0d.jpg', 'ae59195fd335a0e3eed2b16836bedaed.jpg', 'ebf9c8bf8dbaa0e75b42f1e43c630690.jpg', 0, 1, 1, 0);
+(16, 'B18756676', 'room16', 1800, 1, 20, 'room1.jpg', 'room2.jpg', 'room3.jpg', 1, 1, 0, 0),
+(17, 'B18756676', 'room17', 800, 1, 20, 'room3.jpg', 'room1.jpg', 'room2.jpg', 1, 1, 0, 0),
+(18, 'B18756676', 'room18', 500, 1, 20, 'room3.jpg', 'room2.jpg', 'room1.jpg', 1, 1, 0, 0),
+(19, 'B18756676', 'room19', 500, 1, 20, 'room2.jpg', 'room1.jpg', 'room3.jpg', 1, 1, 0, 0),
+(21, 'B18756676', 'room21', 500, 1, 20, 'room1.jpg', 'room2.jpg', 'room2.jpg', 1, 1, 0, 0),
+(22, 'B18756676', 'room22', 500, 1, 20, 'room2.jpg', 'room2.jpg', 'room3.jpg', 0, 1, 0, 1),
+(23, 'B18756676', 'room23', 500, 1, 20, 'room3.jpg', 'room1.jpg', 'room2.jpg', 1, 1, 0, 0),
+(24, 'B18756676', 'room24', 1600, 1, 20, 'room1.jpg', 'room2.jpg', 'room3.jpg', 1, 1, 1, 0),
+(25, 'B18756676', 'room25', 50, 1, 20, 'room1.jpg', 'room2.jpg', 'room3.jpg', 1, 1, 1, 0),
+(26, 'B18756676', 'room26', 500, 1, 20, 'room1.jpg', 'room2.jpg', 'room3.jpg', 1, 1, 1, 1),
+(27, 'B18756676', 'room27', 500, 1, 20, 'room2.jpg', 'room1.jpg', 'room3.jpg', 1, 1, 1, 0),
+(28, 'B18756676', 'room28', 500, 1, 20, 'room3.jpg', 'room2.jpg', 'room1.jpg', 1, 1, 1, 0),
+(29, 'B18756676', 'room29', 34, 1, 15, 'room1.jpg', 'room3.jpg', 'room2.jpg', 0, 1, 1, 0),
+(30, 'test', 'test', 100, 1, 1, 'room1.jpg', 'room3.jpg', 'room2.jpg', 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -330,10 +324,11 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`username`, `password`, `email`, `name`, `is_active`, `creation_date`) VALUES
-('12345678A', '$2y$13$xqavJniqKVrgXgISBRXt.Ow1ztY8UCgdBymCeRep40r4MdvheAIqe', 'antoniou@gmail.com', 'antonio', 1, '2017-01-10 18:31:32'),
-('15426661A', '$2y$13$YzPREGqWagLCq8O7rAvmYOemC9hhK8UMbnRvZY/brrRwcXPcZp2pO', 'pujaporturesi@gmail.com', 'aaaaa', 1, '2017-04-04 13:01:15'),
-('15426661B', '$2y$13$kAhOvlaKlEHzdhYqpdH.JenKvP8X3gLF9VoFTbQ4dyF506ENrNEie', 'mariaasencioperez@gmail.com', 'ISABEL JIMÉNEZ', 1, '2017-04-08 17:08:43'),
-('87654321A', '$2y$13$kHfdnRWdRaJVk0eP/Fc32.u61SPNR88/5O/33nOHrdqNd4bppXnVO', 'jm@sgs.com', 'antonio', 1, '2017-02-09 19:17:57');
+('12345678A', '$2y$13$xqavJniqKVrgXgISBRXt.Ow1ztY8UCgdBymCeRep40r4MdvheAIqe', 'antonio@gmail.com', 'antonio', 1, '2017-01-10 18:31:32'),
+('15426661A', '$2y$13$YzPREGqWagLCq8O7rAvmYOemC9hhK8UMbnRvZY/brrRwcXPcZp2pO', 'Maria@gmail.com', 'Maria', 1, '2017-04-04 13:01:15'),
+('15426661B', '$2y$13$kAhOvlaKlEHzdhYqpdH.JenKvP8X3gLF9VoFTbQ4dyF506ENrNEie', 'isabel@gmail.com', 'ISABEL JIMÉNEZ', 1, '2017-04-08 17:08:43'),
+('87654321A', '$2y$13$kHfdnRWdRaJVk0eP/Fc32.u61SPNR88/5O/33nOHrdqNd4bppXnVO', 'carlos@gmail.com', 'carlos', 1, '2017-02-09 19:17:57'),
+('test', '$2y$13$kHfdnRWdRaJVk0eP/Fc32.u61SPNR88/5O/33nOHrdqNd4bppXnVO', 'new_test_email@gmail.com', 'test', 1, '2017-02-09 19:17:57');
 
 --
 -- Índices para tablas volcadas
@@ -418,7 +413,7 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT de la tabla `agreement`
 --
 ALTER TABLE `agreement`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 --
 -- AUTO_INCREMENT de la tabla `bank`
 --
@@ -428,17 +423,17 @@ ALTER TABLE `bank`
 -- AUTO_INCREMENT de la tabla `bid`
 --
 ALTER TABLE `bid`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT de la tabla `incidence`
 --
 ALTER TABLE `incidence`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 --
 -- AUTO_INCREMENT de la tabla `message`
 --
 ALTER TABLE `message`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 --
 -- AUTO_INCREMENT de la tabla `rent`
 --
@@ -448,7 +443,7 @@ ALTER TABLE `rent`
 -- AUTO_INCREMENT de la tabla `room`
 --
 ALTER TABLE `room`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 --
 -- Restricciones para tablas volcadas
 --

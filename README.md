@@ -1,6 +1,11 @@
 # API_puja_por_tu_resi
 API and cloud system for the management of student and colleges.
 
+
+![PujaPorTuResi Logo](https://raw.githubusercontent.com/softwarejimenez/web_puja_por_tu_resi/master/img/logo.png)
+
+_by @demiurgosoft_
+
 # Keywords: 
 college, student, bid, Web, API, responsive design, booking, delivery 
 
@@ -18,3 +23,5 @@ On another side, the view of the college user, he can be known through the appli
 The application can be reached from the web and it has a serve, what is getting through an API. The design of the web is responsive, it means that can be adapt to be display in different kind of devices such as desktop, tablet or mobile.
 
 Sum up, we have done a survey for possible users of the application, it has been really interesting and it has helped to identify problems and futures works. But the most important is that our product has been accepted, so it can move to the next step and be delivery to real colleges and start to be used. 
+
+> Licensed under GNU AFFERO GENERAL PUBLIC LICENSE Version 3

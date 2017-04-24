@@ -513,8 +513,8 @@ class ProfileCollegeController extends Controller
             array_push($output,
                 array(
                     "student"=>$student[$i]->getJSON(),
-                    "room"=>$student[$i]-> getCurrentAgreement()->getRoom()->getJSON(),
-                    "agreement"=>$student[$i]-> getCurrentAgreement()->getJSON(),
+                    "room"=>$student[$i]->getCurrentAgreement()->getRoom()->getJSON(),
+                    "agreement"=>$student[$i]->getCurrentAgreement()->getJSON(),
                     "rents"=>$rents_student,
                 )
             );
@@ -558,8 +558,8 @@ class ProfileCollegeController extends Controller
                     }
                     $output=array(
                         "student"=>$student->getJSON(),
-                        "room"=>$student-> getCurrentAgreement()->getRoom()->getJSON(),
-                        "agreement"=>$student-> getCurrentAgreement()->getJSON(),
+                        "room"=>$agreement->getRoom()->getJSON(),
+                        "agreement"=>$agreement->getJSON(),
                         "rents"=>$rents_student,
                     );
                 }else{

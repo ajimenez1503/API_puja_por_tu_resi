@@ -90,7 +90,7 @@ class AgreementController extends Controller
         if (!$student) {
             return $this->returnjson(False,'Estudiente con username '.$username.' no existe.');
         }
-        if($student->getCurrentAgreement()){
+        if(!$student->checkAvailability($bid->getDateStartSchool(),$bid->getDateEndSchool())){
             return $this->returnjson(False,'Estudiente '.$username.' ya tiene un contrato.');
         }
         $bid = $this->getDoctrine()->getRepository('AppBundle:Bid')->find($bid_id);
@@ -138,6 +138,11 @@ class AgreementController extends Controller
      *          "dataType"="Integer",
      *          "description"="Id of the room."
      *      },
+     *      {
+     *          "name"="agreement_id",
+     *          "dataType"="Integer",
+     *          "description"="agreement id "
+     *      },
      *  },
      * )
      */
@@ -149,9 +154,10 @@ class AgreementController extends Controller
            return $this->returnjson(False,'Habitacion con id '.$room_id.' no existe.');
        }
        $student=$this->get('security.token_storage')->getToken()->getUser();
-       $agreement_student=$student->getCurrentAgreement();
-       if(!$agreement_student){
-           return $this->returnjson(False,'Estudiente '.$username.' no tiene un contrato.');
+       $agreement_id=$request->request->get('agreement_id');
+       $agreement_student = $this->getDoctrine()->getRepository('AppBundle:Agreement')->find($agreement_id);
+       if (!$agreement_student) {
+           return $this->returnjson(False,'contrato con id '.$room_id.' no existe.');
        }
        try {
            $student->removeAgreement($agreement_student);
@@ -183,7 +189,12 @@ class AgreementController extends Controller
     *      {
     *          "name"="file_agreement_signed",
     *          "dataType"="File",
-    *          "description"="agreement signed "
+    *          "description"="file agreement signed "
+    *      },
+    *      {
+    *          "name"="agreement_id",
+    *          "dataType"="Integer",
+    *          "description"="agreement id "
     *      },
     *  },
     * )
@@ -195,14 +206,12 @@ class AgreementController extends Controller
       if (!$room) {
           return $this->returnjson(False,'Habitacion con id '.$room_id.' no existe.');
       }
+      $agreement_id=$request->request->get('agreement_id');
+      $agreement_student = $this->getDoctrine()->getRepository('AppBundle:Agreement')->find($agreement_id);
+      if (!$agreement_student) {
+          return $this->returnjson(False,'contrato con id '.$room_id.' no existe.');
+      }
       $student=$this->get('security.token_storage')->getToken()->getUser();
-      if(!$student->getCurrentAgreement()){
-          return $this->returnjson(False,'Estudiente '.$username.' ya tiene un contrato.');
-      }
-      $agreement_student=$student->getCurrentAgreement();
-      if(!$agreement_student){
-          return $this->returnjson(False,'Estudiente '.$username.' no tiene un contrato.');
-      }
       if($agreement_student->verifyAgreementSigned()){
           return $this->returnjson(false,'El contrato con id '.$agreement_student->getId().' ya esta firmado con fecha: '.$agreement_student->getDateSigned()->format('Y-m-d H:i'));
       }
@@ -280,32 +289,32 @@ class AgreementController extends Controller
                                 $bid=$bids[$c];
                             }
                         }
-                        if ($rooms[$j]->checkAvailability($bid->getDateStartSchool(),$bid->getDateEndSchool())){
-                            $agreement_student=$student->getCurrentAgreement();
-                            if(!$agreement_student){ //in the student has no agreement
-                                //$rooms[$j]  $student
-                                array_unshift($output,array(
-                                    'room' => $rooms[$j]->getId(),
-                                    'student_username' => $student->getUsername(),
-                                    )
-                                );
+                        if ($rooms[$j]->checkAvailability($bid->getDateStartSchool(),$bid->getDateEndSchool())
+                            &&
+                            $student->checkAvailability($bid->getDateStartSchool(),$bid->getDateEndSchool())
+                        ){
+                            //$rooms[$j]  $student
+                            array_unshift($output,array(
+                                'room' => $rooms[$j]->getId(),
+                                'student_username' => $student->getUsername(),
+                                )
+                            );
 
-                                //create a agreement between a room and a user (student)
-                                $response = $this->forward('AppBundle:Agreement:create', array(
-                                    'username'  =>  $student->getUsername(),
-                                    'room_id' => $rooms[$j]->getId(),
-                                    'bid_id' => $bid->getId(),
-                                ));
-                                if (!json_decode($response->getContent(),true)['success']){
-                                    return $response;
-                                }
-                                //remove all the bids of a student
-                                $response = $this->forward('AppBundle:Bid:removeBidsStudent', array(
-                                    'username'  =>  $student->getUsername(),
-                                ));
-                                continue;
-
+                            //create a agreement between a room and a user (student)
+                            $response = $this->forward('AppBundle:Agreement:create', array(
+                                'username'  =>  $student->getUsername(),
+                                'room_id' => $rooms[$j]->getId(),
+                                'bid_id' => $bid->getId(),
+                            ));
+                            if (!json_decode($response->getContent(),true)['success']){
+                                return $response;
                             }
+                            //remove all the bids of a student
+                            $response = $this->forward('AppBundle:Bid:removeBidsStudent', array(
+                                'username'  =>  $student->getUsername(),
+                            ));
+                            continue;
+
                         }
                         //remove the bid of the student
                         $response = $this->forward('AppBundle:Bid:remove', array(
@@ -350,25 +359,47 @@ class AgreementController extends Controller
 
   /**
    * @ApiDoc(
-   *  description="Verify is a user has a agreement without signed. Return the agreemnt, college, room. That fucntion is called by a user (student).",
+   *  description="Get the current agreement signed. That fucntion is called by a user (student).",
    * )
    */
-   public function verifyUnsignedAction(Request $request)
+   public function getCurrentSignedAction(Request $request)
    {
         $student=$this->get('security.token_storage')->getToken()->getUser();
         $agreement=$student->getCurrentAgreement();
         if($agreement){
-            $output=array(
-                'room' => $agreement->getRoom()->getJSON(),
-                'college' => $agreement->getCollege()->getJSON(),
-                'agreement'=>$agreement->getJSON(),
-                'agreement_signed'=>$agreement->verifyAgreementSigned(),
-            );
-            return $this->returnjson(True,'Estudiante '.$student->getUsername().' tiene un contrato.',$output);
-        }else{
-            return $this->returnjson(False,'Estudiante '.$student->getUsername().' no tiene contrato .');
+            if ($agreement->verifyAgreementSigned()) {
+                $output=array(
+                    'room' => $agreement->getRoom()->getJSON(),
+                    'college' => $agreement->getCollege()->getJSON(),
+                    'agreement'=>$agreement->getJSON(),
+                );
+                return $this->returnjson(True,'Estudiante '.$student->getUsername().' tiene un contrato.',$output);
+            }
         }
+        return $this->returnjson(False,'Estudiante '.$student->getUsername().' no tiene contrato .');
    }
+
+   /**
+    * @ApiDoc(
+    *  description="Get the current agreement signed. That fucntion is called by a user (student).",
+    * )
+    */
+    public function getListAction(Request $request)
+    {
+         $student=$this->get('security.token_storage')->getToken()->getUser();
+         $list_agreement=$student->getAgreements()->getValues();
+         $output=array();
+         for ($i = 0; $i < count($list_agreement); $i++) {
+             array_unshift($output,array(
+                 'room' => $list_agreement[$i]->getRoom()->getJSON(),
+                 'college' => $list_agreement[$i]->getCollege()->getJSON(),
+                 'agreement'=>$list_agreement[$i]->getJSON(),
+                 'agreement_signed'=>$list_agreement[$i]->verifyAgreementSigned(),
+                )
+             );
+         }
+         return $this->returnjson(true,'Lista contratos .',$output);
+    }
 
 
    /**

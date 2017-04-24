@@ -334,7 +334,6 @@ removeAgreement:
     defaults:  { _controller: AppBundle:Agreement:remove}
     methods:  [POST]
 
-
 acceptAgreement:
     path:     /Agreement/accept/
     defaults:  { _controller: AppBundle:Agreement:accept}
@@ -350,9 +349,9 @@ downloadAgreement:
     defaults: { _controller: AppBundle:Agreement:download }
     methods:  [GET]
 
-verifyUnsignedAgreement:
-    path:  /Agreement/verifyUnsigned/
-    defaults: { _controller: AppBundle:Agreement:verifyUnsigned }
+getCurrentSignedAgreement:
+    path:  /Agreement/getCurrentSigned/
+    defaults: { _controller: AppBundle:Agreement:getCurrentSigned}
     methods:  [GET]
 
 roomVerifyUnsignedAgreement:
@@ -364,6 +363,11 @@ removeUnsignedAgreement:
     path:  /Agreement/removeUnsigned/
     defaults: { _controller: AppBundle:Agreement:removeUnsigned }
     methods:  [POST]
+
+getListAgreement:
+    path:  /Agreement/getList/
+    defaults: { _controller: AppBundle:Agreement:getList }
+    methods:  [GET]
 ##############################################################################
 # Bank controler
 ##############################################################################

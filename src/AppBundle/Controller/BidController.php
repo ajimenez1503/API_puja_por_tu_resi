@@ -74,7 +74,7 @@ class BidController extends Controller
         }else {
             $user=$this->get('security.token_storage')->getToken()->getUser();
             //check thaat the user has not a current agreement
-            if(!$user->getCurrentAgreement()){
+            if($user->checkAvailability($date_start_school,$date_end_school)){
                 //Check that the user has not more that 5 bid already.
                 $list_bids=$user->getBids();
                 if (count($list_bids)<5){
@@ -106,7 +106,7 @@ class BidController extends Controller
                     return $this->returnjson(False,'El usuario ya ha pujada por 5 habitaciones.');
                 }
             }else{
-                return $this->returnjson(False,'El usuario ya tiene un contrato.');
+                return $this->returnjson(False,'El usuario tiene un contrato en esas fechas.');
             }
         }
     }

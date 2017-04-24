@@ -454,15 +454,46 @@ class Student implements AdvancedUserInterface, \Serializable
      */
     public function getCurrentAgreement()
     {
-        $list_agreement=$this->getAgreements()->getValues();    
+        $list_agreement=$this->getAgreements()->getValues();
         $today=date_create('now')->format('Y-m-d');//year month and day (not hour and minute)
         for ($i = 0; $i < count($list_agreement); $i++) {
-            if (($list_agreement[$i]->getDateStartSchool()->format('Y-m-d')<= $today && $list_agreement[$i]->getDateEndSchool()->format('Y-m-d')>= $today)
-                || ($list_agreement[$i]->getDateStartSchool()->format('Y-m-d')>= $today && $list_agreement[$i]->getDateEndSchool()->format('Y-m-d')>= $today)
-            ){//the current date is ina contract
+            if ($list_agreement[$i]->getDateSigned()->format('Y-m-d')<= $today &&
+             $list_agreement[$i]->getDateEndSchool()->format('Y-m-d')>= $today){//the current date is ina contract
                 return $list_agreement[$i];
             }
         }
         return null;
+    }
+
+    /**
+     * check if a student has an agreement between 2 dates
+     *
+     * boolean. Return true if the student is available
+     */
+    public function checkAvailability($date_start_school,$date_end_school)
+    {
+        $list_agreement=$this->getAgreements()->getValues();
+        $today=date_create('now')->format('Y-m-d');//year month and day (not hour and minute)
+        for ($i = 0; $i < count($list_agreement); $i++) {
+            if (
+                (
+                    $list_agreement[$i]->getDateStartSchool()->format('Y-m-d')>= $date_start_school->format('Y-m-d') &&
+                    $list_agreement[$i]->getDateStartSchool()->format('Y-m-d')<= $date_end_school->format('Y-m-d')
+                 )
+                ||
+                (
+                    $list_agreement[$i]->getDateEndSchool()->format('Y-m-d')>= $date_start_school->format('Y-m-d') &&
+                    $list_agreement[$i]->getDateEndSchool()->format('Y-m-d')<= $date_end_school->format('Y-m-d')
+                )
+                ||
+                (
+                    $list_agreement[$i]->getDateEndSchool()->format('Y-m-d')>= $date_end_school->format('Y-m-d') &&
+                    $list_agreement[$i]->getDateStartSchool()->format('Y-m-d')<= $date_start_school->format('Y-m-d')
+                )
+            ){//the current date is in a contract
+                return False ;
+            }
+        }
+        return True;
     }
 }

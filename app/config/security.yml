@@ -55,10 +55,10 @@ security:
     - { path: ^/Agreement/accept/ , roles: ROLE_STUDENT }
     - { path: ^/Agreement/assignedRooms/ , roles: ROLE_ADMIN }
     - { path: ^/Agreement/download/ , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }
-    - { path: ^/Agreement/verifyUnsigned/ , roles: ROLE_STUDENT }
+    - { path: ^/Agreement/getCurrentSigned/ , roles: ROLE_STUDENT }
+    - { path: ^/Agreement/getList/ , roles: ROLE_STUDENT }
     - { path: ^/Agreement/roomVerifyUnsigned/ , roles: ROLE_COLLEGE }
     - { path: ^/Agreement/removeUnsigned/ , roles: ROLE_ADMIN }
-
     #BID CONTROLLER
     - { path: ^/Bid/create/ , roles: ROLE_STUDENT }
     - { path: ^/Bid/getBidsRoom/ , roles: [ROLE_STUDENT, ROLE_COLLEGE, ROLE_ADMIN] }

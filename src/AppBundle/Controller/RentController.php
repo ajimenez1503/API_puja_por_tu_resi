@@ -187,7 +187,7 @@ class RentController extends Controller
                 return $this->returnjson(false,'El estudiante '.$student->getUsername().' tiene un contrato pero sin firmar.');
             }
         }else{
-            return $this->returnjson(false,'El estudiante '.$student->getUsername().' no tiene contrato con ninguna residencai.');
+            return $this->returnjson(false,'El estudiante '.$student->getUsername().' no tiene contrato con la residencia.');
         }
         return $this->returnjson(true,'Lista de pagos.',$output);
     }

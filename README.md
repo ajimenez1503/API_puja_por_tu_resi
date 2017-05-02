@@ -4,7 +4,7 @@ API and cloud system for the management of student and colleges.
 
 ![PujaPorTuResi Logo](https://raw.githubusercontent.com/softwarejimenez/web_puja_por_tu_resi/master/img/logo.png)
 
-_by @demiurgosoft_
+_by @softwarejimenez
 
 # Demo
 

@@ -85,17 +85,16 @@ class AgreementController extends Controller
         if (!$room) {
             return $this->returnjson(False,'Habitacion con id '.$room_id.' no existe.');
         }
-
+        $bid = $this->getDoctrine()->getRepository('AppBundle:Bid')->find($bid_id);
+        if (!$bid) {
+            return $this->returnjson(False,'Apuesta con id '.$bid_id.' no existe.');
+        }
         $student = $this->getDoctrine()->getRepository('AppBundle:Student')->find($username);
         if (!$student) {
             return $this->returnjson(False,'Estudiente con username '.$username.' no existe.');
         }
         if(!$student->checkAvailability($bid->getDateStartSchool(),$bid->getDateEndSchool())){
             return $this->returnjson(False,'Estudiente '.$username.' ya tiene un contrato.');
-        }
-        $bid = $this->getDoctrine()->getRepository('AppBundle:Bid')->find($bid_id);
-        if (!$bid) {
-            return $this->returnjson(False,'Apuesta con id '.$bid_id.' no existe.');
         }
         if ($student->getRoles()[0]=="ROLE_STUDENT"){
             try {

@@ -4,7 +4,12 @@ API and cloud system for the management of student and colleges.
 
 ![PujaPorTuResi Logo](https://raw.githubusercontent.com/softwarejimenez/web_puja_por_tu_resi/master/img/logo.png)
 
-_by @demiurgosoft_
+_by @softwarejimenez
+
+# Demo
+
+<a href="https://www.youtube.com/watch?v=kMsx5Rr-fsM&feature=youtu.be" target="_blank"><img src="https://img.youtube.com/vi/kMsx5Rr-fsM/0.jpg" 
+alt="DEMO PujaPorTuResi. Vista estudiante" width="240" height="180" border="10" /></a>
 
 # Keywords: 
 college, student, bid, Web, API, responsive design, booking, delivery 

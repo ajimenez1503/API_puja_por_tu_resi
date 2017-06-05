@@ -276,4 +276,21 @@ class Agreement
             return false;
         }
     }
+
+    /**
+     * Verify is the agreement is current
+     *
+     * @return \Bool
+     */
+    public function verifyAgreementCurrent()
+    {
+        if ($this->file_agreement_signed){
+            $today=date_create('now')->format('Y-m-d');//year month and day (not hour and minute)
+            if ($this->getDateSigned()->format('Y-m-d')<= $today &&
+                 $this->getDateEndSchool()->format('Y-m-d')>= $today){//the current date is in a contract
+                    return true;
+            }
+        }
+        return false;
+    }
 }

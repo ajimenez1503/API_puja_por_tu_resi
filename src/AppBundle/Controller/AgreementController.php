@@ -380,7 +380,7 @@ class AgreementController extends Controller
 
    /**
     * @ApiDoc(
-    *  description="Get the current agreement signed. That fucntion is called by a user (student).",
+    *  description="Get list of agreements. That fucntion is called by a user (student).",
     * )
     */
     public function getListAction(Request $request)

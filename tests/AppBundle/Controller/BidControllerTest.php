@@ -63,7 +63,7 @@ class BidControllerTest extends WebTestCase
 
         $response = $client->getResponse()->getContent();
         $this->assertEquals(
-            $this->returnjson(False,'El usuario ya tiene un contrato.')->getContent(),
+            $this->returnjson(False,'El usuario tiene un contrato en esas fechas.')->getContent(),
             $response
         );
         // Assert a specific 200 status code
